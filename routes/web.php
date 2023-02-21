@@ -157,30 +157,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('ava-index', 'Psicologica\LineaPsicologicaController@indexava')->name('indexava')->middleware('superPsicologica');
 
 
-    //RUTA PARA CONSULTA DE PALIATIVOS
+    //RUTA PARA CONSULTA DE CUENTASXPAGAR
 
-    Route::get('paliativos-index', 'Paliativos\BasePaliativosController@index')->name('indexpaliativos')->middleware('superEditor')->middleware('superEditor');
-    Route::get('paliativos-indexsin', 'Paliativos\BasePaliativosController@indexsin')->name('indexpaliativossin')->middleware('superEditor')->middleware('superEditor');
-    Route::get('paliativos-indexdomi', 'Paliativos\BasePaliativosController@indexdomi')->name('indexpaliativosdomi')->middleware('superEditor')->middleware('superEditor');
-    Route::get('paliativos-indexupe', 'Paliativos\BasePaliativosController@indexupe')->name('indexpaliativosupe')->middleware('superEditor')->middleware('superEditor');
-    Route::get('paliativos-indexupef', 'Paliativos\BasePaliativosController@indexupef')->name('indexpaliativosupef')->middleware('superEditor')->middleware('superEditor');
-    Route::get('paliativos-indexua', 'Paliativos\BasePaliativosController@indexua')->name('indexpaliativosua')->middleware('superEditor')->middleware('superEditor');
-    Route::post('/crear-basepaliativos', 'Paliativos\BasePaliativosController@store')->name('crear-paliativos')->middleware('superEditor');
-    Route::get('/editarbasepaliativos/{id}', 'Paliativos\BasePaliativosController@show')->name('editarbasepaliativos')->middleware('superEditor');
-    Route::put('/actualizar-basepaliativos/{id}', 'Paliativos\BasePaliativosController@update')->name('actualizar-paliativos')->middleware('superEditor');
-    Route::put('/actualizarpro/{id}', 'Paliativos\BasePaliativosController@actualizarpro')->name('actualizarpro')->middleware('superEditor');
-    Route::put('/actualizarestado/{id}', 'Paliativos\BasePaliativosController@actualizarestado')->name('actualizarestado')->middleware('superEditor');
-    Route::put('/actualizarfallecido/{id}', 'Paliativos\BasePaliativosController@actualizarfallecido')->name('actualizarfallecido')->middleware('superEditor');
+    Route::get('cuentasxpagar','Facturacion\CuentasxPagarController@index')->name('cuentasxpagar')->middleware('superPsicologica');
 
-    //RUTA PARA INFORMES DE PALIATIVOS
-    Route::get('informes-paliativos', 'Paliativos\BasePaliativosController@informes')->name('informespaliativos')->middleware('superEditor');
 
-    //RUTA PARA OBSERVACIONES DE PALIATIVOS
-    Route::get('/obspaliativos-index', 'Paliativos\ObsPaliativosController@index')->name('indexobspaliativos')->middleware('superEditor');
-    Route::post('/crearobspaliativos', 'Paliativos\ObsPaliativosController@store')->name('crearobspaliativos')->middleware('superEditor');
-    Route::get('/editarobspaliativos/{id}', 'Paliativos\ObsPaliativosController@show')->name('editarobspaliativos')->middleware('superEditor');
-    Route::put('/actualizarobspaliativos/{id}', 'Paliativos\ObsPaliativosController@update')->name('actualizarobspaliativos')->middleware('superEditor');
-    Route::put('/eliminaralerta/{id}', 'Paliativos\ObsPaliativosController@deletealert')->name('eliminaralerta')->middleware('superEditor');
+
+
+
 
 
     //RUTA PARA LISTAS DE PALIATIVOS

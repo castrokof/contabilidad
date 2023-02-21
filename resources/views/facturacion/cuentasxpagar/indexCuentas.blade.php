@@ -1,7 +1,7 @@
 @extends("theme.$theme.layout")
 
 @section('titulo')
-Linea Psicologica Analista
+Cuentas por Pagar
 @endsection
 @section("styles")
 
@@ -29,7 +29,7 @@ Linea Psicologica Analista
 
 @section('contenido')
 
-@include('lineaPsicologica.tabs.tabsIndexAnalista')
+@include('facturacion.cuentasxpagar.tabs.tabsIndexCuentas')
 
 @include('lineaPsicologica.modal.modalindexresumen')
 
@@ -75,7 +75,7 @@ function ajaxRequest (url, data) {
         type: 'POST',
         data: data,
         success: function (data) {
-            $('#psicologica').DataTable().ajax.reload();
+            $('#pcuentas').DataTable().ajax.reload();
             $('#psicologicaAgendada').DataTable().ajax.reload();
             $('#psicologicaSeguimiento').DataTable().ajax.reload();
             Manteliviano.notificaciones(data.respuesta, data.titulo, data.icon);
@@ -87,7 +87,7 @@ function ajaxRequest (url, data) {
 
       // Funcion para pintar con data table la pestaña de linea psicologica
       var datatable =
-    $('#psicologica').DataTable({
+    $('#pcuentas').DataTable({
     language: idioma_espanol,
     processing: true,
     lengthMenu: [ [25, 50, 100, 500, -1 ], [25, 50, 100, 500, "Mostrar Todo"] ],
@@ -95,31 +95,77 @@ function ajaxRequest (url, data) {
     serverSide: true,
     aaSorting: [[ 20, "desc" ]],
     ajax:{
-      url:"{{route('analistapsico')}}",
+      url:"{{route('cuentasxpagar')}}",
           },
     columns: [
       {data:'action',
        orderable: false},
-      {data:'id'},
-      {data:'surname'},
-      {data:'ssurname'},
-      {data:'fname'},
-      {data:'sname'},
-      {data:'type_document'},
-      {data:'document'},
-      {data:'date_birth'},
-      {data:'municipality'},
-      {data:'other'},
-      {data:'address'},
-      {data:'celular'},
-      {data:'phone'},
-      {data:'email'},
-      {data:'sex'},
-      {data:'eapb'},
-      {data:'reason_consultation'},
-      {data:'consultation'},
-      {data:'diagnosis'},
-      {data:'created_at'}
+       {
+                        data: 'numerofactura'
+                    },
+                    {
+                        data: 'tipofactura'
+                    },
+                    {
+                        data: 'formadepago'
+                    },
+                    {
+                        data: 'fechafactura'
+                    },
+                    {
+                        data: 'fechavencimiento'
+                    },
+                    {
+                        data: 'ica'
+                    },
+                    {
+                        data: 'valorica'
+                    },
+                    {
+                        data: 'retefuente'
+                    },
+                    {
+                        data: 'valorretefuente'
+                    },
+                    {
+                        data: 'iva'
+                    },
+                    {
+                        data: 'valoriva'
+                    },
+                    {
+                        data: 'descuento'
+                    },
+                    {
+                        data: 'valordescuento'
+                    },
+                    {
+                        data: 'total'
+                    },
+                    {
+                        data: 'observacion'
+                    },
+                    {
+                        data: 'future1'
+                    },
+                    {
+                        data: 'future2'
+                    },
+                    {
+                        data: 'future3'
+                    },
+                    {
+                        data: 'future4'
+                    },
+                    {
+                        data: 'future5'
+                    },
+                    {
+                        data: 'user_id'
+                    },
+                    {
+                        data: 'proveedor_id'
+                    }
     ],
 
      //Botones----------------------------------------------------------------------

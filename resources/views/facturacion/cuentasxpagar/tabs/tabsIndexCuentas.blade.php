@@ -10,7 +10,7 @@
         href="#custom-tabs-one-datos-del-paciente"
         role="tab"
         aria-controls="custom-tabs-one-datos-del-paciente"
-        aria-selected="false">Linea Psicologica</a>
+        aria-selected="false">Cuentas por Pagar</a>
       </li>
       <li class="nav-item">
         <a class="nav-link"
@@ -19,7 +19,7 @@
         href="#custom-tabs-one-datos-agendados"
         role="tab"
         aria-controls="custom-tabs-one-datos-agendados"
-        aria-selected="false">Citas agendadas</a>
+        aria-selected="false">Pagos Parciales</a>
       </li>
       <li class="nav-item">
         <a class="nav-link"
@@ -28,7 +28,7 @@
         href="#custom-tabs-one-datos-seguimiento"
         role="tab"
         aria-controls="custom-tabs-one-datos-seguimiento"
-        aria-selected="false">Seguimiento</a>
+        aria-selected="false">Cuentas Canceladas</a>
       </li>
       </ul>
   </div>
@@ -36,7 +36,7 @@
    <div class="tab-content" id="custom-tabs-one-tabContent">
       <div class="tab-pane fade active show" id="custom-tabs-one-datos-del-paciente" role="tabpanel" aria-labelledby="custom-tabs-one-datos-del-paciente-tab">
         <div class="card-body">
-       @include('lineaPsicologica.tablas.tablaIndexPsicologica')
+       @include('facturacion.cuentasxpagar.tablas.tablaIndexCuentas')
       </div>
       </div>
 
