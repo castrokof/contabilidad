@@ -162,7 +162,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('cuentasxpagar','Facturacion\CuentasxPagarController@index')->name('cuentasxpagar')->middleware('superPsicologica');
 
 
+ //RUTA PARA CONSULTA DE PROVEEDORES
 
+ Route::get('proveedores','Facturacion\ProveedoresController@index')->name('proveedores')->middleware('superPsicologica');
 
 
 
