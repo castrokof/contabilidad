@@ -164,7 +164,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('cuentasxpagar/{id}', 'Facturacion\CuentasxPagarController@actualizar')->name('actualizar_factura')->middleware('superPsicologica');
 
 
+ //RUTA PARA CONSULTA DE PROVEEDORES
 
+ Route::get('proveedores','Facturacion\ProveedoresController@index')->name('proveedores')->middleware('superPsicologica');
 
 
 

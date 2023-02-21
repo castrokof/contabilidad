@@ -1,7 +1,7 @@
 @extends("theme.$theme.layout")
 
 @section('titulo')
-    Empleados
+    Proveedores
 @endsection
 @section('styles')
     <link href="{{ asset("assets/$theme/plugins/datatables-bs4/css/dataTables.bootstrap4.css") }}" rel="stylesheet"
@@ -12,12 +12,12 @@
 
 
 @section('scripts')
-    <script src="{{ asset('assets/pages/scripts/admin/usuario/crearempleado.js') }}" type="text/javascript"></script>
+
 @endsection
 
 @section('contenido')
-    @include('nomina.empleados.tablas.tablaIndexEmpleados')
-    @include('nomina.empleados.modal.modalEmpleado')
+    @include('facturacion.proveedores.tablas.tablaIndexProveedores')
+    @include('facturacion.proveedores.modal.modalProveedores')
 @endsection
 
 
@@ -327,11 +327,9 @@
                     cache: true
                 }
             });
-            //     $.get('select_position',
-            //     function(positions) {  //initiate dataTables plugin
-            // $.each(positions, function(position1, value) {
+
             var myTable =
-                $('#empleados').DataTable({
+                $('#proveedores').DataTable({
                     language: idioma_espanol,
                     processing: true,
                     lengthMenu: [
@@ -345,7 +343,7 @@
                     ],
 
                     ajax: {
-                        url: "{{ route('empleado') }}",
+                        url: "{{route('proveedores')}}",
                     },
                     columns: [{
                             data: 'action',
@@ -357,58 +355,49 @@
                             name: 'id'
                         },
                         {
-                            data: 'pnombre',
-                            name: 'pnombre'
-                        },
-                        {
-                            data: 'snombre',
-                            name: 'snombre'
-                        },
-                        {
-                            data: 'papellido',
-                            name: 'papellido'
-                        },
-                        {
-                            data: 'sapellido',
-                            name: 'sapellido'
-                        },
-                        {
-                            data: 'tipo_documento',
-                            name: 'tipo_documento'
+                            data: 'tipodocumento',
+                            name: 'tipodocumento'
                         },
                         {
                             data: 'documento',
                             name: 'documento'
                         },
                         {
-                            data: 'celular',
-                            name: 'celular'
+                            data: 'nombre',
+                            name: 'nombre'
                         },
                         {
-                            data: 'email',
-                            name: 'email'
+                            data: 'direccion',
+                            name: 'direccion'
                         },
                         {
-                            data: 'ips',
-                            name: 'ips'
+                            data: 'telefono',
+                            name: 'telefono'
                         },
                         {
-                            data: 'activo',
-                            name: 'activo'
+                            data: 'pais',
+                            name: 'pais'
                         },
                         {
-                            data: 'position'
-
+                            data: 'ciudad',
+                            name: 'ciudad'
                         },
-
                         {
-                            data: 'type_salary',
-                            name: 'type_salary'
+                            data: 'dpto',
+                            name: 'dpto'
+                        },
+                        {
+                            data: 'correo',
+                            name: 'correo'
+                        },
+                        {
+                            data: 'user_id',
+                            name: 'user_id'
                         },
                         {
                             data: 'created_at',
                             name: 'created_at'
-                        },
+                        }
 
                     ],
 
@@ -451,42 +440,37 @@
 
 
                         }
-                    ],
+                    ]
 
-                    "columnDefs": [{
+                    // "columnDefs": [{
 
-                            "render": function(data, type, row) {
-                                if (row["activo"] == 1) {
-                                    return data + ' - Activo';
-                                } else {
+                    //         "render": function(data, type, row) {
+                    //             if (row["activo"] == 1) {
+                    //                 return data + ' - Activo';
+                    //             } else {
 
-                                    return data + ' - Inactivo';
+                    //                 return data + ' - Inactivo';
 
-                                }
+                    //             }
 
-                            },
-                            "targets": [11]
-                        },
+                    //         },
+                    //         "targets": [11]
+                    //     },
+                    //],
 
+                    // "createdRow": function(row, data, dataIndex) {
+                    //     if (data["activo"] == 1) {
+                    //         $($(row).find("td")[11]).addClass("btn btn-sm btn-success rounded-lg");
+                    //     } else {
+                    //         $($(row).find("td")[11]).addClass("btn btn-sm btn-warning rounded-lg");
+                    //     }
+                    //     if (data["type_salary"] == 1) {
+                    //         $($(row).find("td")[15]).addClass("btn btn-sm btn-info rounded-lg");
+                    //     } else {
+                    //         $($(row).find("td")[15]).addClass("btn btn-sm btn-dark rounded-lg");
+                    //     }
 
-
-
-
-                    ],
-
-                    "createdRow": function(row, data, dataIndex) {
-                        if (data["activo"] == 1) {
-                            $($(row).find("td")[11]).addClass("btn btn-sm btn-success rounded-lg");
-                        } else {
-                            $($(row).find("td")[11]).addClass("btn btn-sm btn-warning rounded-lg");
-                        }
-                        if (data["type_salary"] == 1) {
-                            $($(row).find("td")[15]).addClass("btn btn-sm btn-info rounded-lg");
-                        } else {
-                            $($(row).find("td")[15]).addClass("btn btn-sm btn-dark rounded-lg");
-                        }
-
-                    }
+                    // }
 
 
 
@@ -496,10 +480,10 @@
 
             // });
 
-            $('#create_empleado').click(function() {
+            $('#create_proveedor').click(function() {
                 $('#form-general')[0].reset();
                 $('#email').prop('disabled', false).prop('required', true);
-                $('.card-title').text('Estas creando un nuevo empleado');
+                $('.card-title').text('Estas creando un nuevo proveedor');
                 $('#action_button').val('Add');
                 $('#action').val('Add');
                 $('#form_result').html('');
@@ -521,7 +505,7 @@
 
                 if ($('#action').val() == 'Add') {
                     text = "Estás por crear un empleado"
-                    url = "{{ route('guardar_empleado') }}";
+                   // url = "{{ route('guardar_empleado') }}";
                     method = 'post';
                 }
 
@@ -623,122 +607,130 @@
             });
 
 
-            // Edición de cliente
+            // // Edición de cliente
 
-            $(document).on('click', '.editemployed', function() {
+            // $(document).on('click', '.editemployed', function() {
 
-                $('#form-general')[0].reset();
-                var id = $(this).attr('id');
+            //     $('#form-general')[0].reset();
+            //     var id = $(this).attr('id');
 
-                $.ajax({
-                    url: "/empleado/" + id + "/editar",
-                    dataType: "json",
-                    success: function(data) {
-
-
-                        // Primer form de información empleado
-                        $('#pnombre').val(data.empleado.pnombre);
-                        $('#snombre').val(data.empleado.snombre);
-                        $('#papellido').val(data.empleado.papellido);
-                        $('#sapellido').val(data.empleado.sapellido);
-                        $('#tipo_documento').val(data.empleado.tipo_documento);
-                        $('#documento').val(data.empleado.documento);
-                        $('#email').val(data.empleado.email).prop('required', false);
-                        $('#celular').val(data.empleado.celular);
-
-                        var newips = new Option(data.empleado.ips, data.empleado.ips, true, true);
-                        $('#ips').append(newips).trigger('change');
-
-                        //Segundo form afiliaciones
-                        var newposition = new Option(data.empleado.position, data.empleado.position, true, true);
-                        $('#cargo_id').append(newposition).trigger('change');
-
-                        var neweps = new Option(data.empleado.eps, data.empleado.eps, true, true);
-                        $('#eps').append(neweps).trigger('change');
-
-                        var newfc = new Option(data.empleado.fc, data.empleado.fc, true, true);
-                        $('#fc').append(newfc).trigger('change');
-
-                        var newafp = new Option(data.empleado.afp, data.empleado.afp, true, true);
-                        $('#afp').append(newafp).trigger('change');
-
-                        var newarl = new Option(data.empleado.arl, data.empleado.arl, true, true);
-                        $('#arl').append(newarl).trigger('change');
-
-                        //Tercer form contrato
-
-                        $('#type_contrat').val(data.empleado.type_contrat);
-
-                        $('#date_in').val(data.empleado.date_in);
-
-                        $('#activo').val(data.empleado.activo);
-
-                        $('#type_salary').val(data.empleado.type_salary);
-
-                        if ($('#type_contrat').val() == "CT") {
-                            $("#salaryform").css("display", "block");
-                            $("#salary").prop("required", true).val(data.empleado.salary);
-
-                            $("#salarypsform").css("display", "none");
-                            $("#salary_ps").prop("required", false);
-
-                        } else {
-                            $("#salarypsform").css("display", "block");
-                            $("#salary_ps").prop("required", true).val(data.empleado.salary_ps);
-
-                            $("#salaryform").css("display", "none");
-                            $("#salary").prop("required", false);
-
-                        }
-
-                        $('#date_incontract').val(data.empleado.date_incontract);
-                        $('#date_endcontract').val(data.empleado.date_endcontract);
-                        $('#date_out').val(data.empleado.date_out);
-
-                        //Cuato form salarios
+            //     $.ajax({
+            //         url: "/empleado/" + id + "/editar",
+            //         dataType: "json",
+            //         success: function(data) {
 
 
-                        var newbank = new Option(data.empleado.name_bank, data.empleado.name_bank, true, true);
-                        $('#name_bank').append(newbank).trigger('change');
+            //             // Primer form de información empleado
+            //             $('#pnombre').val(data.empleado.pnombre);
+            //             $('#snombre').val(data.empleado.snombre);
+            //             $('#papellido').val(data.empleado.papellido);
+            //             $('#sapellido').val(data.empleado.sapellido);
+            //             $('#tipo_documento').val(data.empleado.tipo_documento);
+            //             $('#documento').val(data.empleado.documento);
+            //             $('#email').val(data.empleado.email).prop('required', false);
+            //             $('#celular').val(data.empleado.celular);
 
-                        var newtypea = new Option(data.empleado.type_account, data.empleado.type_account, true, true);
-                        $('#type_account').append(newtypea).trigger('change');
+            //             var newips = new Option(data.empleado.ips, data.empleado.ips, true,
+            //                 true);
+            //             $('#ips').append(newips).trigger('change');
 
-                        $('#account').val(data.empleado.account);
+            //             //Segundo form afiliaciones
+            //             var newposition = new Option(data.empleado.position, data.empleado
+            //                 .position, true, true);
+            //             $('#cargo_id').append(newposition).trigger('change');
 
-                        $('#value_transporte').val(data.empleado.value_transporte);
+            //             var neweps = new Option(data.empleado.eps, data.empleado.eps, true,
+            //                 true);
+            //             $('#eps').append(neweps).trigger('change');
 
-                        $('#value_salary_add').val(data.empleado.value_salary_add);
+            //             var newfc = new Option(data.empleado.fc, data.empleado.fc, true, true);
+            //             $('#fc').append(newfc).trigger('change');
 
-                        $('#value_hour').val(data.empleado.value_hour);
+            //             var newafp = new Option(data.empleado.afp, data.empleado.afp, true,
+            //                 true);
+            //             $('#afp').append(newafp).trigger('change');
 
-                        $('#value_patient_attended').val(data.empleado.value_patient_attended);
+            //             var newarl = new Option(data.empleado.arl, data.empleado.arl, true,
+            //                 true);
+            //             $('#arl').append(newarl).trigger('change');
 
-                        $('#value_add_security_social').val(data.empleado.value_add_security_social);
+            //             //Tercer form contrato
+
+            //             $('#type_contrat').val(data.empleado.type_contrat);
+
+            //             $('#date_in').val(data.empleado.date_in);
+
+            //             $('#activo').val(data.empleado.activo);
+
+            //             $('#type_salary').val(data.empleado.type_salary);
+
+            //             if ($('#type_contrat').val() == "CT") {
+            //                 $("#salaryform").css("display", "block");
+            //                 $("#salary").prop("required", true).val(data.empleado.salary);
+
+            //                 $("#salarypsform").css("display", "none");
+            //                 $("#salary_ps").prop("required", false);
+
+            //             } else {
+            //                 $("#salarypsform").css("display", "block");
+            //                 $("#salary_ps").prop("required", true).val(data.empleado.salary_ps);
+
+            //                 $("#salaryform").css("display", "none");
+            //                 $("#salary").prop("required", false);
+
+            //             }
+
+            //             $('#date_incontract').val(data.empleado.date_incontract);
+            //             $('#date_endcontract').val(data.empleado.date_endcontract);
+            //             $('#date_out').val(data.empleado.date_out);
+
+            //             //Cuato form salarios
 
 
-                        $('#hidden_id').val(id)
-                        $('.card-title').text("Editando empleado: " + data.empleado.pnombre +
-                            "-" + data.empleado.papellido);
-                        $('#action_button').val('Edit');
-                        $('#action').val('Edit');
-                        $('#modal-u').modal('show');
+            //             var newbank = new Option(data.empleado.name_bank, data.empleado
+            //                 .name_bank, true, true);
+            //             $('#name_bank').append(newbank).trigger('change');
 
-                    },
+            //             var newtypea = new Option(data.empleado.type_account, data.empleado
+            //                 .type_account, true, true);
+            //             $('#type_account').append(newtypea).trigger('change');
+
+            //             $('#account').val(data.empleado.account);
+
+            //             $('#value_transporte').val(data.empleado.value_transporte);
+
+            //             $('#value_salary_add').val(data.empleado.value_salary_add);
+
+            //             $('#value_hour').val(data.empleado.value_hour);
+
+            //             $('#value_patient_attended').val(data.empleado.value_patient_attended);
+
+            //             $('#value_add_security_social').val(data.empleado
+            //                 .value_add_security_social);
+
+
+            //             $('#hidden_id').val(id)
+            //             $('.card-title').text("Editando empleado: " + data.empleado.pnombre +
+            //                 "-" + data.empleado.papellido);
+            //             $('#action_button').val('Edit');
+            //             $('#action').val('Edit');
+            //             $('#modal-u').modal('show');
+
+            //         },
 
 
 
-                }).fail(function(jqXHR, textStatus, errorThrown) {
+            //     }).fail(function(jqXHR, textStatus, errorThrown) {
 
-                    if (jqXHR.status === 403) {
+            //         if (jqXHR.status === 403) {
 
-                        Manteliviano.notificaciones('No tienes permisos para realizar esta accion',
-                            'Call Nomina', 'warning');
+            //             Manteliviano.notificaciones('No tienes permisos para realizar esta accion',
+            //                 'Call Nomina', 'warning');
 
-                    }
-                });
+            //         }
+            //     });
 
-            });
+            // });
 
 
 
