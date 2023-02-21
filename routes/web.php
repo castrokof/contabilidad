@@ -160,6 +160,8 @@ Route::group(['middleware' => ['auth']], function () {
     //RUTA PARA CONSULTA DE CUENTASXPAGAR
 
     Route::get('cuentasxpagar','Facturacion\CuentasxPagarController@index')->name('cuentasxpagar')->middleware('superPsicologica');
+    Route::post('cuentasxpagar', 'Facturacion\CuentasxPagarController@guardar')->name('guardar_factura')->middleware('superPsicologica');
+    Route::put('cuentasxpagar/{id}', 'Facturacion\CuentasxPagarController@actualizar')->name('actualizar_factura')->middleware('superPsicologica');
 
 
 

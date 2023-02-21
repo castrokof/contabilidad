@@ -1,4 +1,4 @@
-<div class="modal fade" tabindex="-1" id ="modal-evolution" role="dialog" aria-labelledby="myLargeModalLabel">
+<div class="modal fade" tabindex="-1" id ="modal-add-cuentas" role="dialog" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog  modal-xl" role="document">
     <div class="modal-content">
     <div class="row">
@@ -7,7 +7,7 @@
             <span id="form_result"></span>
              <div class="card card-info" style="transition: all 0.15s ease 0s; height: inherit; width: inherit;">
             <div class="card-header with-border">
-              <h3 class="card-title">Evolución psicologica</h3>
+              <h3 class="card-title">Registre la Cuenta Por Pagar</h3>
 
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="maximize">
@@ -36,7 +36,7 @@
                         href="#custom-tabs-one-datos-del-paciente"
                         role="tab"
                         aria-controls="custom-tabs-one-datos-del-paciente"
-                        aria-selected="false">Datos del paciente</a>
+                        aria-selected="false">Datos de la Factura</a>
                       </li>
                       </ul>
                   </div>
@@ -46,7 +46,7 @@
                         <div class="card-body">
                         <form  id="form-general" class="form-horizontal" method="POST">
                             @csrf
-                            @include('lineaPsicologica.form.form')
+                            @include('facturacion.cuentasxpagar.form.form')
                             @include('includes.boton-form-crear-empresa-empleado-usuario')
                         </form>
                         </div>

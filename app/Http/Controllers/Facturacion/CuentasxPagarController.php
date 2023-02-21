@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Facturacion;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Facturacion\Cuentas;
 
 class CuentasxPagarController extends Controller
@@ -15,17 +17,17 @@ class CuentasxPagarController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->ajax()){
+        if ($request->ajax()) {
 
-        $datas = Cuentas::orderBy('id')->get();
-        return  DataTables()->of($datas)
-        ->addColumn('action', function ($datas) {
-            $button = '<button type="button" name="resumen" id="' . $datas->id . '" class="resumen btn btn-app bg-success tooltipsC" title="Agregar Pago"  ><span class="badge bg-teal">Add Pago</span><i class="fas fa-notes-medical"></i> Detalle </button>';
+            $datas = Cuentas::orderBy('id')->get();
+            return  DataTables()->of($datas)
+                ->addColumn('action', function ($datas) {
+                    $button = '<button type="button" name="resumen" id="' . $datas->id . '" class="resumen btn btn-app bg-success tooltipsC" title="Agregar Pago"  ><span class="badge bg-teal">Add Pago</span><i class="fas fa-notes-medical"></i> Detalle </button>';
 
-            return $button;
-        })
-        ->rawColumns(['action'])
-        ->make(true);
+                    return $button;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
         return view('facturacion.cuentasxpagar.indexCuentas');
     }
@@ -35,9 +37,44 @@ class CuentasxPagarController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function guardar(Request $request)
     {
-        //
+        $rules = array(
+            'numerofactura' => 'required',
+            'tipofactura' => 'required',
+            'formadepago' => 'required',
+            'fechafactura' => 'required|date',
+            'fechavencimiento' => 'required|date',
+            'ica' => 'numeric',
+            'valorica' => 'numeric',
+            'retefuente' => 'numeric',
+            'valorretefuente' => 'numeric',
+            'iva' => 'numeric',
+            'valoriva' => 'numeric',
+            'descuento' => 'numeric',
+            'valordescuento' => 'numeric',
+            'total' => 'required|numeric',
+            'observacion' => 'max:500',
+            'future1' => 'max:255',
+            'future2' => 'max:255',
+            'future3' => 'max:255',
+            'future4' => 'max:255',
+            'future5' => 'max:255',
+            'user_id' => 'required|numeric',
+            'proveedor_id' => 'required|numeric'
+
+
+        );
+
+        $error = Validator::make($request->all(), $rules);
+
+        if ($error->fails()) {
+
+            return response()->json(['errors' => $error->errors()->all()]);
+        }
+
+        Cuentas::create($request->all());
+        return response()->json(['success' => 'ok']);
     }
 
     /**
