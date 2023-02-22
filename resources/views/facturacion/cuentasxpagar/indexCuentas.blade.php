@@ -9,9 +9,10 @@ Cuentas por Pagar
 <link href="{{asset("assets/$theme/plugins/icheck-bootstrap/icheck-bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
 <link href="{{asset("assets/$theme/plugins/fontawesome-free/css/all.min.css")}}" rel="stylesheet" type="text/css" />
 
+<link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/select2-bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" rel="stylesheet" type="text/css" />
+
 
 <link href="{{asset("assets/js/gijgo-combined-1.9.13/css/gijgo.min.css")}}" rel="stylesheet" type="text/css" />
 <link href="{{asset("assets/css/select2-bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
@@ -56,6 +57,39 @@ Cuentas por Pagar
 <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
 <script>
     $(document).ready(function() {
+
+        $("#proveedor_id").select2({
+                language: "es",
+                theme: "bootstrap4",
+                placeholder: 'Seleccione un proveedor',
+                allowClear: true,
+                ajax: {
+                    url: "{{ route('proveedoreslist') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            q: params.term,
+
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data.array[0], function(datas) {
+
+                                return {
+
+                                    text: datas.nombre,
+                                    id: datas.id
+
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
+
 
 
         //Funcion que abre modal donde se debe registrar los datos de la factura o cuenta por pagar

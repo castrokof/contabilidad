@@ -85,8 +85,37 @@ class ProveedoresController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function select(Request $request)
     {
+
+
+        $array=[];
+
+
+        if($request->has('q'))
+        {
+            $term = $request->get('q');
+
+
+            array_push($array, Proveedores::orderBy('nombre')->where('nombre', 'LIKE', '%' . $term . '%')
+            ->get());
+
+            return response()->json(['array'=>$array]);
+
+        }
+        else {
+
+
+
+                array_push($array, Proveedores::orderBy('nombre')
+                ->get());
+
+
+                return response()->json(['array'=>$array]);
+
+
+
+        }
 
     }
 

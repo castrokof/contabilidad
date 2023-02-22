@@ -25,7 +25,8 @@
         </div>
         <div class="col-lg-3">
             <label for="proveedor_id" class="col-xs-4 control-label requerido">Proveedor</label>
-            <input type="text" id="proveedor_id" name="proveedor_id" class="form-control">
+            <select name="proveedor_id" id="proveedor_id" class="form-control select2bs4" style="width: 100%;" required>
+            </select>
         </div>
     </div>
 </fieldset>
