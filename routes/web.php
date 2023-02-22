@@ -166,7 +166,10 @@ Route::group(['middleware' => ['auth']], function () {
 
  //RUTA PARA CONSULTA DE PROVEEDORES
 
- Route::get('proveedores','Facturacion\ProveedoresController@index')->name('proveedores')->middleware('superPsicologica');
+    Route::get('proveedores','Facturacion\ProveedoresController@index')->name('proveedores')->middleware('superPsicologica');
+    Route::post('proveedoresstore','Facturacion\ProveedoresController@store')->name('proveedores_store')->middleware('superPsicologica');
+    Route::get('editproveedores/{id}', 'Facturacion\ProveedoresController@edit')->name('proveedores-edit')->middleware('superEditor');
+    Route::put('proveedores/{id}','Facturacion\ProveedoresController@update')->name('proveedores_update')->middleware('superPsicologica');
 
 
 

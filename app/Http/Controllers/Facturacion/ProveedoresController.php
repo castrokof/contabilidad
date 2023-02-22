@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Facturacion;
 use App\Http\Controllers\Controller;
 use App\Models\Facturacion\Proveedores;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProveedoresController extends Controller
 {
@@ -21,7 +22,7 @@ class ProveedoresController extends Controller
                 $datas = Proveedores::orderBy('id')->get();
                 return DataTables()->of($datas)
                 ->addColumn('action', function ($datas) {
-                $button = '<button type="button" name="resumen" id="' . $datas->id . '" class="Editar btn btn-app bg-info tooltipsC" title="Editar proveedor"  ><span class="badge bg-teal">Editar</span><i class="fas fa-pencil"></i> Detalle </button>';
+                $button = '<button type="button" name="resumen" id="' . $datas->id . '" class="edit_proveedor btn btn-app bg-info tooltipsC" title="Editar proveedor"  ><span class="badge bg-teal">Editar</span><i class="fas fa-pen"></i> Editar </button>';
 
             return $button;
         })->rawColumns(['action'])
@@ -50,7 +51,32 @@ class ProveedoresController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $rules = array(
+
+            'tipodocumento'=> 'required',
+            'documento'=> 'required|unique:proveedores|max:99999999999',
+            'nombre'=> 'required',
+            'direccion'=> 'required',
+            'telefono'=> 'required|max:255',
+            'pais'=> 'required',
+            'ciudad'=> 'required',
+            'dpto'=> 'required',
+            'correo'=> 'required',
+            'user_id' => 'required|numeric'
+
+
+        );
+
+        $error = Validator::make($request->all(), $rules);
+
+        if($error->fails()) {
+            return response()->json(['errors' => $error->errors()->all()]);
+        }else{
+
+        Proveedores::create($request->all());
+            return response()->json(['success' => 'ok']);
+        }
     }
 
     /**
@@ -61,7 +87,7 @@ class ProveedoresController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -72,7 +98,13 @@ class ProveedoresController extends Controller
      */
     public function edit($id)
     {
-        //
+        if(request()->ajax()){
+            $proveedor = Proveedores::where('id', '=', $id)->first();
+            return response()->json(['proveedor'=>$proveedor]);
+
+        }
+
+        return view('facturacion.proveedores.index');
     }
 
     /**
@@ -84,7 +116,34 @@ class ProveedoresController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $rules = array(
+
+            'tipodocumento'=> 'required',
+            'documento'=> 'required',
+            'nombre'=> 'required',
+            'direccion'=> 'required',
+            'telefono'=> 'required|max:255',
+            'pais'=> 'required',
+            'ciudad'=> 'required',
+            'dpto'=> 'required',
+            'correo'=> 'required',
+            'user_id' => 'required|numeric'
+
+
+        );
+
+        $error = Validator::make($request->all(), $rules);
+
+        if($error->fails()) {
+            return response()->json(['errors' => $error->errors()->all()]);
+        }
+
+        if(request()->ajax()){
+        Proveedores::findOrFail($id)
+        ->update($request->all());
+
+        }
+        return response()->json(['success' => 'ok1']);
     }
 
     /**

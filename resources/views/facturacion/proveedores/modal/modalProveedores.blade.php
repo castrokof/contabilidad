@@ -1,4 +1,4 @@
-<div class="modal fade" tabindex="-1" id="modal-u" role="dialog" aria-labelledby="myLargeModalLabel">
+<div class="modal fade" tabindex="-1" id="modal-proveedor" role="dialog" aria-labelledby="myLargeModalLabel">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="row">
@@ -6,7 +6,7 @@
                         @include('includes.form-error')
                         @include('includes.form-mensaje')
                         <span id="form_result"></span>
-                        <div class="card card-info">
+                        <div id="card-drawel" class="card card-info">
                             <div class="card-header">
                                 <h3 class="card-title"></h3>
                                 <div class="card-tools pull-right">
@@ -16,7 +16,7 @@
                             <form id="form-general" class="form-horizontal" method="POST">
                                 @csrf
                                 <div class="card-body">
-                                    @include('nomina.empleados.tabs.tabsempleado')
+                                    @include('facturacion.proveedores.tabs.tabsproveedores')
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer">
@@ -28,8 +28,6 @@
                                 </div>
                                 <!-- /.card-footer -->
                             </form>
-
-
 
                         </div>
                     </div>

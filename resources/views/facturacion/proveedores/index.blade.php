@@ -40,38 +40,38 @@
 
 
 
-            function ocultarsalario() {
+            // function ocultarsalario() {
 
-                if ($('#type_contrat').val() == "CT") {
-
-
-                    $("#salaryform").css("display", "block");
-                    $("#salary").prop("required", true);
-
-                    $("#salarypsform").css("display", "none");
-                    $("#salary_ps").prop("required", false);
+            //     if ($('#type_contrat').val() == "CT") {
 
 
-                } else {
+            //         $("#salaryform").css("display", "block");
+            //         $("#salary").prop("required", true);
 
-                    $("#salarypsform").css("display", "block");
-                    $("#salary_ps").prop("required", true);
+            //         $("#salarypsform").css("display", "none");
+            //         $("#salary_ps").prop("required", false);
 
-                    $("#salaryform").css("display", "none");
-                    $("#salary").prop("required", false);
 
-                }
+            //     } else {
 
-            }
+            //         $("#salarypsform").css("display", "block");
+            //         $("#salary_ps").prop("required", true);
 
-            $('#type_contrat').change(ocultarsalario);
+            //         $("#salaryform").css("display", "none");
+            //         $("#salary").prop("required", false);
+
+            //     }
+
+            // }
+
+            // $('#type_contrat').change(ocultarsalario);
 
 
             //Consulta de datos de la tabla lista-detalle
-            $("#ips").select2({
+            $("#pais").select2({
                 language: "es",
                 theme: "bootstrap4",
-                placeholder: 'Seleccione una empresa',
+                placeholder: 'Seleccione un pais',
                 allowClear: true,
                 ajax: {
                     url: "{{ route('selectlist') }}",
@@ -80,41 +80,7 @@
                     data: function(params) {
                         return {
                             q: params.term,
-                            id: 1
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.array[0], function(datas) {
-
-                                return {
-
-                                    text: datas.nombre,
-                                    id: datas.nombre
-
-                                }
-                            })
-                        };
-                    },
-                    cache: true
-                }
-            });
-
-
-            //Consulta de datos de la tabla lista-detalle
-            $("#name_bank").select2({
-                language: "es",
-                theme: "bootstrap4",
-                placeholder: 'Seleccione un banco',
-                allowClear: true,
-                ajax: {
-                    url: "{{ route('selectlist') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            q: params.term,
-                            id: 2
+                            id: 16
                         };
                     },
                     processResults: function(data) {
@@ -136,10 +102,10 @@
 
 
             //Consulta de datos de la tabla lista-detalle
-            $("#type_account").select2({
+            $("#dpto").select2({
                 language: "es",
                 theme: "bootstrap4",
-                placeholder: 'Seleccione tipo de cuenta',
+                placeholder: 'Seleccione un dpto',
                 allowClear: true,
                 ajax: {
                     url: "{{ route('selectlist') }}",
@@ -148,7 +114,7 @@
                     data: function(params) {
                         return {
                             q: params.term,
-                            id: 3
+                            id: 15
                         };
                     },
                     processResults: function(data) {
@@ -168,10 +134,12 @@
                 }
             });
 
-            $("#cargo_id").select2({
+
+            //Consulta de datos de la tabla lista-detalle
+            $("#ciudad").select2({
                 language: "es",
                 theme: "bootstrap4",
-                placeholder: 'Seleccione un cargo',
+                placeholder: 'Seleccione la ciudad',
                 allowClear: true,
                 ajax: {
                     url: "{{ route('selectlist') }}",
@@ -180,7 +148,7 @@
                     data: function(params) {
                         return {
                             q: params.term,
-                            id: 4
+                            id: 17
                         };
                     },
                     processResults: function(data) {
@@ -200,133 +168,7 @@
                 }
             });
 
-            $("#eps").select2({
-                language: "es",
-                theme: "bootstrap4",
-                placeholder: 'Seleccione una eps',
-                allowClear: true,
-                ajax: {
-                    url: "{{ route('selectlist') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            q: params.term,
-                            id: 5
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.array[0], function(datas) {
 
-                                return {
-
-                                    text: datas.nombre,
-                                    id: datas.nombre
-
-                                }
-                            })
-                        };
-                    },
-                    cache: true
-                }
-            });
-
-            $("#arl").select2({
-                language: "es",
-                theme: "bootstrap4",
-                placeholder: 'Seleccione arl',
-                allowClear: true,
-                ajax: {
-                    url: "{{ route('selectlist') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            q: params.term,
-                            id: 6
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.array[0], function(datas) {
-
-                                return {
-
-                                    text: datas.nombre,
-                                    id: datas.nombre
-
-                                }
-                            })
-                        };
-                    },
-                    cache: true
-                }
-            });
-
-            $("#afp").select2({
-                language: "es",
-                theme: "bootstrap4",
-                placeholder: 'Seleccione afp',
-                allowClear: true,
-                ajax: {
-                    url: "{{ route('selectlist') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            q: params.term,
-                            id: 7
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.array[0], function(datas) {
-
-                                return {
-
-                                    text: datas.nombre,
-                                    id: datas.nombre
-
-                                }
-                            })
-                        };
-                    },
-                    cache: true
-                }
-            });
-
-            $("#fc").select2({
-                language: "es",
-                theme: "bootstrap4",
-                placeholder: 'Seleccione fc',
-                allowClear: true,
-                ajax: {
-                    url: "{{ route('selectlist') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            q: params.term,
-                            id: 8
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.array[0], function(datas) {
-
-                                return {
-
-                                    text: datas.nombre,
-                                    id: datas.nombre
-
-                                }
-                            })
-                        };
-                    },
-                    cache: true
-                }
-            });
 
             var myTable =
                 $('#proveedores').DataTable({
@@ -487,7 +329,13 @@
                 $('#action_button').val('Add');
                 $('#action').val('Add');
                 $('#form_result').html('');
-                $('#modal-u').modal({
+                $('#card-drawel').removeClass('card card-warning');
+                $('#card-drawel').addClass('card card-info');
+                $('#cardtabspro').removeClass('card card-warning card-tabs');
+                $('#cardtabspro').addClass('card card-info card-tabs');
+
+
+                $('#modal-proveedor').modal({
                     backdrop: 'static',
                     keyboard: false
                 });
@@ -497,22 +345,22 @@
             });
 
 
-            $(document).on('click', '.addempleado', function(event) {
+            $(document).on('click', '.addproveedor', function(event) {
                 event.preventDefault();
                 var url = '';
                 var method = '';
                 var text = '';
 
                 if ($('#action').val() == 'Add') {
-                    text = "Estás por crear un empleado"
-                   // url = "{{ route('guardar_empleado') }}";
+                    text = "Estás por crear un proveedor"
+                    url = "{{ route('proveedores_store') }}";
                     method = 'post';
                 }
 
                 if ($('#action').val() == 'Edit') {
-                    text = "Estás por actualizar un empleado"
+                    text = "Estás por actualizar un proveedor"
                     var updateid = $('#hidden_id').val();
-                    url = "/empleado/" + updateid;
+                    url = "proveedores/" + updateid;
                     method = 'put';
                 }
                 Swal.fire({
@@ -532,11 +380,11 @@
                             success: function(data) {
                                 if (data.success == 'ok') {
                                     $('#form-general')[0].reset();
-                                    $('#modal-u').modal('hide');
-                                    $('#empleados').DataTable().ajax.reload();
+                                    $('#modal-proveedor').modal('hide');
+                                    $('#proveedores').DataTable().ajax.reload();
                                     Swal.fire({
                                         icon: 'success',
-                                        title: 'empleado creado correctamente',
+                                        title: 'proveedor creado correctamente',
                                         showConfirmButton: false,
                                         timer: 1500
 
@@ -545,18 +393,25 @@
 
                                 } else if (data.success == 'ok1') {
                                     $('#form-general')[0].reset();
-                                    $('#modal-u').modal('hide');
-                                    $('#empleados').DataTable().ajax.reload();
+                                    $('#modal-proveedor').modal('hide');
+                                    $('#proveedores').DataTable().ajax.reload();
                                     Swal.fire({
                                         icon: 'warning',
-                                        title: 'empleado actualizado correctamente',
+                                        title: 'proveedor actualizado correctamente',
                                         showConfirmButton: false,
                                         timer: 1500
 
                                     })
                                     // Manteliviano.notificaciones('cliente actualizado correctamente', 'Sistema Ventas', 'success');
 
-                                }
+                                } else if (data.errors != null) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: data.errors,
+                                            showConfirmButton: false,
+                                            timer: 3000
+                                        })
+                                    }
                             }
 
 
@@ -569,14 +424,15 @@
                                 $.each(error, function(i, items) {
 
                                     var errores = [];
-                                    errores.push(items.celular + '<br>');
-                                    errores.push(items.activo + '<br>');
+                                    errores.push(items.tipodocumento + '<br>');
                                     errores.push(items.documento + '<br>');
-                                    errores.push(items.email + '<br>');
-                                    errores.push(items.papellido + '<br>');
-                                    errores.push(items.pnombre + '<br>');
-                                    errores.push(items.position + '<br>');
-                                    errores.push(items.tipo_documento + '<br>');
+                                    errores.push(items.nombre + '<br>');
+                                    errores.push(items.telefono + '<br>');
+                                    errores.push(items.direccion + '<br>');
+                                    errores.push(items.correo + '<br>');
+                                    errores.push(items.pais + '<br>');
+                                    errores.push(items.dpto + '<br>');
+                                    errores.push(items.ciudad + '<br>');
                                     errores.push(items.user_id + '<br>');
 
                                     console.log(errores);
@@ -607,130 +463,73 @@
             });
 
 
-            // // Edición de cliente
+            // Edición de proveedor
 
-            // $(document).on('click', '.editemployed', function() {
+            $(document).on('click', '.edit_proveedor', function() {
 
-            //     $('#form-general')[0].reset();
-            //     var id = $(this).attr('id');
+                $('#form-general')[0].reset();
+                var id = $(this).attr('id');
 
-            //     $.ajax({
-            //         url: "/empleado/" + id + "/editar",
-            //         dataType: "json",
-            //         success: function(data) {
-
-
-            //             // Primer form de información empleado
-            //             $('#pnombre').val(data.empleado.pnombre);
-            //             $('#snombre').val(data.empleado.snombre);
-            //             $('#papellido').val(data.empleado.papellido);
-            //             $('#sapellido').val(data.empleado.sapellido);
-            //             $('#tipo_documento').val(data.empleado.tipo_documento);
-            //             $('#documento').val(data.empleado.documento);
-            //             $('#email').val(data.empleado.email).prop('required', false);
-            //             $('#celular').val(data.empleado.celular);
-
-            //             var newips = new Option(data.empleado.ips, data.empleado.ips, true,
-            //                 true);
-            //             $('#ips').append(newips).trigger('change');
-
-            //             //Segundo form afiliaciones
-            //             var newposition = new Option(data.empleado.position, data.empleado
-            //                 .position, true, true);
-            //             $('#cargo_id').append(newposition).trigger('change');
-
-            //             var neweps = new Option(data.empleado.eps, data.empleado.eps, true,
-            //                 true);
-            //             $('#eps').append(neweps).trigger('change');
-
-            //             var newfc = new Option(data.empleado.fc, data.empleado.fc, true, true);
-            //             $('#fc').append(newfc).trigger('change');
-
-            //             var newafp = new Option(data.empleado.afp, data.empleado.afp, true,
-            //                 true);
-            //             $('#afp').append(newafp).trigger('change');
-
-            //             var newarl = new Option(data.empleado.arl, data.empleado.arl, true,
-            //                 true);
-            //             $('#arl').append(newarl).trigger('change');
-
-            //             //Tercer form contrato
-
-            //             $('#type_contrat').val(data.empleado.type_contrat);
-
-            //             $('#date_in').val(data.empleado.date_in);
-
-            //             $('#activo').val(data.empleado.activo);
-
-            //             $('#type_salary').val(data.empleado.type_salary);
-
-            //             if ($('#type_contrat').val() == "CT") {
-            //                 $("#salaryform").css("display", "block");
-            //                 $("#salary").prop("required", true).val(data.empleado.salary);
-
-            //                 $("#salarypsform").css("display", "none");
-            //                 $("#salary_ps").prop("required", false);
-
-            //             } else {
-            //                 $("#salarypsform").css("display", "block");
-            //                 $("#salary_ps").prop("required", true).val(data.empleado.salary_ps);
-
-            //                 $("#salaryform").css("display", "none");
-            //                 $("#salary").prop("required", false);
-
-            //             }
-
-            //             $('#date_incontract').val(data.empleado.date_incontract);
-            //             $('#date_endcontract').val(data.empleado.date_endcontract);
-            //             $('#date_out').val(data.empleado.date_out);
-
-            //             //Cuato form salarios
+                $.ajax({
+                    url: "editproveedores/" + id ,
+                    dataType: "json",
+                    success: function(data) {
 
 
-            //             var newbank = new Option(data.empleado.name_bank, data.empleado
-            //                 .name_bank, true, true);
-            //             $('#name_bank').append(newbank).trigger('change');
+                        // Primer form de información empleado
+                        $('#tipodocumento').val(data.proveedor.tipodocumento);
+                        $('#documento').val(data.proveedor.documento);
+                        $('#nombre').val(data.proveedor.nombre);
+                        $('#telefono').val(data.proveedor.telefono);
+                        $('#direccion').val(data.proveedor.direccion);
+                        $('#correo').val(data.proveedor.correo);
 
-            //             var newtypea = new Option(data.empleado.type_account, data.empleado
-            //                 .type_account, true, true);
-            //             $('#type_account').append(newtypea).trigger('change');
+                        var newpais = new Option(data.proveedor.pais, data.proveedor.pais, true,
+                            true);
+                        $('#pais').append(newpais).trigger('change');
 
-            //             $('#account').val(data.empleado.account);
-
-            //             $('#value_transporte').val(data.empleado.value_transporte);
-
-            //             $('#value_salary_add').val(data.empleado.value_salary_add);
-
-            //             $('#value_hour').val(data.empleado.value_hour);
-
-            //             $('#value_patient_attended').val(data.empleado.value_patient_attended);
-
-            //             $('#value_add_security_social').val(data.empleado
-            //                 .value_add_security_social);
+                        var newdpto = new Option(data.proveedor.dpto, data.proveedor.dpto, true,
+                            true);
+                        $('#dpto').append(newdpto).trigger('change');
 
 
-            //             $('#hidden_id').val(id)
-            //             $('.card-title').text("Editando empleado: " + data.empleado.pnombre +
-            //                 "-" + data.empleado.papellido);
-            //             $('#action_button').val('Edit');
-            //             $('#action').val('Edit');
-            //             $('#modal-u').modal('show');
-
-            //         },
+                        var newcity = new Option(data.proveedor.ciudad, data.proveedor.ciudad, true,
+                            true);
+                        $('#ciudad').append(newcity).trigger('change');
 
 
 
-            //     }).fail(function(jqXHR, textStatus, errorThrown) {
 
-            //         if (jqXHR.status === 403) {
 
-            //             Manteliviano.notificaciones('No tienes permisos para realizar esta accion',
-            //                 'Call Nomina', 'warning');
 
-            //         }
-            //     });
+                        $('#hidden_id').val(id)
+                        $('.card-title').text("Editando proveedor: " + data.proveedor.nombre +
+                            "-" + data.proveedor.documento);
+                        $('#card-drawel').removeClass('card card-info');
+                        $('#card-drawel').addClass('card card-warning');
+                        $('#cardtabspro').removeClass('card card-info card-tabs');
+                        $('#cardtabspro').addClass('card card-warning card-tabs');
+                        $('#action_button').val('Editar').removeClass('btn-sucess')
+                        $('#action_button').addClass('btn-danger')
+                        $('#action_button').val('Edit');
+                        $('#action').val('Edit');
+                        $('#modal-proveedor').modal('show');
 
-            // });
+                    },
+
+
+
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+
+                    if (jqXHR.status === 403) {
+
+                        Manteliviano.notificaciones('No tienes permisos para realizar esta accion',
+                            'Call Nomina', 'warning');
+
+                    }
+                });
+
+            });
 
 
 
