@@ -333,7 +333,9 @@
                 $('#card-drawel').addClass('card card-info');
                 $('#cardtabspro').removeClass('card card-warning card-tabs');
                 $('#cardtabspro').addClass('card card-info card-tabs');
-
+                $('#pais').val('').trigger('change');
+                $('#dpto').val('').trigger('change');
+                $('#ciudad').val('').trigger('change');
 
                 $('#modal-proveedor').modal({
                     backdrop: 'static',

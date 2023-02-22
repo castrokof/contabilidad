@@ -64,7 +64,7 @@ Cuentas por Pagar
                 placeholder: 'Seleccione un proveedor',
                 allowClear: true,
                 ajax: {
-                    url: "{{ route('proveedoreslist') }}",
+                    url: "{{route('proveedoreslist')}}",
                     dataType: 'json',
                     delay: 250,
                     data: function(params) {
@@ -95,7 +95,7 @@ Cuentas por Pagar
         //Funcion que abre modal donde se debe registrar los datos de la factura o cuenta por pagar
         $('#create_cuenta').click(function() {
             $('#form-general')[0].reset();
-            // $('.card-title').text('Agregar Procedimiento');
+            $('#proveedor_id').val('').trigger('change');
             $('#action_button').val('Add');
             $('#action').val('Add');
             $('#form_result').html('');
