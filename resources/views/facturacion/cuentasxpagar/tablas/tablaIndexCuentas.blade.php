@@ -25,7 +25,7 @@
                             <th>Ica</th>
                             <th>ValorICA</th>
                             <th>Retefuente</th>
-                            <th>Valorretefuente</th>
+                            <th>ValorRetefuente</th>
                             <th>Iva</th>
                             <th>ValorIVA</th>
                             <th>Descuento</th>

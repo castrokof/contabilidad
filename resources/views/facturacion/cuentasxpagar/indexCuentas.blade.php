@@ -203,6 +203,9 @@ Cuentas por Pagar
                         orderable: false
                     },
                     {
+                        data: 'id'
+                    },
+                    {
                         data: 'numerofactura'
                     },
                     {

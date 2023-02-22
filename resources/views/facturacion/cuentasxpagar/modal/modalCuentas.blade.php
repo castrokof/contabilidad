@@ -36,7 +36,7 @@
                         href="#custom-tabs-one-datos-del-paciente"
                         role="tab"
                         aria-controls="custom-tabs-one-datos-del-paciente"
-                        aria-selected="false">Datos de la Factura</a>
+                        aria-selected="false">Detalle de la Factura</a>
                       </li>
                       </ul>
                   </div>
