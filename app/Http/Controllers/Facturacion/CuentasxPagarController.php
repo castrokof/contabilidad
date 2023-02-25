@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Facturacion\Cuentas;
+use App\Models\Facturacion\Pagos;
 
 class CuentasxPagarController extends Controller
 {
@@ -22,7 +23,7 @@ class CuentasxPagarController extends Controller
             $datas = Cuentas::orderBy('id')->get();
             return  DataTables()->of($datas)
                 ->addColumn('action', function ($datas) {
-                    $button = '<button type="button" name="resumen" id="' . $datas->id . '" class="resumen btn btn-app bg-success tooltipsC" title="Agregar Pago"  ><span class="badge bg-teal">Add Pago</span><i class="fas fa-notes-medical"></i> Detalle </button>';
+                    $button = '<button type="button" name="payment" id="' . $datas->id . '" class="payment btn btn-app bg-success tooltipsC" title="Agregar Pago"  ><span class="badge bg-teal">Add Pago</span><i class="fas fa-notes-medical"></i> Detalle </button>';
 
                     return $button;
                 })
@@ -83,9 +84,42 @@ class CuentasxPagarController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+
+    public function addpay($id)
     {
-        //
+        if (request()->ajax()) {
+
+            $datas2 = Cuentas::where('id', $id)->first();
+
+            return response()->json(['result' => $datas2]);
+        }
+        return view('facturacion.cuentasxpagar.indexCuentas');
+    }
+
+    public function guardarpago(Request $request)
+    {
+
+        if ($request->ajax()) {
+
+            $rules = array(
+                'fechadepago'=> 'required',
+                'valordelpago'=> 'required',
+                'tipodepago'=> 'required',
+                'numerotransaccion'=> 'required',
+                'observacion'=> 'required',
+                'cuentasxpagar_id ' => 'required'
+
+            );
+
+            $error = Validator::make($request->all(), $rules);
+
+            if ($error->fails()) {
+                return response()->json(['errors' => $error->errors()->all()]);
+            }
+
+            Pagos::create($request->all());
+            return response()->json(['success' => 'okn1']);
+        }
     }
 
     /**

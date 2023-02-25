@@ -10,7 +10,7 @@ Cuentas por Pagar
 <link href="{{asset("assets/$theme/plugins/fontawesome-free/css/all.min.css")}}" rel="stylesheet" type="text/css" />
 
 <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/css/select2-bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('assets/css/select2-bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
 
 
 
@@ -33,8 +33,8 @@ Cuentas por Pagar
 @include('facturacion.cuentasxpagar.tabs.tabsIndexCuentas')
 
 @include('facturacion.cuentasxpagar.modal.modalCuentas')
+@include('facturacion.cuentasxpagar.modal.modalPayCuentas')
 
-@include('facturacion.cuentasxpagar.modal.modalindexaddseguimiento')
 
 
 
@@ -58,37 +58,87 @@ Cuentas por Pagar
 <script>
     $(document).ready(function() {
 
+        // Obtener los elementos del formulario Cuentas por Pagar para calcular el Descuento, los Impuestos y Retenciones
+        const descuentoInput = document.getElementById("descuento");
+        const valordescuentoInput = document.getElementById("valordescuento");
+        const retefuenteInput = document.getElementById("retefuente");
+        const valorretefuenteInput = document.getElementById("valorretefuente");
+        const ivaInput = document.getElementById("iva");
+        const valorivaInput = document.getElementById("valoriva");
+        const totalInput = document.getElementById("total");
+
+        // Agregar event listener para escuchar los cambios en el campo descuento
+        descuentoInput.addEventListener("change", () => {
+            // Obtener el valor de descuento y total
+            const descuento = descuentoInput.value;
+            const total = totalInput.value;
+
+            // Calcular el valor del descuento
+            const valordescuento = (descuento * total) / 100;
+
+            // Actualizar el campo de valor del descuento
+            valordescuentoInput.value = valordescuento.toFixed(2);
+        });
+
+        // Agregar event listener para escuchar los cambios en el campo retefuente
+        retefuenteInput.addEventListener("change", () => {
+            // Obtener el valor de retefuente y total
+            const retefuente = retefuenteInput.value;
+            const total = totalInput.value;
+
+            // Calcular el valor de la retención en la fuente
+            const valorretefuente = total * retefuente;
+
+            // Actualizar el campo de valor de la retención en la fuente
+            valorretefuenteInput.value = valorretefuente.toFixed(2);
+            /* valorretefuenteInput.value = valorretefuente.toFixed(2); */
+        });
+
+        // Agregar event listener para escuchar los cambios en el campo iva
+        ivaInput.addEventListener("change", () => {
+            // Obtener el valor de iva y total
+            const iva = ivaInput.value;
+            const total = totalInput.value;
+
+            // Calcular el valor del iva
+            const valoriva = (iva * total) / 100;
+
+            // Actualizar el campo de valor del iva
+            valorivaInput.value = valoriva.toFixed(2);
+        });
+
+
         $("#proveedor_id").select2({
-                language: "es",
-                theme: "bootstrap4",
-                placeholder: 'Seleccione un proveedor',
-                allowClear: true,
-                ajax: {
-                    url: "{{route('proveedoreslist')}}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            q: params.term,
+            language: "es",
+            theme: "bootstrap4",
+            placeholder: 'Seleccione un proveedor',
+            allowClear: true,
+            ajax: {
+                url: "{{route('proveedoreslist')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        q: params.term,
 
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.array[0], function(datas) {
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: $.map(data.array[0], function(datas) {
 
-                                return {
+                            return {
 
-                                    text: datas.nombre,
-                                    id: datas.id
+                                text: datas.nombre,
+                                id: datas.id
 
-                                }
-                            })
-                        };
-                    },
-                    cache: true
-                }
-            });
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
 
 
 
@@ -189,15 +239,7 @@ Cuentas por Pagar
         });
 
 
-        // Función que envia el id al controlador y cambia el estado del registro
-        $(document).on('click', '.agenda', function() {
-            var data = {
-                id: $(this).attr('value'),
-                _token: $('input[name=_token]').val()
-            };
 
-            ajaxRequest('agendado', data);
-        });
 
         function ajaxRequest(url, data) {
             $.ajax({
@@ -687,104 +729,122 @@ Cuentas por Pagar
 
 
 
-        //Función para abrir modal del detalle de la evolución y muestra las observaciones agregadas
-        $(document).on('click', '.resumen', function() {
-            var idevo = $(this).attr('id');
-            $('#names').empty();
-            $('#documents').empty();
-            $('#evolution').empty();
-            $('#names1').empty();
-            $('#address').empty();
-            $('#date_birth').empty();
-            $('#celular').empty();
-            $('#sex').empty();
-            $('#consultation').empty();
-            $('#created_at').empty();
-            $('#observaciones_chat').empty();
-
+        //Función para abrir modal del detalle de la cuenta por pagar para registrar un pago total o parcial
+        $(document).on('click', '.payment', function() {
+            var id = $(this).attr('id');
 
             $.ajax({
-                url: "evolucion/" + idevo + "",
+                url: "/paycuentasxpagar/" + id + "/addpay",
                 dataType: "json",
                 success: function(data) {
+                    $('#numerofactura_n').val(data.result.numerofactura);
+                    $('#total_n').val(data.result.total);
+                    $('#tipofactura_n').val(data.result.tipofactura);
+                    $('#cuentasxpagar_id').val(id);
 
-
-                    var usuarios = data[1];
-                    console.log(usuarios);
-                    console.log(data[0]);
-                    $.each(data[0], function(i, items) {
-                        $('#names').append(items.surname + " " + items.fname);
-                        $('#documents').append(items.type_document + "-" + items.document);
-                        $('#evolution').append(items.reason_consultation);
-                        $('#names1').append(items.surname + " " + items.fname);
-                        $('#address').append("Ciudad: " + items.municipality + " | Dirección: " + items.address + " | Eapb: " + items.eapb);
-                        $('#date_birth').append(items.date_birth);
-                        $('#celular').append(items.celular);
-                        if (items.sex == "M") {
-                            $('#sex').append("MASCULINO");
-                        } else {
-                            $('#sex').append("FEMENINO");
-                        }
-                        $('#created_at').append("Fecha de evolución: " + " " + items.created_at);
-                        if (items.consultation == 1) {
-                            $('#consultation').append("Evolución " + items.consultation + "-" + "Orientación Psicológica");
-                        }
-                    });
-
-
-                    $.each(usuarios, function(i, items1) {
-                        $.each(data[0], function(i, items) {
-                            $.each(items.observacionadd, function(i, itemobs) {
-                                var filtered = items1.filter(el => el.id == itemobs.user_id);
-                                $.each(filtered, function(i, itemsusu) {
-                                    $('#observaciones_chat').append(
-                                        '<div class="direct-chat-msg">' +
-                                        '<div class="direct-chat-infos clearfix">' +
-                                        '<span class="direct-chat-name float-left">' + 'Usuario: ' + itemsusu.usuario + '</span>' +
-                                        '<span class="direct-chat-timestamp float-right">' + 'Fecha creación: ' + itemobs.created_at + '</span>' +
-                                        '</div>' +
-                                        '<div class="direct-chat-text">' + 'Observación: ' +
-                                        itemobs.addobservacion +
-                                        '</div>' +
-                                        '</div>');
-                                });
-                            });
-
-                        });
-                    });
-
-
-
-
-                    $('.modal-title-resumen').text('Evolución');
-                    $('#modal-resumen').modal({
+                    //$('.card-title').text('Registrar Pago');
+                    $('#action_button').val('Add');
+                    $('#action').val('Add');
+                    $('#modal-payment').modal({
                         backdrop: 'static',
                         keyboard: false
                     });
-                    $('#modal-resumen').modal('show');
+                    $('#modal-payment').modal('show');
                 }
-
 
             }).fail(function(jqXHR, textStatus, errorThrown) {
 
                 if (jqXHR.status === 403) {
 
-                    Manteliviano.notificaciones('No tienes permisos para realizar esta accion', 'Sistema Ventas', 'warning');
-
+                    Manteliviano.notificaciones('No tienes permisos para realizar esta accion', 'Sistema cuentas por pagar', 'warning');
                 }
             });
 
-
         });
 
+        //Funcion para agregar niveles y copagos
+    $('#form-general').on('submit', function(event) {
+      event.preventDefault();
+      var url = '';
+      var method = '';
+      var text = '';
+
+      if ($('#action').val() == 'Add') {
+        text = "Estás por registrar un pago"
+        url = "{{route('cuentasxpagar_payment')}}";
+        method = 'post';
+      }
+      if ($('#action').val() == 'Edit') {
+        text = "Estás por actualizar un Nivel"
+        var updateid = $('#id_eps_niveles').val();
+        url = "/eps_niveles/" + updateid;
+        method = 'put';
+      }
+
+      Swal.fire({
+        title: "¿Estás seguro?",
+        text: text,
+        icon: "success",
+        showCancelButton: true,
+        showCloseButton: true,
+        confirmButtonText: 'Aceptar',
+      }).then((result) => {
+        if (result.value) {
+          $.ajax({
+            url: url,
+            method: method,
+            data: $(this).serialize(),
+            dataType: "json",
+            success: function(data) {
+              var html = '';
+              if (data.errors) {
+
+                html =
+                  '<div class="alert alert-danger alert-dismissible">' +
+                  '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                  '<h5><i class="icon fas fa-ban"></i> Mensaje fidem</h5>';
+
+                for (var count = 0; count < data.errors.length; count++) {
+                  html += '<p>' + data.errors[count] + '<p>';
+                }
+                html += '</div>';
+              }
+
+              if (data.success == 'okn1') {
+                limpiar_input_niveles();
+                $('#modal-payment').modal('hide');
+                /* $('#tniveles').DataTable().ajax.reload(); */
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Pago creado correctamente',
+                  showConfirmButton: false,
+                  timer: 1500
+
+                })
+
+              } else if (data.success == 'okn2') {
+                $('#form-general')[0].reset();
+                $('#modal-payment').modal('hide');
+                $('#tniveles').DataTable().ajax.reload();
+                Swal.fire({
+                  icon: 'warning',
+                  title: 'NIVEL actualizado correctamente',
+                  showConfirmButton: false,
+                  timer: 1500
+
+                })
+
+              }
+              $('#form_result').html(html)
+            }
 
 
+          });
+        }
+      });
 
 
-
-
-
-
+    });
 
 
 

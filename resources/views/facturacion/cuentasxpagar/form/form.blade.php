@@ -38,6 +38,7 @@
         <div class="col-lg-3">
             <label for="formadepago" class="col-xs-4 control-label requerido">Forma de pago:</label>
             <select id="formadepago" name="formadepago" class="form-control select2bs4" required>
+                <option value="">---seleccione---</option>
                 <option value="Efectivo">Efectivo</option>
                 <option value="Transferencia">Transferencia</option>
                 <option value="Tarjeta de crédito">Tarjeta de crédito</option>
@@ -86,7 +87,12 @@
     <div class="form-group row">
         <div class="col-lg-2">
             <label for="iva" class="col-xs-4 control-label ">IVA:</label>
-            <input type="number" id="iva" name="iva" class="form-control">
+            <select id="iva" name="iva" class="form-control">
+                <option value="">---seleccione---</option>
+                <option value="0">0%</option>
+                <option value="5">5%</option>
+                <option value="19">19%</option>
+            </select>
         </div>
         <div class="col-lg-3">
             <label for="valoriva" class="col-xs-4 control-label ">Valor IVA:</label>
