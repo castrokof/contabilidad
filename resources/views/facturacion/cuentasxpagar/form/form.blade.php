@@ -32,6 +32,32 @@
 </fieldset>
 
 <fieldset>
+    <legend style="font-size: 20px; color: #1f7386;">Datos de la sede</legend>
+    <div class="form-group row">
+        <div class="col-lg-3">
+            <label for="sede_ips" class="col-xs-4 control-label ">Futuro 3:</label>
+            <select id="sede_ips" name="sede_ips" class="form-control select2bs4" onchange="mostrarOcultarCampos()">
+                <option value="">---seleccione---</option>
+                <option value="FIDEM1">ATENCIÓN FIDEM 1</option>
+                <option value="FIDEM2">ATENCIÓN FIDEM 2</option>
+                <option value="FIDEMCOMPARTIDO">FIDEM COMPARTIDO</option>
+                <option value="MEDCOL">MEDCOL</option>
+                <option value="VITALIA">SALUD TEMPUS</option>
+                <option value="VITALIA">SALUD VITALIA</option>
+            </select>
+        </div>
+        <div id="futuro1" class="col-lg-3" style="display:none;">
+            <label for="porcentaje_gasto_fidem_1" class="col-xs-4 control-label ">% FIDEM 1:</label>
+            <input type="number" id="porcentaje_gasto_fidem_1" name="porcentaje_gasto_fidem_1" class="form-control">
+        </div>
+        <div id="futuro2" class="col-lg-3" style="display:none;">
+            <label for="porcentaje_gasto_fidem_2" class="col-xs-4 control-label ">% FIDEM 2:</label>
+            <input type="number" id="porcentaje_gasto_fidem_2" name="porcentaje_gasto_fidem_2" class="form-control">
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
     <legend style="font-size: 20px; color: #1f7386;">Información de pago</legend>
 
     <div class="form-group row">

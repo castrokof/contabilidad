@@ -30,9 +30,9 @@ class CreateCuentasxpagarTable extends Migration
             $table->unsignedBigInteger('valordescuento')->nullable();
             $table->unsignedBigInteger('total');
             $table->longText('observacion');
-            $table->string('future1')->nullable();
-            $table->string('future2')->nullable();
-            $table->string('future3')->nullable();
+            $table->unsignedBigInteger('porcentaje_gasto_fidem_1')->nullable();
+            $table->unsignedBigInteger('porcentaje_gasto_fidem_2')->nullable();
+            $table->string('sede_ips')->nullable();
             $table->string('future4')->nullable();
             $table->string('future5')->nullable();
             $table->unsignedInteger('user_id');

@@ -327,13 +327,13 @@ Cuentas por Pagar
                         data: 'observacion'
                     },
                     {
-                        data: 'future1'
+                        data: 'porcentaje_gasto_fidem_1'
                     },
                     {
-                        data: 'future2'
+                        data: 'porcentaje_gasto_fidem_2'
                     },
                     {
-                        data: 'future3'
+                        data: 'sede_ips'
                     },
                     {
                         data: 'future4'
@@ -342,10 +342,10 @@ Cuentas por Pagar
                         data: 'future5'
                     },
                     {
-                        data: 'user_id'
+                        data: 'username'
                     },
                     {
-                        data: 'proveedor_id'
+                        data: 'proveedor_nombre'
                     }
                 ],
 
@@ -387,33 +387,7 @@ Cuentas por Pagar
 
                     }
                 ],
-                "columnDefs": [{
 
-                        "render": function(data, type, row) {
-                            if (row["consultation"] == 1) {
-                                return data + ' - Orientación Psicológica';
-
-                            } else {
-
-                                return data + ' - Call center';
-
-                            }
-
-                        },
-                        "targets": [18]
-                    }
-
-
-                ],
-
-                "createdRow": function(row, data, dataIndex) {
-                    if (data["consultation"] == 1) {
-                        $($(row).find("td")[18]).addClass("btn btn-sm btn-danger rounded-lg");
-                    } else {
-                        $($(row).find("td")[18]).addClass("btn btn-sm btn-dark rounded-lg");
-                    }
-
-                }
 
 
             });
@@ -887,9 +861,9 @@ Cuentas por Pagar
 
 <!--
     **FUNCIONES PARA VALIDACIONES DEL FORMULARIO REGISTRO DE PAGOS**
-    función de validación en JavaScript para mostrar una alerta si el valor ingresado en el campo "valordelpago" es mayor que el valor del campo "total_n"
 -->
 <script>
+    //función de validación en JavaScript para mostrar una alerta si el valor ingresado en el campo "valordelpago" es mayor que el valor del campo "total_n"
     function validarPago() {
         var total = parseFloat(document.getElementById('total_n').value);
         var pago = parseFloat(document.getElementById('valordelpago').value);
@@ -899,6 +873,21 @@ Cuentas por Pagar
             return false;
         }
         return true;
+    }
+
+    //funcion que va ocultar o mostrar los campos futuro1 y futuro2 siempre y cuando en el campo futuro 3 se seleccionar la opcion FIDEMCOMPARTIDO
+    function mostrarOcultarCampos() {
+        var sede_ips = document.getElementById("sede_ips");
+        var futuro1 = document.getElementById("futuro1");
+        var futuro2 = document.getElementById("futuro2");
+
+        if (sede_ips.value == "FIDEMCOMPARTIDO") {
+            futuro1.style.display = "block";
+            futuro2.style.display = "block";
+        } else {
+            futuro1.style.display = "none";
+            futuro2.style.display = "none";
+        }
     }
 
     /* function validarPago() {

@@ -26,9 +26,9 @@ class Cuentas extends Model
         'valordescuento',
         'total',
         'observacion',
-        'future1',
-        'future2',
-        'future3',
+        'porcentaje_gasto_fidem_1',
+        'porcentaje_gasto_fidem_2',
+        'sede_ips',
         'future4',
         'future5',
         'user_id',
@@ -41,8 +41,8 @@ class Cuentas extends Model
         return $this->belongsTo(Usuario::class, 'id');
     }
 
-    public function observacionadd(){
-        return $this->hasMany(ObservacionesPsicologia::class, 'evo_id');
+    public function proveedorId(){
+        return $this->hasMany(Proveedores::class, 'id');
     }
 
 }

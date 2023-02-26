@@ -32,9 +32,9 @@
                             <th>ValorDescuento</th>
                             <th>Total</th>
                             <th>Observacion</th>
-                            <th>Future1</th>
-                            <th>Future2</th>
-                            <th>Future3</th>
+                            <th>% Gasto Fidem 1</th>
+                            <th>% Gasto Fidem 2</th>
+                            <th>Sede</th>
                             <th>Future4</th>
                             <th>Future5</th>
                             <th>Usuario</th>

@@ -18,9 +18,16 @@ class CuentasxPagarController extends Controller
      */
     public function index(Request $request)
     {
+        $idlist = $request->id;
+
         if ($request->ajax()) {
 
-            $datas = Cuentas::orderBy('id')->get();
+            $datas = DB::table('cuentasxpagar') /* Cuentas::orderBy('id') */
+            ->Join('proveedores', 'cuentasxpagar.proveedor_id', '=', 'proveedores.id')
+            ->Join('usuario', 'cuentasxpagar.user_id', '=', 'usuario.id')
+            ->selectRaw('cuentasxpagar.*, proveedores.nombre as proveedor_nombre, usuario.usuario as username')
+            ->orderBy('cuentasxpagar.id')
+            ->get();
             return  DataTables()->of($datas)
                 ->addColumn('action', function ($datas) {
                     $button = '<button type="button" name="payment" id="' . $datas->id . '" class="payment btn btn-app bg-success tooltipsC" title="Agregar Pago"  ><span class="badge bg-teal">Add Pago</span><i class="fas fa-notes-medical"></i> Detalle </button>';
@@ -56,9 +63,9 @@ class CuentasxPagarController extends Controller
             'valordescuento',
             'total' => 'required|numeric',
             'observacion' => 'max:500',
-            'future1' => 'max:255',
-            'future2' => 'max:255',
-            'future3' => 'max:255',
+            'porcentaje_gasto_fidem_1' => 'required|numeric',
+            'porcentaje_gasto_fidem_2' => 'required|numeric',
+            'sede_ips' => 'max:255',
             'future4' => 'max:255',
             'future5' => 'max:255',
             'user_id' => 'required|numeric',
