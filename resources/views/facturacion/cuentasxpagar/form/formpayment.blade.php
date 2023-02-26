@@ -48,11 +48,11 @@
 
     <div class="form-group row">
         <div class="col-lg-6">
-            <label for="observacion" class="col-xs-4 control-label">Observaciones:</label>
-            <textarea id="observacion" name="observacion" class="form-control" rows="3"></textarea>
+            <label for="observacion" class="col-xs-4 control-label requerido" >Observaciones:</label>
+            <textarea id="observacion" name="observacion" class="form-control" rows="3" required></textarea>
         </div>
     </div>
 
+    <input type="hidden" name="cuentasxpagar_id" id="cuentasxpagar_id" class="form-control" >
 </fieldset>
-<input type="hidden" name="cuentasxpagar_id" id="cuentasxpagar_id" class="form-control" value="{{old('cuentasxpagar_id')}}" readonly>
-<input type="hidden" name="user_id" id="user_id" class="form-control" value="{{Session()->get('usuario_id')}}">
+<!-- <input type="hidden" name="user_id" id="user_id" class="form-control" value="{{Session()->get('usuario_id')}}"> -->

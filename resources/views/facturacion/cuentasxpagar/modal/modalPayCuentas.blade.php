@@ -7,7 +7,7 @@
                     <div class="col-lg-12">
                         @include('includes.form-error')
                         @include('includes.form-mensaje')
-                        <span id="form_result"></span>
+                        <span id="form_result_p"></span>
                         <div id="card-drawel" class="card card-info">
                             <div class="card-header">
                                 <h3 class="card-title"></h3>
@@ -15,7 +15,7 @@
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
-                            <form id="form-general" class="form-horizontal" method="POST">
+                            <form id="form-general-p" class="form-horizontal" method="POST" onsubmit="return validarPago()">
                                 @csrf
                                 <div class="card-body">
                                     @include('facturacion.cuentasxpagar.tabs.tabsIndexPayment')

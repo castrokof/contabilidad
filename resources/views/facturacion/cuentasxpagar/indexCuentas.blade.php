@@ -762,89 +762,92 @@ Cuentas por Pagar
 
         });
 
-        //Funcion para agregar niveles y copagos
-    $('#form-general').on('submit', function(event) {
-      event.preventDefault();
-      var url = '';
-      var method = '';
-      var text = '';
 
-      if ($('#action').val() == 'Add') {
-        text = "Estás por registrar un pago"
-        url = "{{route('cuentasxpagar_payment')}}";
-        method = 'post';
-      }
-      if ($('#action').val() == 'Edit') {
-        text = "Estás por actualizar un Nivel"
-        var updateid = $('#id_eps_niveles').val();
-        url = "/eps_niveles/" + updateid;
-        method = 'put';
-      }
 
-      Swal.fire({
-        title: "¿Estás seguro?",
-        text: text,
-        icon: "success",
-        showCancelButton: true,
-        showCloseButton: true,
-        confirmButtonText: 'Aceptar',
-      }).then((result) => {
-        if (result.value) {
-          $.ajax({
-            url: url,
-            method: method,
-            data: $(this).serialize(),
-            dataType: "json",
-            success: function(data) {
-              var html = '';
-              if (data.errors) {
+        //Funcion para agregar pagos parciales y totales
+        $('#form-general-p').on('submit', function(event) {
+            event.preventDefault();
+            var url = '';
+            var method = '';
+            var text = '';
 
-                html =
-                  '<div class="alert alert-danger alert-dismissible">' +
-                  '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-                  '<h5><i class="icon fas fa-ban"></i> Mensaje fidem</h5>';
+            if ($('#action').val() == 'Add') {
 
-                for (var count = 0; count < data.errors.length; count++) {
-                  html += '<p>' + data.errors[count] + '<p>';
-                }
-                html += '</div>';
-              }
-
-              if (data.success == 'okn1') {
-                limpiar_input_niveles();
-                $('#modal-payment').modal('hide');
-                /* $('#tniveles').DataTable().ajax.reload(); */
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Pago creado correctamente',
-                  showConfirmButton: false,
-                  timer: 1500
-
-                })
-
-              } else if (data.success == 'okn2') {
-                $('#form-general')[0].reset();
-                $('#modal-payment').modal('hide');
-                $('#tniveles').DataTable().ajax.reload();
-                Swal.fire({
-                  icon: 'warning',
-                  title: 'NIVEL actualizado correctamente',
-                  showConfirmButton: false,
-                  timer: 1500
-
-                })
-
-              }
-              $('#form_result').html(html)
+                text = "Estás por registrar un pago"
+                url = "{{route('cuentasxpagar_payment')}}";
+                method = 'post';
+            }
+            if ($('#action').val() == 'Edit') {
+                text = "Estás por actualizar un Nivel"
+                var updateid = $('#id_eps_niveles').val();
+                url = "/eps_niveles/" + updateid;
+                method = 'put';
             }
 
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: text,
+                icon: "success",
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: 'Aceptar',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: url,
+                        method: method,
+                        data: $(this).serialize(),
+                        dataType: "json",
+                        success: function(data) {
+                            var html = '';
+                            if (data.errors) {
 
-          });
-        }
-      });
+                                html =
+                                    '<div class="alert alert-danger alert-dismissible">' +
+                                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                    '<h5><i class="icon fas fa-ban"></i> Mensaje fidem</h5>';
+
+                                for (var count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '<p>';
+                                }
+                                html += '</div>';
+                            }
+
+                            if (data.success == 'okn1') {
+                                $('#form-general-p')[0].reset();
+                                $('#modal-payment').modal('hide');
+                                $('#pcuentas').DataTable().ajax.reload();
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Pago creado correctamente',
+                                    showConfirmButton: false,
+                                    timer: 1500
+
+                                })
+
+                            } else if (data.success == 'okn2') {
+                                $('#form-general-p')[0].reset();
+                                $('#modal-payment').modal('hide');
+                                $('#pcuentas').DataTable().ajax.reload();
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'NIVEL actualizado correctamente',
+                                    showConfirmButton: false,
+                                    timer: 1500
+
+                                })
+
+                            }
+                            $('#form_result_p').html(html)
+                        }
 
 
-    });
+                    });
+                }
+            });
+
+
+        });
 
 
 
@@ -880,5 +883,33 @@ Cuentas por Pagar
             "colvis": "Visibilidad"
         }
     }
+</script>
+
+<!--
+    **FUNCIONES PARA VALIDACIONES DEL FORMULARIO REGISTRO DE PAGOS**
+    función de validación en JavaScript para mostrar una alerta si el valor ingresado en el campo "valordelpago" es mayor que el valor del campo "total_n"
+-->
+<script>
+    function validarPago() {
+        var total = parseFloat(document.getElementById('total_n').value);
+        var pago = parseFloat(document.getElementById('valordelpago').value);
+        if (pago > total) {
+            alert('El valor del pago no puede ser mayor que el total de la factura.');
+            document.getElementById('valordelpago').value = '';
+            return false;
+        }
+        return true;
+    }
+
+    /* function validarPago() {
+    var valorPago = document.getElementById("valordelpago").value;
+    var total = document.getElementById("total_n").value;
+    if (parseInt(valorPago) > parseInt(total)) {
+        var mensaje = "<div class='alert alert-danger'>El valor del pago no puede ser mayor al total de la factura</div>";
+        document.getElementById("alerta").innerHTML = mensaje;
+        return false;
+    }
+    return true;
+} */
 </script>
 @endsection

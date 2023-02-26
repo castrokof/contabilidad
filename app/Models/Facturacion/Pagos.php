@@ -16,7 +16,7 @@ class Pagos extends Model
         'tipodepago',
         'numerotransaccion',
         'observacion',
-        'cuentasxpagar_id '
+        'cuentasxpagar_id'
     ];
 
 

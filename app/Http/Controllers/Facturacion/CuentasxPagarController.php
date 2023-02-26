@@ -102,12 +102,12 @@ class CuentasxPagarController extends Controller
         if ($request->ajax()) {
 
             $rules = array(
-                'fechadepago'=> 'required',
-                'valordelpago'=> 'required',
-                'tipodepago'=> 'required',
-                'numerotransaccion'=> 'required',
-                'observacion'=> 'required',
-                'cuentasxpagar_id ' => 'required'
+                'fechadepago' => 'required',
+                'valordelpago' => 'required',
+                'tipodepago' => 'required',
+                'numerotransaccion' => 'required',
+                'observacion' => 'required',
+                'cuentasxpagar_id' => 'required|numeric'
 
             );
 
