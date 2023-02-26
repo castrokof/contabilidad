@@ -233,8 +233,9 @@ class CuentasxPagarController extends Controller
                 /* Si ya existe un registro en la tabla Pagos para la cuenta por pagar,
                 se valida el valor del pago ingresado en el formulario con el valor existente
                 para evitar que se ingresen mas pagos que excedan el valor total de la cuenta por pagar */
-                $saldo_pendiente = $cuenta->total - $cuenta_pagas->valordelpago;
-                if ($valordelpago + $total_pagos > $saldo_pendiente) {
+                /* $saldo_pendiente = $cuenta->total - $cuenta_pagas->valordelpago; */
+                $saldo_pendiente = $cuenta->total - $total_pagos;
+                if ($valordelpago + $total_pagos > $cuenta->total) {
                     /* return response()->json(['error2' => 'post2'], 422); */
                     return response()->json(['error2' => 'post2']);
                 } else {

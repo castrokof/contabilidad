@@ -773,7 +773,7 @@ Cuentas por Pagar
                 success: function(data) {
                     $('#numerofactura_n').val(data.result.numerofactura);
                     $('#total_n').val(data.result.total);
-                    $('#tipofactura_n').val(data.result.tipofactura);
+                    $('#sede_ips_n').val(data.result.sede_ips);
                     $('#saldo_p').val(data.saldo_pendiente); // Agregamos el saldo pendiente que se calcula dentro de la funcion addpay
 
                     $('#cuentasxpagar_id').val(id);
@@ -879,12 +879,11 @@ Cuentas por Pagar
                                     title: 'Error',
                                     text: 'No se encontró información de la cuenta por pagar',
                                 });
-                            }
-                            else if (data.error2 == 'post2') {
+                            } else if (data.error2 == 'post2') {
                                 Swal.fire({
                                     icon: 'warning',
                                     title: 'Error',
-                                    text: 'El valor del pago no puede ser mayor al saldo pendiente',
+                                    text: 'El valor del pago no puede ser mayor al Saldo Pendiente o la Factura ya fue cancelada en su totalidad',
                                 });
                             }
 

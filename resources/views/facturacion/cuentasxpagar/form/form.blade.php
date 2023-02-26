@@ -35,7 +35,7 @@
     <legend style="font-size: 20px; color: #1f7386;">Datos de la sede</legend>
     <div class="form-group row">
         <div class="col-lg-3">
-            <label for="sede_ips" class="col-xs-4 control-label ">Futuro 3:</label>
+            <label for="sede_ips" class="col-xs-4 control-label ">Sede IPS:</label>
             <select id="sede_ips" name="sede_ips" class="form-control select2bs4" onchange="mostrarOcultarCampos()">
                 <option value="">---seleccione---</option>
                 <option value="FIDEM1">ATENCIÓN FIDEM 1</option>
