@@ -774,6 +774,8 @@ Cuentas por Pagar
                     $('#numerofactura_n').val(data.result.numerofactura);
                     $('#total_n').val(data.result.total);
                     $('#tipofactura_n').val(data.result.tipofactura);
+                    $('#saldo_p').val(data.saldo_pendiente); // Agregamos el saldo pendiente que se calcula dentro de la funcion addpay
+
                     $('#cuentasxpagar_id').val(id);
 
                     //$('.card-title').text('Registrar Pago');

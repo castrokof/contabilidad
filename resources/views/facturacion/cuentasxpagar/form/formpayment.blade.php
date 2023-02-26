@@ -14,6 +14,10 @@
             <label for="total_n" class="col-xs-4 control-label ">Total:</label>
             <input type="number" id="total_n" name="total_n" class="form-control">
         </div>
+        <div class="col-lg-3">
+            <label for="saldo_p" class="col-xs-4 control-label ">Saldo Pendiente:</label>
+            <input type="number" id="saldo_p" name="saldo_p" class="form-control" style="color: red;">
+        </div>
     </div>
 </fieldset>
 

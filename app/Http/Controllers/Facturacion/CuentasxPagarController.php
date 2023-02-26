@@ -172,11 +172,26 @@ class CuentasxPagarController extends Controller
     public function addpay($id)
     {
         if (request()->ajax()) {
+
             $cuenta = Cuentas::where('id', $id)->first();
             if (!$cuenta) {
                 return response()->json(['error' => 'No se encontró la cuenta por pagar'], 404);
             } else {
-                return response()->json(['result' => $cuenta]);
+                /*  Este código, después de calcular $saldo_pendiente, se devuelve un resultado JSON con $cuenta y $saldo_pendiente incluidos en la respuesta json*/
+                $total_pagos = DB::table('cuentasxpagas')
+                    ->where('cuentasxpagar_id', $id)
+                    ->sum('valordelpago');
+
+                $total_factura = DB::table('cuentasxpagar')
+                    ->where('id', $id)
+                    ->value('total');
+
+                $saldo_pendiente = $total_factura - $total_pagos;
+
+                return response()->json([
+                    'result' => $cuenta,
+                    'saldo_pendiente' => $saldo_pendiente
+                ]);
             }
         }
 
@@ -195,6 +210,7 @@ class CuentasxPagarController extends Controller
                 return response()->json(['error1' => 'post1']);
             }
 
+            /* Esta variable guarda la consulta a la bd con una funcion sum para agrupar todos los pagos realizados a una cuenta filtrando por su cuentasxpagar_id = $id */
             $total_pagos = DB::table('cuentasxpagas')
                 ->where('cuentasxpagar_id', $id)
                 ->sum('valordelpago');
