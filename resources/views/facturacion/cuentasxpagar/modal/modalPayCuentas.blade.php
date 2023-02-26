@@ -10,7 +10,7 @@
                         <span id="form_result_p"></span>
                         <div id="card-drawel" class="card card-info">
                             <div class="card-header">
-                                <h3 class="card-title"></h3>
+                                <h3 class="card-title-1"></h3>
                                 <div class="card-tools pull-right">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 </div>

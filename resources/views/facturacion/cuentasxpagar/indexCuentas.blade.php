@@ -46,7 +46,7 @@ Cuentas por Pagar
 <script src="{{asset("assets/$theme/plugins/datatables-responsive/js/dataTables.responsive.min.js")}}" type="text/javascript"></script>
 <script src="{{asset("assets/js/jquery-select2/select2.min.js")}}" type="text/javascript"></script>
 <script src="{{asset("assets/js/gijgo-combined-1.9.13/js/gijgo.min.js")}}" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 
 <script src="https://cdn.datatables.net/plug-ins/1.10.20/api/sum().js"></script>
@@ -91,7 +91,6 @@ Cuentas por Pagar
 
             // Actualizar el campo de valor de la retención en la fuente
             valorretefuenteInput.value = valorretefuente.toFixed(2);
-            /* valorretefuenteInput.value = valorretefuente.toFixed(2); */
         });
 
         // Agregar event listener para escuchar los cambios en el campo iva
@@ -235,6 +234,70 @@ Cuentas por Pagar
                 }
             });
 
+
+        });
+
+        // Funcion para editar las cuentas por pagar
+
+        $(document).on('click', '.edit_cuenta', function() {
+
+
+            $('#form-general')[0].reset();
+            var id = $(this).attr('id');
+
+            $.ajax({
+                url: "editcuentasxpagar/" + id,
+                dataType: "json",
+                success: function(data) {
+
+                    // Primer form de información cuentas por pagar
+                    $('#numerofactura').val(data.cuenta.numerofactura);
+                    $('#tipofactura').val(data.cuenta.tipofactura);
+                    $('#formadepago').val(data.cuenta.formadepago);
+                    $('#fechafactura').val(moment(data.cuenta.fechafactura).format('YYYY-MM-DD'));
+                    $('#fechavencimiento').val(moment(data.cuenta.fechavencimiento).format('YYYY-MM-DD'));
+                    /* $('#fechafactura').val(data.cuenta.fechafactura); */
+                    /* $('#fechavencimiento').val(data.cuenta.fechavencimiento); */
+                    $('#ica').val(data.cuenta.ica);
+                    $('#valorica').val(data.cuenta.valorica);
+                    $('#retefuente').val(data.cuenta.retefuente);
+                    $('#valorretefuente').val(data.cuenta.valorretefuente);
+                    $('#iva').val(data.cuenta.iva);
+                    $('#valoriva').val(data.cuenta.valoriva);
+                    $('#descuento').val(data.cuenta.descuento);
+                    $('#valordescuento').val(data.cuenta.valordescuento);
+                    $('#total').val(data.cuenta.total);
+                    $('#observacion').val(data.cuenta.observacion);
+                    $('#porcentaje_gasto_fidem_1').val(data.cuenta.porcentaje_gasto_fidem_1);
+                    $('#porcentaje_gasto_fidem_2').val(data.cuenta.porcentaje_gasto_fidem_2);
+                    $('#sede_ips').val(data.cuenta.sede_ips);
+                    $('#future4').val(data.cuenta.future4);
+                    $('#future5').val(data.cuenta.future5);
+                    $('#user_id').val(data.cuenta.user_id);
+                    $('#proveedor_id').val(data.cuenta.proveedor_id);
+
+                    $('#hidden_id').val(id)
+                    $('.card-title').text("Editando cuenta por pagar: " + data.cuenta.numerofactura +
+                        "-" + data.cuenta.sede_ips);
+                    $('#action_button').val('Editar').removeClass('btn-sucess')
+                    $('#action_button').addClass('btn-danger')
+                    $('#action_button').val('Edit');
+                    $('#action').val('Edit');
+                    $('#modal-add-cuentas').modal('show');
+
+                },
+
+
+
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+
+                if (jqXHR.status === 403) {
+
+                    Manteliviano.notificaciones('No tienes permisos para realizar esta accion',
+                        'Sistema cuentas por pagar', 'warning');
+
+                }
+            });
 
         });
 
@@ -384,11 +447,8 @@ Cuentas por Pagar
                         titleAttr: 'Exportar pdf',
                         className: "btn  btn-outline-secondary btn-sm"
 
-
                     }
                 ],
-
-
 
             });
 

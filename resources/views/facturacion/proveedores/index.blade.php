@@ -526,7 +526,7 @@
                     if (jqXHR.status === 403) {
 
                         Manteliviano.notificaciones('No tienes permisos para realizar esta accion',
-                            'Call Nomina', 'warning');
+                            'Sistema cuentas por pagar', 'warning');
 
                     }
                 });

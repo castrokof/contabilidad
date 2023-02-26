@@ -4,7 +4,7 @@
         @include('includes.form-mensaje')
         <div class="card card-info">
             <div class="card-header with-border">
-                <h3 class="card-title">Listado de Cuentas por Pagar</h3>
+                <h3 class="card-title-1">Listado de Cuentas por Pagar</h3>
                 <div class="card-tools pull-right">
                     <button type="button" class="btn create_cuenta btn-default" name="create_cuenta" id="create_cuenta"><i class="fa fa-fw fa-plus-circle"></i>Nueva Cuenta</button>
                 </div>
