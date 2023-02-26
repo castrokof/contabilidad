@@ -871,7 +871,21 @@ Cuentas por Pagar
 
                                 })
 
+                            } else if (data.error1 == 'post1') {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Error',
+                                    text: 'No se encontró información de la cuenta por pagar',
+                                });
                             }
+                            else if (data.error2 == 'post2') {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Error',
+                                    text: 'El valor del pago no puede ser mayor al saldo pendiente',
+                                });
+                            }
+
                             $('#form_result_p').html(html)
                         }
 

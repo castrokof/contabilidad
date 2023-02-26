@@ -184,6 +184,59 @@ class CuentasxPagarController extends Controller
     }
 
 
+    public function validpay(Request $request)
+    {
+
+
+        if (request()->ajax()) {
+            $id = $request->input('cuentasxpagar_id');
+            $cuenta = Cuentas::findOrFail($id);
+            if (!$cuenta) {
+                return response()->json(['error1' => 'post1']);
+            }
+
+            $total_pagos = DB::table('cuentasxpagas')
+                ->where('cuentasxpagar_id', $id)
+                ->sum('valordelpago');
+
+            $cuenta_pagas = Pagos::where('cuentasxpagar_id', $id)->first();
+            $valordelpago = $request->input('valordelpago');
+
+            if (!$cuenta_pagas) {
+                /* Si no existe un registro en la tabla Pagos para la cuenta por pagar,
+                se crea uno nuevo con el valor del pago ingresado en el formulario */
+                $cuenta_pagas = new Pagos;
+                $cuenta_pagas->cuentasxpagar_id = $id;
+                $cuenta_pagas->fechadepago = $request->input('fechadepago');
+                $cuenta_pagas->valordelpago = $valordelpago;
+                $cuenta_pagas->tipodepago = $request->input('tipodepago');
+                $cuenta_pagas->numerotransaccion = $request->input('numerotransaccion');
+                $cuenta_pagas->observacion = $request->input('observacion');
+                $cuenta_pagas->save();
+            } else {
+                /* Si ya existe un registro en la tabla Pagos para la cuenta por pagar,
+                se valida el valor del pago ingresado en el formulario con el valor existente
+                para evitar que se ingresen mas pagos que excedan el valor total de la cuenta por pagar */
+                $saldo_pendiente = $cuenta->total - $cuenta_pagas->valordelpago;
+                if ($valordelpago + $total_pagos > $saldo_pendiente) {
+                    /* return response()->json(['error2' => 'post2'], 422); */
+                    return response()->json(['error2' => 'post2']);
+                } else {
+                    $cuenta_pagas = new Pagos;
+                    $cuenta_pagas->cuentasxpagar_id = $id;
+                    $cuenta_pagas->fechadepago = $request->input('fechadepago');
+                    $cuenta_pagas->valordelpago = $valordelpago;
+                    $cuenta_pagas->tipodepago = $request->input('tipodepago');
+                    $cuenta_pagas->numerotransaccion = $request->input('numerotransaccion');
+                    $cuenta_pagas->observacion = $request->input('observacion');
+                    $cuenta_pagas->save();
+                }
+            }
+
+            return response()->json(['success' => 'okn1']);
+        }
+    }
+
     // Deprecated
     /* public function guardarpago(Request $request)
     {
@@ -210,54 +263,6 @@ class CuentasxPagarController extends Controller
             return response()->json(['success' => 'okn1']);
         }
     } */
-
-    public function validpay(Request $request)
-    {
-        if (request()->ajax()) {
-            $id = $request->input('cuentasxpagar_id');
-            $cuenta = Cuentas::findOrFail($id);
-            if (!$cuenta) {
-                return response()->json(['error' => 'No se encontró información de la cuenta por pagar'], 404);
-            }
-
-            $cuenta_pagas = Pagos::where('cuentasxpagar_id', $id)->first();
-            $valordelpago = $request->input('valordelpago');
-
-            if (!$cuenta_pagas) {
-                /* Si no existe un registro en la tabla Pagos para la cuenta por pagar,
-                se crea uno nuevo con el valor del pago ingresado en el formulario */
-                $cuenta_pagas = new Pagos;
-                $cuenta_pagas->cuentasxpagar_id = $id;
-                $cuenta_pagas->fechadepago = $request->input('fechadepago');
-                $cuenta_pagas->valordelpago = $valordelpago;
-                $cuenta_pagas->tipodepago = $request->input('tipodepago');
-                $cuenta_pagas->numerotransaccion = $request->input('numerotransaccion');
-                $cuenta_pagas->observacion = $request->input('observacion');
-                $cuenta_pagas->save();
-            } else {
-                /* Si ya existe un registro en la tabla Pagos para la cuenta por pagar,
-                se valida el valor del pago ingresado en el formulario con el valor existente
-                para evitar que se ingresen mas pagos que excedan el valor total de la cuenta por pagar */
-                $saldo_pendiente = $cuenta->total - $cuenta_pagas->valordelpago;
-                if ($valordelpago > $saldo_pendiente) {
-                    return response()->json(['error' => 'El valor del pago no puede ser mayor al saldo pendiente'], 422);
-                } else {
-                    $cuenta_pagas = new Pagos;
-                    $cuenta_pagas->cuentasxpagar_id = $id;
-                    $cuenta_pagas->fechadepago = $request->input('fechadepago');
-                    $cuenta_pagas->valordelpago = $valordelpago;
-                    $cuenta_pagas->tipodepago = $request->input('tipodepago');
-                    $cuenta_pagas->numerotransaccion = $request->input('numerotransaccion');
-                    $cuenta_pagas->observacion = $request->input('observacion');
-                    $cuenta_pagas->save();
-                }
-            }
-
-            return response()->json(['success' => 'okn1']);
-        }
-    }
-
-
 
     /**
      * Display the specified resource.
