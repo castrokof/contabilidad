@@ -10,7 +10,7 @@ Cuentas por Pagar
 <link href="{{asset("assets/$theme/plugins/fontawesome-free/css/all.min.css")}}" rel="stylesheet" type="text/css" />
 
 <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/css/select2-bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('assets/css/select2-bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
 
 
 
@@ -33,8 +33,8 @@ Cuentas por Pagar
 @include('facturacion.cuentasxpagar.tabs.tabsIndexCuentas')
 
 @include('facturacion.cuentasxpagar.modal.modalCuentas')
+@include('facturacion.cuentasxpagar.modal.modalPayCuentas')
 
-@include('facturacion.cuentasxpagar.modal.modalindexaddseguimiento')
 
 
 
@@ -46,7 +46,7 @@ Cuentas por Pagar
 <script src="{{asset("assets/$theme/plugins/datatables-responsive/js/dataTables.responsive.min.js")}}" type="text/javascript"></script>
 <script src="{{asset("assets/js/jquery-select2/select2.min.js")}}" type="text/javascript"></script>
 <script src="{{asset("assets/js/gijgo-combined-1.9.13/js/gijgo.min.js")}}" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 
 <script src="https://cdn.datatables.net/plug-ins/1.10.20/api/sum().js"></script>
@@ -58,37 +58,86 @@ Cuentas por Pagar
 <script>
     $(document).ready(function() {
 
+        // Obtener los elementos del formulario Cuentas por Pagar para calcular el Descuento, los Impuestos y Retenciones
+        const descuentoInput = document.getElementById("descuento");
+        const valordescuentoInput = document.getElementById("valordescuento");
+        const retefuenteInput = document.getElementById("retefuente");
+        const valorretefuenteInput = document.getElementById("valorretefuente");
+        const ivaInput = document.getElementById("iva");
+        const valorivaInput = document.getElementById("valoriva");
+        const totalInput = document.getElementById("total");
+
+        // Agregar event listener para escuchar los cambios en el campo descuento
+        descuentoInput.addEventListener("change", () => {
+            // Obtener el valor de descuento y total
+            const descuento = descuentoInput.value;
+            const total = totalInput.value;
+
+            // Calcular el valor del descuento
+            const valordescuento = (descuento * total) / 100;
+
+            // Actualizar el campo de valor del descuento
+            valordescuentoInput.value = valordescuento.toFixed(2);
+        });
+
+        // Agregar event listener para escuchar los cambios en el campo retefuente
+        retefuenteInput.addEventListener("change", () => {
+            // Obtener el valor de retefuente y total
+            const retefuente = retefuenteInput.value;
+            const total = totalInput.value;
+
+            // Calcular el valor de la retención en la fuente
+            const valorretefuente = total * retefuente;
+
+            // Actualizar el campo de valor de la retención en la fuente
+            valorretefuenteInput.value = valorretefuente.toFixed(2);
+        });
+
+        // Agregar event listener para escuchar los cambios en el campo iva
+        ivaInput.addEventListener("change", () => {
+            // Obtener el valor de iva y total
+            const iva = ivaInput.value;
+            const total = totalInput.value;
+
+            // Calcular el valor del iva
+            const valoriva = (iva * total) / 100;
+
+            // Actualizar el campo de valor del iva
+            valorivaInput.value = valoriva.toFixed(2);
+        });
+
+
         $("#proveedor_id").select2({
-                language: "es",
-                theme: "bootstrap4",
-                placeholder: 'Seleccione un proveedor',
-                allowClear: true,
-                ajax: {
-                    url: "{{route('proveedoreslist')}}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            q: params.term,
+            language: "es",
+            theme: "bootstrap4",
+            placeholder: 'Seleccione un proveedor',
+            allowClear: true,
+            ajax: {
+                url: "{{route('proveedoreslist')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        q: params.term,
 
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.array[0], function(datas) {
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: $.map(data.array[0], function(datas) {
 
-                                return {
+                            return {
 
-                                    text: datas.nombre,
-                                    id: datas.id
+                                text: datas.nombre,
+                                id: datas.id
 
-                                }
-                            })
-                        };
-                    },
-                    cache: true
-                }
-            });
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
 
 
 
@@ -188,16 +237,72 @@ Cuentas por Pagar
 
         });
 
+        // Funcion para editar las cuentas por pagar
 
-        // Función que envia el id al controlador y cambia el estado del registro
-        $(document).on('click', '.agenda', function() {
-            var data = {
-                id: $(this).attr('value'),
-                _token: $('input[name=_token]').val()
-            };
+        $(document).on('click', '.edit_cuenta', function() {
 
-            ajaxRequest('agendado', data);
+
+            $('#form-general')[0].reset();
+            var id = $(this).attr('id');
+
+            $.ajax({
+                url: "editcuentasxpagar/" + id,
+                dataType: "json",
+                success: function(data) {
+
+                    // Primer form de información cuentas por pagar
+                    $('#numerofactura').val(data.cuenta.numerofactura);
+                    $('#tipofactura').val(data.cuenta.tipofactura);
+                    $('#formadepago').val(data.cuenta.formadepago);
+                    $('#fechafactura').val(moment(data.cuenta.fechafactura).format('YYYY-MM-DD'));
+                    $('#fechavencimiento').val(moment(data.cuenta.fechavencimiento).format('YYYY-MM-DD'));
+                    /* $('#fechafactura').val(data.cuenta.fechafactura); */
+                    /* $('#fechavencimiento').val(data.cuenta.fechavencimiento); */
+                    $('#ica').val(data.cuenta.ica);
+                    $('#valorica').val(data.cuenta.valorica);
+                    $('#retefuente').val(data.cuenta.retefuente);
+                    $('#valorretefuente').val(data.cuenta.valorretefuente);
+                    $('#iva').val(data.cuenta.iva);
+                    $('#valoriva').val(data.cuenta.valoriva);
+                    $('#descuento').val(data.cuenta.descuento);
+                    $('#valordescuento').val(data.cuenta.valordescuento);
+                    $('#total').val(data.cuenta.total);
+                    $('#observacion').val(data.cuenta.observacion);
+                    $('#porcentaje_gasto_fidem_1').val(data.cuenta.porcentaje_gasto_fidem_1);
+                    $('#porcentaje_gasto_fidem_2').val(data.cuenta.porcentaje_gasto_fidem_2);
+                    $('#sede_ips').val(data.cuenta.sede_ips);
+                    $('#future4').val(data.cuenta.future4);
+                    $('#future5').val(data.cuenta.future5);
+                    $('#user_id').val(data.cuenta.user_id);
+                    $('#proveedor_id').val(data.cuenta.proveedor_id);
+
+                    $('#hidden_id').val(id)
+                    $('.card-title').text("Editando cuenta por pagar: " + data.cuenta.numerofactura +
+                        "-" + data.cuenta.sede_ips);
+                    $('#action_button').val('Editar').removeClass('btn-sucess')
+                    $('#action_button').addClass('btn-danger')
+                    $('#action_button').val('Edit');
+                    $('#action').val('Edit');
+                    $('#modal-add-cuentas').modal('show');
+
+                },
+
+
+
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+
+                if (jqXHR.status === 403) {
+
+                    Manteliviano.notificaciones('No tienes permisos para realizar esta accion',
+                        'Sistema cuentas por pagar', 'warning');
+
+                }
+            });
+
         });
+
+
+
 
         function ajaxRequest(url, data) {
             $.ajax({
@@ -285,13 +390,13 @@ Cuentas por Pagar
                         data: 'observacion'
                     },
                     {
-                        data: 'future1'
+                        data: 'porcentaje_gasto_fidem_1'
                     },
                     {
-                        data: 'future2'
+                        data: 'porcentaje_gasto_fidem_2'
                     },
                     {
-                        data: 'future3'
+                        data: 'sede_ips'
                     },
                     {
                         data: 'future4'
@@ -300,10 +405,10 @@ Cuentas por Pagar
                         data: 'future5'
                     },
                     {
-                        data: 'user_id'
+                        data: 'username'
                     },
                     {
-                        data: 'proveedor_id'
+                        data: 'proveedor_nombre'
                     }
                 ],
 
@@ -342,37 +447,8 @@ Cuentas por Pagar
                         titleAttr: 'Exportar pdf',
                         className: "btn  btn-outline-secondary btn-sm"
 
-
                     }
                 ],
-                "columnDefs": [{
-
-                        "render": function(data, type, row) {
-                            if (row["consultation"] == 1) {
-                                return data + ' - Orientación Psicológica';
-
-                            } else {
-
-                                return data + ' - Call center';
-
-                            }
-
-                        },
-                        "targets": [18]
-                    }
-
-
-                ],
-
-                "createdRow": function(row, data, dataIndex) {
-                    if (data["consultation"] == 1) {
-                        $($(row).find("td")[18]).addClass("btn btn-sm btn-danger rounded-lg");
-                    } else {
-                        $($(row).find("td")[18]).addClass("btn btn-sm btn-dark rounded-lg");
-                    }
-
-                }
-
 
             });
 
@@ -687,104 +763,140 @@ Cuentas por Pagar
 
 
 
-        //Función para abrir modal del detalle de la evolución y muestra las observaciones agregadas
-        $(document).on('click', '.resumen', function() {
-            var idevo = $(this).attr('id');
-            $('#names').empty();
-            $('#documents').empty();
-            $('#evolution').empty();
-            $('#names1').empty();
-            $('#address').empty();
-            $('#date_birth').empty();
-            $('#celular').empty();
-            $('#sex').empty();
-            $('#consultation').empty();
-            $('#created_at').empty();
-            $('#observaciones_chat').empty();
-
+        //Función para abrir modal del detalle de la cuenta por pagar para registrar un pago total o parcial
+        $(document).on('click', '.payment', function() {
+            var id = $(this).attr('id');
 
             $.ajax({
-                url: "evolucion/" + idevo + "",
+                url: "/paycuentasxpagar/" + id + "/addpay",
                 dataType: "json",
                 success: function(data) {
+                    $('#numerofactura_n').val(data.result.numerofactura);
+                    $('#total_n').val(data.result.total);
+                    $('#sede_ips_n').val(data.result.sede_ips);
+                    $('#saldo_p').val(data.saldo_pendiente); // Agregamos el saldo pendiente que se calcula dentro de la funcion addpay
 
+                    $('#cuentasxpagar_id').val(id);
 
-                    var usuarios = data[1];
-                    console.log(usuarios);
-                    console.log(data[0]);
-                    $.each(data[0], function(i, items) {
-                        $('#names').append(items.surname + " " + items.fname);
-                        $('#documents').append(items.type_document + "-" + items.document);
-                        $('#evolution').append(items.reason_consultation);
-                        $('#names1').append(items.surname + " " + items.fname);
-                        $('#address').append("Ciudad: " + items.municipality + " | Dirección: " + items.address + " | Eapb: " + items.eapb);
-                        $('#date_birth').append(items.date_birth);
-                        $('#celular').append(items.celular);
-                        if (items.sex == "M") {
-                            $('#sex').append("MASCULINO");
-                        } else {
-                            $('#sex').append("FEMENINO");
-                        }
-                        $('#created_at').append("Fecha de evolución: " + " " + items.created_at);
-                        if (items.consultation == 1) {
-                            $('#consultation').append("Evolución " + items.consultation + "-" + "Orientación Psicológica");
-                        }
-                    });
-
-
-                    $.each(usuarios, function(i, items1) {
-                        $.each(data[0], function(i, items) {
-                            $.each(items.observacionadd, function(i, itemobs) {
-                                var filtered = items1.filter(el => el.id == itemobs.user_id);
-                                $.each(filtered, function(i, itemsusu) {
-                                    $('#observaciones_chat').append(
-                                        '<div class="direct-chat-msg">' +
-                                        '<div class="direct-chat-infos clearfix">' +
-                                        '<span class="direct-chat-name float-left">' + 'Usuario: ' + itemsusu.usuario + '</span>' +
-                                        '<span class="direct-chat-timestamp float-right">' + 'Fecha creación: ' + itemobs.created_at + '</span>' +
-                                        '</div>' +
-                                        '<div class="direct-chat-text">' + 'Observación: ' +
-                                        itemobs.addobservacion +
-                                        '</div>' +
-                                        '</div>');
-                                });
-                            });
-
-                        });
-                    });
-
-
-
-
-                    $('.modal-title-resumen').text('Evolución');
-                    $('#modal-resumen').modal({
+                    //$('.card-title').text('Registrar Pago');
+                    $('#action_button').val('Add');
+                    $('#action').val('Add');
+                    $('#modal-payment').modal({
                         backdrop: 'static',
                         keyboard: false
                     });
-                    $('#modal-resumen').modal('show');
+                    $('#modal-payment').modal('show');
                 }
-
 
             }).fail(function(jqXHR, textStatus, errorThrown) {
 
                 if (jqXHR.status === 403) {
 
-                    Manteliviano.notificaciones('No tienes permisos para realizar esta accion', 'Sistema Ventas', 'warning');
-
+                    Manteliviano.notificaciones('No tienes permisos para realizar esta accion', 'Sistema cuentas por pagar', 'warning');
                 }
             });
-
 
         });
 
 
 
+        //Funcion para agregar pagos parciales y totales
+        $('#form-general-p').on('submit', function(event) {
+            event.preventDefault();
+            var url = '';
+            var method = '';
+            var text = '';
+
+            if ($('#action').val() == 'Add') {
+
+                text = "Estás por registrar un pago"
+                url = "{{route('cuentasxpagar_payment')}}";
+                method = 'post';
+            }
+            if ($('#action').val() == 'Edit') {
+                text = "Estás por actualizar un Nivel"
+                var updateid = $('#id_eps_niveles').val();
+                url = "/eps_niveles/" + updateid;
+                method = 'put';
+            }
+
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: text,
+                icon: "success",
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: 'Aceptar',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: url,
+                        method: method,
+                        data: $(this).serialize(),
+                        dataType: "json",
+                        success: function(data) {
+                            var html = '';
+                            if (data.errors) {
+
+                                html =
+                                    '<div class="alert alert-danger alert-dismissible">' +
+                                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                                    '<h5><i class="icon fas fa-ban"></i> Mensaje fidem</h5>';
+
+                                for (var count = 0; count < data.errors.length; count++) {
+                                    html += '<p>' + data.errors[count] + '<p>';
+                                }
+                                html += '</div>';
+                            }
+
+                            if (data.success == 'okn1') {
+                                $('#form-general-p')[0].reset();
+                                $('#modal-payment').modal('hide');
+                                $('#pcuentas').DataTable().ajax.reload();
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Pago creado correctamente',
+                                    showConfirmButton: false,
+                                    timer: 1500
+
+                                })
+
+                            } else if (data.success == 'okn2') {
+                                $('#form-general-p')[0].reset();
+                                $('#modal-payment').modal('hide');
+                                $('#pcuentas').DataTable().ajax.reload();
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'NIVEL actualizado correctamente',
+                                    showConfirmButton: false,
+                                    timer: 1500
+
+                                })
+
+                            } else if (data.error1 == 'post1') {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Error',
+                                    text: 'No se encontró información de la cuenta por pagar',
+                                });
+                            } else if (data.error2 == 'post2') {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Error',
+                                    text: 'El valor del pago no puede ser mayor al Saldo Pendiente o la Factura ya fue cancelada en su totalidad',
+                                });
+                            }
+
+                            $('#form_result_p').html(html)
+                        }
 
 
+                    });
+                }
+            });
 
 
-
-
+        });
 
 
 
@@ -820,5 +932,48 @@ Cuentas por Pagar
             "colvis": "Visibilidad"
         }
     }
+</script>
+
+<!--
+    **FUNCIONES PARA VALIDACIONES DEL FORMULARIO REGISTRO DE PAGOS**
+-->
+<script>
+    //función de validación en JavaScript para mostrar una alerta si el valor ingresado en el campo "valordelpago" es mayor que el valor del campo "total_n"
+    function validarPago() {
+        var total = parseFloat(document.getElementById('total_n').value);
+        var pago = parseFloat(document.getElementById('valordelpago').value);
+        if (pago > total) {
+            alert('El valor del pago no puede ser mayor que el total de la factura.');
+            document.getElementById('valordelpago').value = '';
+            return false;
+        }
+        return true;
+    }
+
+    //funcion que va ocultar o mostrar los campos futuro1 y futuro2 siempre y cuando en el campo futuro 3 se seleccionar la opcion FIDEMCOMPARTIDO
+    function mostrarOcultarCampos() {
+        var sede_ips = document.getElementById("sede_ips");
+        var futuro1 = document.getElementById("futuro1");
+        var futuro2 = document.getElementById("futuro2");
+
+        if (sede_ips.value == "FIDEMCOMPARTIDO") {
+            futuro1.style.display = "block";
+            futuro2.style.display = "block";
+        } else {
+            futuro1.style.display = "none";
+            futuro2.style.display = "none";
+        }
+    }
+
+    /* function validarPago() {
+    var valorPago = document.getElementById("valordelpago").value;
+    var total = document.getElementById("total_n").value;
+    if (parseInt(valorPago) > parseInt(total)) {
+        var mensaje = "<div class='alert alert-danger'>El valor del pago no puede ser mayor al total de la factura</div>";
+        document.getElementById("alerta").innerHTML = mensaje;
+        return false;
+    }
+    return true;
+} */
 </script>
 @endsection

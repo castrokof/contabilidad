@@ -130,7 +130,6 @@ class ProveedoresController extends Controller
         if(request()->ajax()){
             $proveedor = Proveedores::where('id', '=', $id)->first();
             return response()->json(['proveedor'=>$proveedor]);
-
         }
 
         return view('facturacion.proveedores.index');
