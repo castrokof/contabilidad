@@ -254,6 +254,54 @@ class CuentasxPagarController extends Controller
         }
     }
 
+
+    public function indexParcial(Request $request)
+    {
+
+        if ($request->ajax()) {
+            /* Esta consulta selecciona todas las columnas de la tabla cuentasxpagar y agrega una columna adicional llamada total_pagos que es la suma de los valores de pago (valordelpago)
+            ** en la tabla cuentasxpagas para la cuenta por pagar correspondiente (cuentasxpagar_id). Luego, la consulta filtra los resultados por el ID de la cuenta por pagar (c.id) y utiliza
+            ** la cláusula HAVING(havingRaw) para asegurarse de que la suma de los valores de pago (total_pagos) sea menor que el total (total) de la cuenta por pagar correspondiente.
+            ** Luego se crea la subconsulta ($subquery) como una instancia separada de la clase DB, y la almacenamos en una variable $subquery. Luego, dentro de la función whereExists,
+            ** usamos el método fromSub para referirnos a la subconsulta que creamos previamente.
+            */
+            $subquery = DB::table('cuentasxpagas')
+                ->selectRaw('SUM(cuentasxpagas.valordelpago) as total_pagos, cuentasxpagas.cuentasxpagar_id')
+                ->groupBy('cuentasxpagas.cuentasxpagar_id');
+
+            $datas = DB::table('cuentasxpagar')
+                ->join('proveedores', 'cuentasxpagar.proveedor_id', '=', 'proveedores.id')
+                ->join('usuario', 'cuentasxpagar.user_id', '=', 'usuario.id')
+                ->selectRaw('cuentasxpagar.*, proveedores.nombre as proveedor_nombre, usuario.usuario as username')
+                ->whereExists(function ($query) use ($subquery) {
+                    $query->select(DB::raw(1))
+                        ->fromSub($subquery, 'subquery')
+                        ->whereRaw('subquery.cuentasxpagar_id = cuentasxpagar.id')
+                        ->whereRaw('subquery.total_pagos < cuentasxpagar.total');
+                })
+                ->orderBy('cuentasxpagar.id')
+                ->get();
+
+
+
+
+            /* DD($datas); */
+
+            return  DataTables()->of($datas)
+                ->addColumn('action', function ($datas) {
+                    $button = '<button type="button" name="payment" id="' . $datas->id . '" class="payment btn btn-app bg-success tooltipsC" title="Agregar Pago"  ><span class="badge bg-teal">Add Pago</span><i class="fas fa-notes-medical"></i> Detalle </button>';
+                    $button2 = '<button type="button" name="edit_cuenta" id="' . $datas->id . '" class="edit_cuenta btn btn-app bg-info tooltipsC" title="Editar"  ><span class="badge bg-teal">Editar</span><i class="fas fa-pencil-alt"></i> Editar </button>';
+                    return $button . ' ' . $button2;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+
+        return view('facturacion.cuentasxpagar.indexCuentas');
+    }
+
+
     // Deprecated
     /* public function guardarpago(Request $request)
     {

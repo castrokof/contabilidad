@@ -157,9 +157,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('ava-index', 'Psicologica\LineaPsicologicaController@indexava')->name('indexava')->middleware('superPsicologica');
 
 
-    //RUTA PARA CONSULTA DE CUENTASXPAGAR
+    //RUTA PARA CONSULTA DE CUENTASXPAGAR, PARCIALES Y TOTALES
 
     Route::get('cuentasxpagar', 'Facturacion\CuentasxPagarController@index')->name('cuentasxpagar')->middleware('superPsicologica');
+    Route::get('cuentas_parciales', 'Facturacion\CuentasxPagarController@indexParcial')->name('cuentas_parciales')->middleware('superEditor');
     Route::post('cuentasxpagar', 'Facturacion\CuentasxPagarController@guardar')->name('guardar_factura')->middleware('superPsicologica');
     Route::get('editcuentasxpagar/{id}', 'Facturacion\CuentasxPagarController@edit')->name('cuentasxpagar-edit')->middleware('superEditor');
     Route::put('cuentasxpagar/{id}', 'Facturacion\CuentasxPagarController@update')->name('actualizar_factura')->middleware('superPsicologica');

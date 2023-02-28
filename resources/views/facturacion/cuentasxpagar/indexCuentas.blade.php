@@ -453,9 +453,9 @@ Cuentas por Pagar
             });
 
 
-        // Funcion para pintar con data table la pestaña de citas agendadas
+        // Funcion para pintar con data table la pestaña de Pagos Parciales
         var datatable =
-            $('#psicologicaAgendada').DataTable({
+            $('#pcuentas_parcial').DataTable({
                 language: idioma_espanol,
                 processing: true,
                 lengthMenu: [
@@ -468,75 +468,80 @@ Cuentas por Pagar
                     [21, "desc"]
                 ],
                 ajax: {
-                    url: "{{route('analistapsicoa')}}",
+                    url: "{{route('cuentas_parciales')}}",
                 },
                 columns: [{
                         data: 'action',
                         orderable: false
                     },
                     {
-                        data: 'actions',
-                        orderable: false
-                    },
-                    {
                         data: 'id'
                     },
                     {
-                        data: 'surname'
+                        data: 'numerofactura'
                     },
                     {
-                        data: 'ssurname'
+                        data: 'tipofactura'
                     },
                     {
-                        data: 'fname'
+                        data: 'formadepago'
                     },
                     {
-                        data: 'sname'
+                        data: 'fechafactura'
                     },
                     {
-                        data: 'type_document'
+                        data: 'fechavencimiento'
                     },
                     {
-                        data: 'document'
+                        data: 'ica'
                     },
                     {
-                        data: 'date_birth'
+                        data: 'valorica'
                     },
                     {
-                        data: 'municipality'
+                        data: 'retefuente'
                     },
                     {
-                        data: 'other'
+                        data: 'valorretefuente'
                     },
                     {
-                        data: 'address'
+                        data: 'iva'
                     },
                     {
-                        data: 'celular'
+                        data: 'valoriva'
                     },
                     {
-                        data: 'phone'
+                        data: 'descuento'
                     },
                     {
-                        data: 'email'
+                        data: 'valordescuento'
                     },
                     {
-                        data: 'sex'
+                        data: 'total'
                     },
                     {
-                        data: 'eapb'
+                        data: 'observacion'
                     },
                     {
-                        data: 'reason_consultation'
+                        data: 'porcentaje_gasto_fidem_1'
                     },
                     {
-                        data: 'consultation'
+                        data: 'porcentaje_gasto_fidem_2'
                     },
                     {
-                        data: 'diagnosis'
+                        data: 'sede_ips'
                     },
                     {
-                        data: 'created_at'
+                        data: 'future4'
+                    },
+                    {
+                        data: 'future5'
+                    },
+                    {
+                        data: 'username'
+                    },
+                    {
+                        data: 'proveedor_nombre'
                     }
                 ],
 
@@ -578,34 +583,6 @@ Cuentas por Pagar
 
                     }
                 ],
-                "columnDefs": [{
-
-                        "render": function(data, type, row) {
-                            if (row["consultation"] == 1) {
-                                return data + ' - Orientación Psicológica';
-
-                            } else {
-
-                                return data + ' - Call center';
-
-                            }
-
-                        },
-                        "targets": [19]
-                    }
-
-
-                ],
-
-                "createdRow": function(row, data, dataIndex) {
-                    if (data["consultation"] == 1) {
-                        $($(row).find("td")[19]).addClass("btn btn-sm btn-danger rounded-lg");
-                    } else {
-                        $($(row).find("td")[19]).addClass("btn btn-sm btn-dark rounded-lg");
-                    }
-
-                }
-
 
             });
 

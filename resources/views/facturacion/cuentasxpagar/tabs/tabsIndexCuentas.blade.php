@@ -24,7 +24,7 @@
 
                     <div class="tab-pane fade " id="custom-tabs-one-datos-agendados" role="tabpanel" aria-labelledby="custom-tabs-one-datos-agendados-tab">
                         <div class="card-body">
-                            @include('lineaPsicologica.tablas.tablaIndexPsicologicaAgendado')
+                            @include('facturacion.cuentasxpagar.tablas.tablaIndexCuentasParciales')
                         </div>
 
                     </div>
