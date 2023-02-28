@@ -67,7 +67,8 @@ class UsuarioController extends Controller
 
     }
 
-   return view('admin.usuario.index', compact('Rols1'));
+
+    return view('admin.usuario.index', compact('Rols1'));
  }
     /**
      * Show the form for creating a new resource.
