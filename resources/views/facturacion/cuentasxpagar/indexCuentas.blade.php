@@ -405,10 +405,10 @@ Cuentas por Pagar
                         data: 'future5'
                     },
                     {
-                        data: 'username'
+                        data: 'user_id.usuario'
                     },
                     {
-                        data: 'proveedor_nombre'
+                        data: 'proveedor_id.nombre'
                     }
                 ],
 

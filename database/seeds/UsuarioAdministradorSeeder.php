@@ -277,7 +277,7 @@ class UsuarioAdministradorSeeder extends Seeder
         ]);
         DB::table('menu')->insert([
 
-            'menu_id'=> 22,
+            'menu_id'=> 27,
             'nombre'=>'Cuentas x pagar',
             'url'=>'/cuentasxpagar',
             'orden'=>'1',

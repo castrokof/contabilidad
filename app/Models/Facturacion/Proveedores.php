@@ -2,6 +2,7 @@
 
 namespace App\Models\Facturacion;
 
+use App\Models\Facturacion\Cuentas;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,6 +32,10 @@ class Proveedores extends Model
 
 
 
+    public function cuentas()
+    {
+        return $this->hasMany(Cuentas::class, 'id');
+    }
 
 
 }

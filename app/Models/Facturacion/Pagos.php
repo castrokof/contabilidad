@@ -20,9 +20,9 @@ class Pagos extends Model
     ];
 
 
-    public function cuentasid()
+    public function cuentasxpagarId()
     {
-        return $this->belongsTo(Cuentas::class, 'id');
+        return $this->belongsTo(Cuentas::class, 'cuentasxpagar_id');
     }
 
 }

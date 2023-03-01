@@ -4,6 +4,7 @@ namespace App\Models\Facturacion;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Seguridad\Usuario;
 
 class Cuentas extends Model
 {
@@ -36,13 +37,18 @@ class Cuentas extends Model
     ];
 
 
-    public function userid()
+    public function userId()
     {
-        return $this->belongsTo(Usuario::class, 'id');
+        return $this->belongsTo(Usuario::class, 'user_id');
     }
 
     public function proveedorId(){
-        return $this->hasMany(Proveedores::class, 'id');
+        return $this->belongsTo(Proveedores::class, 'proveedor_id');
+    }
+
+    public function pagos()
+    {
+        return $this->hasMany(Pagos::class, 'id');
     }
 
 }

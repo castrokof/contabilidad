@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Facturacion\Cuentas;
 use App\Models\Facturacion\Pagos;
+use App\Models\Seguridad\Usuario;
 
 class CuentasxPagarController extends Controller
 {
@@ -22,12 +23,10 @@ class CuentasxPagarController extends Controller
 
         if ($request->ajax()) {
 
-            $datas = DB::table('cuentasxpagar') /* Cuentas::orderBy('id') */
-                ->Join('proveedores', 'cuentasxpagar.proveedor_id', '=', 'proveedores.id')
-                ->Join('usuario', 'cuentasxpagar.user_id', '=', 'usuario.id')
-                ->selectRaw('cuentasxpagar.*, proveedores.nombre as proveedor_nombre, usuario.usuario as username')
-                ->orderBy('cuentasxpagar.id')
+            $datas = Cuentas::orderBy('cuentasxpagar.id')->with('userId:usuario,id','proveedorId','pagos')
                 ->get();
+
+
             return  DataTables()->of($datas)
                 ->addColumn('action', function ($datas) {
                     $button = '<button type="button" name="payment" id="' . $datas->id . '" class="payment btn btn-app bg-success tooltipsC" title="Agregar Pago"  ><span class="badge bg-teal">Add Pago</span><i class="fas fa-notes-medical"></i> Detalle </button>';

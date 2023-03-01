@@ -16,6 +16,8 @@ use App\Models\Paliativos\BasePaliativos;
 use App\Models\Paliativos\ObsPaliativos;
 use App\Models\Psicologica\LineaPsicologica;
 use App\Models\Psicologica\ObservacionesPsicologia;
+use App\Models\Facturacion\Cuentas;
+use App\Models\Facturacion\Proveedores;
 use DateTimeInterface;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -94,6 +96,10 @@ class Usuario extends Authenticatable
         return $this->hasMany(ObservacionesPsicologia::class, 'user_id');
     }
 
+    public function cuentas(){
+        return $this->hasMany(Cuentas::class, 'id');
+
+    }
 
 
     public function roles1(){

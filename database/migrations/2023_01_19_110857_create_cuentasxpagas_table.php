@@ -16,7 +16,7 @@ class CreateCuentasxpagasTable extends Migration
         Schema::create('cuentasxpagas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('fechadepago');
-            $table->string('valordelpago');
+            $table->unsignedBigInteger('valordelpago');
             $table->string('tipodepago');
             $table->string('numerotransaccion');
             $table->longText('observacion');
