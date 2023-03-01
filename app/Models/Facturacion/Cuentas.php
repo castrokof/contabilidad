@@ -51,4 +51,9 @@ class Cuentas extends Model
         return $this->hasMany(Pagos::class, 'id');
     }
 
+    public function cuentaPorPagar()
+    {
+        return $this->belongsTo(Pagos::class, 'cuentasxpagar_id');
+    }
+
 }

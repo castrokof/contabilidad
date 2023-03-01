@@ -34,6 +34,7 @@ Cuentas por Pagar
 
 @include('facturacion.cuentasxpagar.modal.modalCuentas')
 @include('facturacion.cuentasxpagar.modal.modalPayCuentas')
+@include('facturacion.cuentasxpagar.modal.modalListPagos')
 
 
 
@@ -66,6 +67,9 @@ Cuentas por Pagar
         const ivaInput = document.getElementById("iva");
         const valorivaInput = document.getElementById("valoriva");
         const totalInput = document.getElementById("total");
+        const subtotalTd = document.getElementById("subtotal");
+        const ivaTd = document.getElementById("ivaFinal");
+        const totalFinalTd = document.getElementById("totalFinal");
 
         // Agregar event listener para escuchar los cambios en el campo descuento
         descuentoInput.addEventListener("change", () => {
@@ -104,6 +108,18 @@ Cuentas por Pagar
 
             // Actualizar el campo de valor del iva
             valorivaInput.value = valoriva.toFixed(2);
+
+            // Actualizar el campo de IVA en la tabla de resultados
+            ivaTd.textContent = valoriva.toFixed(2);
+
+            // Actualizar el campo de TOTAL en la tabla de resultados
+            const subtotal = parseFloat(totalInput.value);
+            const totalFinal = subtotal + parseFloat(valorivaInput.value);
+            totalFinalTd.textContent = totalFinal.toFixed(2);
+
+            // Actualizar el campo de SUBTOTAL en la tabla de resultados
+            subtotalTd.textContent = subtotal.toFixed(2);
+
         });
 
 
@@ -141,6 +157,15 @@ Cuentas por Pagar
 
 
 
+        function limpiarModal() {
+            const modal = document.getElementById("modal-add-cuentas");
+            const form = modal.querySelector("form");
+            form.reset();
+
+            const tabla = document.getElementById("resultados").querySelector("tbody");
+            tabla.innerHTML = "";
+        }
+
         //Funcion que abre modal donde se debe registrar los datos de la factura o cuenta por pagar
         $('#create_cuenta').click(function() {
             $('#form-general')[0].reset();
@@ -148,8 +173,11 @@ Cuentas por Pagar
             $('#action_button').val('Add');
             $('#action').val('Add');
             $('#form_result').html('');
+            /* limpiarModal(); */
             $('#modal-add-cuentas').modal('show');
         });
+
+
 
         // Función que envían los datos de la factura al controlador
         $('#form-general').on('submit', function(event) {
@@ -202,6 +230,7 @@ Cuentas por Pagar
                             if (data.success == 'ok') {
                                 $('#form-general')[0].reset();
                                 $('#modal-add-cuentas').modal('hide');
+                                /* limpiarModal(); */
                                 $('#pcuentas').DataTable().ajax.reload();
                                 Swal.fire({
                                     icon: 'success',
@@ -311,8 +340,8 @@ Cuentas por Pagar
                 data: data,
                 success: function(data) {
                     $('#pcuentas').DataTable().ajax.reload();
-                    $('#psicologicaAgendada').DataTable().ajax.reload();
-                    $('#psicologicaSeguimiento').DataTable().ajax.reload();
+                    $('#pcuentas_parcial').DataTable().ajax.reload();
+                    $('#pcuentas_canceladas').DataTable().ajax.reload();
                     Manteliviano.notificaciones(data.respuesta, data.titulo, data.icon);
                 }
             });
@@ -320,7 +349,7 @@ Cuentas por Pagar
 
 
 
-        // Funcion para pintar con data table la pestaña de linea psicologica
+        // Funcion para pintar con data table la pestaña de Cuentas por Pagar
         var datatable =
             $('#pcuentas').DataTable({
                 language: idioma_espanol,
@@ -335,7 +364,7 @@ Cuentas por Pagar
                     [20, "desc"]
                 ],
                 ajax: {
-                    url: "{{route('cuentasxpagar')}}",
+                    url: "{{route('cuentas_payless')}}",
                 },
                 columns: [{
                         data: 'action',
@@ -586,9 +615,9 @@ Cuentas por Pagar
 
             });
 
-        // Funcion para pintar con data table la pestaña de seguimiento
+        // Funcion para pintar con data table la pestaña Cuentas Canceladas 'tablaIndexCuentasCanceladas'
         var datatable =
-            $('#psicologicaSeguimiento').DataTable({
+            $('#pcuentas_canceladas').DataTable({
                 language: idioma_espanol,
                 processing: true,
                 lengthMenu: [
@@ -601,7 +630,7 @@ Cuentas por Pagar
                     [20, "desc"]
                 ],
                 ajax: {
-                    url: "{{route('analistapsicos')}}",
+                    url: "{{route('cuentas_canceladas')}}",
                 },
                 columns: [{
                         data: 'action',
@@ -611,61 +640,70 @@ Cuentas por Pagar
                         data: 'id'
                     },
                     {
-                        data: 'surname'
+                        data: 'numerofactura'
                     },
                     {
-                        data: 'ssurname'
+                        data: 'tipofactura'
                     },
                     {
-                        data: 'fname'
+                        data: 'formadepago'
                     },
                     {
-                        data: 'sname'
+                        data: 'fechafactura'
                     },
                     {
-                        data: 'type_document'
+                        data: 'fechavencimiento'
                     },
                     {
-                        data: 'document'
+                        data: 'ica'
                     },
                     {
-                        data: 'date_birth'
+                        data: 'valorica'
                     },
                     {
-                        data: 'municipality'
+                        data: 'retefuente'
                     },
                     {
-                        data: 'other'
+                        data: 'valorretefuente'
                     },
                     {
-                        data: 'address'
+                        data: 'iva'
                     },
                     {
-                        data: 'celular'
+                        data: 'valoriva'
                     },
                     {
-                        data: 'phone'
+                        data: 'descuento'
                     },
                     {
-                        data: 'email'
+                        data: 'valordescuento'
                     },
                     {
-                        data: 'sex'
+                        data: 'total'
                     },
                     {
-                        data: 'eapb'
+                        data: 'observacion'
                     },
                     {
-                        data: 'reason_consultation'
+                        data: 'porcentaje_gasto_fidem_1'
                     },
                     {
-                        data: 'consultation'
+                        data: 'porcentaje_gasto_fidem_2'
                     },
                     {
-                        data: 'diagnosis'
+                        data: 'sede_ips'
                     },
                     {
-                        data: 'created_at'
+                        data: 'future4'
+                    },
+                    {
+                        data: 'future5'
+                    },
+                    {
+                        data: 'username'
+                    },
+                    {
+                        data: 'proveedor_nombre'
                     }
                 ],
 
@@ -707,36 +745,35 @@ Cuentas por Pagar
 
                     }
                 ],
-                "columnDefs": [{
-
-                        "render": function(data, type, row) {
-                            if (row["consultation"] == 1) {
-                                return data + ' - Orientación Psicológica';
-
-                            } else {
-
-                                return data + ' - Call center';
-
-                            }
-
-                        },
-                        "targets": [18]
-                    }
-
-
-                ],
-
-                "createdRow": function(row, data, dataIndex) {
-                    if (data["consultation"] == 1) {
-                        $($(row).find("td")[18]).addClass("btn btn-sm btn-danger rounded-lg");
-                    } else {
-                        $($(row).find("td")[18]).addClass("btn btn-sm btn-dark rounded-lg");
-                    }
-
-                }
-
 
             });
+
+
+
+
+
+        $(document).on('click', '.paylist', function() {
+            var cuenta_id = $(this).attr('id');
+            $('#modalPagosCuentaId').text(cuenta_id);
+            $('#modalPagosTable tbody').empty();
+
+            $('#modalPagos').modal('show');
+            $.ajax({
+                url: '/pagos/cuenta/' + cuenta_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+
+                    $.each(data.pagos, function(index, pago) {
+                        var row = '<tr><td>' + pago.id + '</td><td>' + pago.valordelpago + '</td><td>' + pago.fechadepago + '</td></tr>';
+                        $('#modalPagosTable tbody').append(row);
+                    });
+                },
+                error: function(data) {
+                    console.log('Error:', data);
+                }
+            });
+        });
 
 
 
@@ -774,8 +811,6 @@ Cuentas por Pagar
             });
 
         });
-
-
 
         //Funcion para agregar pagos parciales y totales
         $('#form-general-p').on('submit', function(event) {
@@ -939,6 +974,28 @@ Cuentas por Pagar
         } else {
             futuro1.style.display = "none";
             futuro2.style.display = "none";
+        }
+    }
+
+    function mostrarDescuento() {
+        var descuentos_check = document.getElementById("descuentos_check");
+        var descuento = document.getElementById("descuento");
+
+        if (descuento.checked) {
+            descuentos_check.style.display = "block";
+        } else {
+            descuentos_check.style.display = "none";
+        }
+    }
+
+    function mostrarImpuestos() {
+        var impuestos_check = document.getElementById("impuestos_check");
+        var impuestos = document.getElementById("impuestos");
+
+        if (impuestos.checked) {
+            impuestos_check.style.display = "block";
+        } else {
+            impuestos_check.style.display = "none";
         }
     }
 

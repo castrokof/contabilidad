@@ -1,4 +1,4 @@
-<div class="modal fade" tabindex="-1" id ="modal-add-cuentas" role="dialog" aria-labelledby="myLargeModalLabel">
+<div class="modal fade" tabindex="-1" id ="modal-add-cuentas" role="dialog" aria-labelledby="myLargeModalLabel" hidden.bs.modal="limpiarModal()">
     <div class="modal-dialog  modal-xl" role="document">
     <div class="modal-content">
     <div class="row">
@@ -17,7 +17,7 @@
                     <i class="fas fa-minus"></i>
                   </button>
 
-                    <button type="button" class="btn btn-tool" data-dismiss="modal">
+                    <button type="button" class="btn btn-tool" data-dismiss="modal" >
                       <i class="fas fa-times"></i>
                     </button>
 
