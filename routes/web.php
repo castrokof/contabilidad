@@ -160,13 +160,17 @@ Route::group(['middleware' => ['auth']], function () {
     //RUTA PARA CONSULTA DE CUENTASXPAGAR, PARCIALES Y TOTALES
 
     Route::get('cuentasxpagar', 'Facturacion\CuentasxPagarController@index')->name('cuentasxpagar')->middleware('superPsicologica');
+    Route::get('cuentas_payless', 'Facturacion\CuentasxPagarController@indexPayment')->name('cuentas_payless')->middleware('superEditor');
     Route::get('cuentas_parciales', 'Facturacion\CuentasxPagarController@indexParcial')->name('cuentas_parciales')->middleware('superEditor');
+    Route::get('cuentas_canceladas', 'Facturacion\CuentasxPagarController@indexTotales')->name('cuentas_canceladas')->middleware('superEditor');
     Route::post('cuentasxpagar', 'Facturacion\CuentasxPagarController@guardar')->name('guardar_factura')->middleware('superPsicologica');
     Route::get('editcuentasxpagar/{id}', 'Facturacion\CuentasxPagarController@edit')->name('cuentasxpagar-edit')->middleware('superEditor');
     Route::put('cuentasxpagar/{id}', 'Facturacion\CuentasxPagarController@update')->name('actualizar_factura')->middleware('superPsicologica');
+
     //RUTAS PARA AGREGAR PAGO TOTAL O PARCIAL DE LAS CUENTAS POR PAGAR
+    /* Route::get('pagos_cuenta/{id}', 'Facturacion\CuentasxPagarController@getPagos')->name('lista_pagos')->middleware('superEditor'); */
 
-
+    Route::get('pagos/cuenta/{id}', 'Facturacion\CuentasxPagarController@getPagos')->name('lista_pagos')->middleware('superEditor');
     Route::get('paycuentasxpagar/{id}/addpay', 'Facturacion\CuentasxPagarController@addpay')->name('cuentasxpagar-pay')->middleware('superEditor');
     /* Route::post('paycuentasxpagar', 'Facturacion\CuentasxPagarController@guardarpago')->name('cuentasxpagar_payment')->middleware('superEditor'); */
     Route::post('paycuentasxpagar', 'Facturacion\CuentasxPagarController@validpay')->name('cuentasxpagar_payment')->middleware('superEditor');

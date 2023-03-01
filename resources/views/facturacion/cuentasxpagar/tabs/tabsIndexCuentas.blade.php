@@ -31,7 +31,7 @@
 
                     <div class="tab-pane fade " id="custom-tabs-one-datos-seguimiento" role="tabpanel" aria-labelledby="custom-tabs-one-datos-seguimiento-tab">
                         <div class="card-body">
-                            @include('lineaPsicologica.tablas.tablaIndexPsicologicaSeguimiento')
+                            @include('facturacion.cuentasxpagar.tablas.tablaIndexCuentasCanceladas')
                         </div>
 
                     </div>
