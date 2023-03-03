@@ -763,12 +763,23 @@ Cuentas por Pagar
 
                     var totalPago = 0; // Variable totalPago inicializada en cero que suma en cada iteración el valor de pago.valordelpago.
                     $.each(data.result.pagos, function(index, pago) {
-                        var row = '<tr><td>' + pago.id + '</td><td>' + pago.valordelpago + '</td><td>' + pago.fechadepago + '</td></tr>';
+                        /* console.log(pago.valordelpago); */
+                        var valordelpagoFormatted = parseFloat(pago.valordelpago).toLocaleString('es-CO', {
+                            style: 'currency',
+                            currency: 'COP'
+                        }); // Formatea el valor de pago como moneda colombiana
+                        var row = '<tr><td>' + pago.id + '</td><td>' + valordelpagoFormatted + '</td><td>' + pago.fechadepago + '</td></tr>';
                         $('#modalPagosTable tbody').append(row);
                         totalPago += parseFloat(pago.valordelpago);
                     });
+                    /* var totalPagoEntero = totalPago.toFixed(0); */ // Redondea el valor de un campo al entero más cercano
+
                     // Agrega una fila con el total de los pagos
-                    var rowTotal = '<tr><td><b>Total:</b></td><td><b>' + totalPago.toFixed(2) + '</b></td><td></td></tr>';
+                    var totalPagoFormatted = totalPago.toLocaleString('es-CO', {
+                        style: 'currency',
+                        currency: 'COP'
+                    }); // Formatea el valor totalPago como moneda peso colombiano
+                    var rowTotal = '<tr><td><b>Total:</b></td><td><b>' + totalPagoFormatted + '</b></td><td></td></tr>';
                     $('#modalPagosTable tbody').append(rowTotal);
                 },
                 error: function(data) {
