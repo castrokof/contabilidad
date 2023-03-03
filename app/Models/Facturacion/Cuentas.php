@@ -48,7 +48,7 @@ class Cuentas extends Model
 
     public function pagos()
     {
-        return $this->hasMany(Pagos::class, 'id');
+        return $this->hasMany(Pagos::class, 'cuentasxpagar_id');
     }
 
     public function cuentaPorPagar()

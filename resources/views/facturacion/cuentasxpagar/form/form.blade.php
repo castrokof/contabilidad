@@ -87,8 +87,10 @@
                 <option value="Cheque">Cheque</option>
             </select>
         </div>
-
-
+        <div class="col-lg-3">
+            <label for="total" class="col-xs-4 control-label requerido">Total Factura:</label>
+            <input type="number" id="total" name="total" class="form-control">
+        </div>
         <div class="col-lg-2">
             <label for="iva" class="col-xs-4 control-label ">IVA:</label>
             <select id="iva" name="iva" class="form-control">
@@ -102,15 +104,10 @@
             <label for="valoriva" class="col-xs-4 control-label ">Valor IVA:</label>
             <input type="number" id="valoriva" name="valoriva" class="form-control">
         </div>
-
         <div class="col-lg-3">
-            <label for="total" class="col-xs-4 control-label requerido">Total Factura:</label>
-            <input type="number" id="total" name="total" class="form-control">
-        </div>
-        <div class="col-lg-3">
-            <label for="descuento" >¿Aplicar descuento?   </label>
+            <label for="descuento" style="color: #ff0000;">¿Aplica descuento? </label>
             <input type="checkbox" id="descuento" onchange="mostrarDescuento()">
-            <label for="impuestos" >¿Aplica retenciones?  </label>
+            <label for="impuestos" style="color: #ff0000;">¿Aplica retenciones? </label>
             <input type="checkbox" id="impuestos" onchange="mostrarImpuestos()">
         </div>
     </div>

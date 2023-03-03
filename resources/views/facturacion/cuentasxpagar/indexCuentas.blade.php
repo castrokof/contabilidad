@@ -122,6 +122,15 @@ Cuentas por Pagar
 
         });
 
+        function limpiarModal() {
+            const modal = document.getElementById("modal-add-cuentas");
+            const form = modal.querySelector("form");
+            form.reset();
+
+            const tabla = document.getElementById("resultados").querySelector("tbody");
+            tabla.innerHTML = "";
+        }
+
 
         $("#proveedor_id").select2({
             language: "es",
@@ -155,16 +164,6 @@ Cuentas por Pagar
             }
         });
 
-
-
-        function limpiarModal() {
-            const modal = document.getElementById("modal-add-cuentas");
-            const form = modal.querySelector("form");
-            form.reset();
-
-            const tabla = document.getElementById("resultados").querySelector("tbody");
-            tabla.innerHTML = "";
-        }
 
         //Funcion que abre modal donde se debe registrar los datos de la factura o cuenta por pagar
         $('#create_cuenta').click(function() {
@@ -434,10 +433,10 @@ Cuentas por Pagar
                         data: 'future5'
                     },
                     {
-                        data: 'user_id.usuario'
+                        data: 'username'
                     },
                     {
-                        data: 'proveedor_id.nombre'
+                        data: 'proveedor_nombre'
                     }
                 ],
 
@@ -749,9 +748,6 @@ Cuentas por Pagar
             });
 
 
-
-
-
         $(document).on('click', '.paylist', function() {
             var cuenta_id = $(this).attr('id');
             $('#modalPagosCuentaId').text(cuenta_id);
@@ -763,11 +759,17 @@ Cuentas por Pagar
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
+                    $('#modalNumFactura').text(data.result.numFactura); // Esta funcion captura el numero de la factura numFactura que envia la respuesta JSON de la funcion getPagos del CuentasxPagarController
 
-                    $.each(data.pagos, function(index, pago) {
+                    var totalPago = 0; // Variable totalPago inicializada en cero que suma en cada iteración el valor de pago.valordelpago.
+                    $.each(data.result.pagos, function(index, pago) {
                         var row = '<tr><td>' + pago.id + '</td><td>' + pago.valordelpago + '</td><td>' + pago.fechadepago + '</td></tr>';
                         $('#modalPagosTable tbody').append(row);
+                        totalPago += parseFloat(pago.valordelpago);
                     });
+                    // Agrega una fila con el total de los pagos
+                    var rowTotal = '<tr><td><b>Total:</b></td><td><b>' + totalPago.toFixed(2) + '</b></td><td></td></tr>';
+                    $('#modalPagosTable tbody').append(rowTotal);
                 },
                 error: function(data) {
                     console.log('Error:', data);

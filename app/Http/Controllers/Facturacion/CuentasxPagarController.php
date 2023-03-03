@@ -23,7 +23,7 @@ class CuentasxPagarController extends Controller
 
         if ($request->ajax()) {
 
-            $datas = Cuentas::orderBy('cuentasxpagar.id')->with('userId:usuario,id','proveedorId','pagos')
+            $datas = Cuentas::orderBy('cuentasxpagar.id')->with('userId:usuario,id', 'proveedorId', 'pagos')
                 ->get();
 
 
@@ -195,12 +195,13 @@ class CuentasxPagarController extends Controller
     public function getPagos($id)
     {
         if (request()->ajax()) {
-            $cuenta = Cuentas::findOrFail($id);
-            $pagos = Pagos::where('cuentasxpagar_id', $id)->get();
-            $numFactura = $cuenta->numFactura; // Aquí se obtiene el número de factura
+            /* $cuenta = Cuentas::findOrFail($id); */
+            /* $pagos = Pagos::where('cuentasxpagar_id', $id)->get(); */
+            $cuenta = Cuentas::with('pagos')->findOrFail($id);
+            $numFactura = $cuenta->numerofactura; // Aquí se obtiene el número de factura
 
             $data = [
-                'pagos' => $pagos,
+                'pagos' => $cuenta->pagos,
                 'numFactura' => $numFactura // Aquí se agrega el número de factura a la respuesta JSON
             ];
 
