@@ -23,7 +23,7 @@
             </select>
         </div>
 
-        <div class="col-lg-3">
+        <div class="col-lg-3" >
             <label for="fechafactura" class="col-xs-4 control-label requerido">Fecha de factura:</label>
             <input type="date" id="fechafactura" name="fechafactura" class="form-control">
         </div>
@@ -174,6 +174,10 @@
                     <th style="font-weight: bold;">TOTAL:</th>
                     <td id="totalFinal"></td>
                     <!-- <td><input type="number" name="totalFinal" id="totalFinal" readonly></td> -->
+                </tr>
+                <tr>
+                    <th style="font-weight: bold;">TOTAL DEDUCIDO:</th> <!-- TOTAL - IMPUESTOS -->
+                    <td id="deduccionImpuestos"></td>
                 </tr>
             </tbody>
         </table>

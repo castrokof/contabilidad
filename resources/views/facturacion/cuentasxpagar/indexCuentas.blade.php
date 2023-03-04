@@ -62,14 +62,16 @@ Cuentas por Pagar
         // Obtener los elementos del formulario Cuentas por Pagar para calcular el Descuento, los Impuestos y Retenciones
         const descuentoInput = document.getElementById("descuento");
         const valordescuentoInput = document.getElementById("valordescuento");
-        const retefuenteInput = document.getElementById("retefuente");
+        /* const retefuenteInput = document.getElementById("retefuente"); */
         const valorretefuenteInput = document.getElementById("valorretefuente");
+        const valoricaInput = document.getElementById("valorica");
         const ivaInput = document.getElementById("iva");
         const valorivaInput = document.getElementById("valoriva");
         const totalInput = document.getElementById("total");
         const subtotalTd = document.getElementById("subtotal");
         const ivaTd = document.getElementById("ivaFinal");
         const totalFinalTd = document.getElementById("totalFinal");
+        const deduccionImpuestosTd = document.getElementById("deduccionImpuestos");
 
         // Agregar event listener para escuchar los cambios en el campo descuento
         descuentoInput.addEventListener("change", () => {
@@ -82,19 +84,6 @@ Cuentas por Pagar
 
             // Actualizar el campo de valor del descuento
             valordescuentoInput.value = valordescuento.toFixed(2);
-        });
-
-        // Agregar event listener para escuchar los cambios en el campo retefuente
-        retefuenteInput.addEventListener("change", () => {
-            // Obtener el valor de retefuente y total
-            const retefuente = retefuenteInput.value;
-            const total = totalInput.value;
-
-            // Calcular el valor de la retención en la fuente
-            const valorretefuente = total * retefuente;
-
-            // Actualizar el campo de valor de la retención en la fuente
-            valorretefuenteInput.value = valorretefuente.toFixed(2);
         });
 
         // Agregar event listener para escuchar los cambios en el campo iva
@@ -121,6 +110,23 @@ Cuentas por Pagar
             subtotalTd.textContent = subtotal.toFixed(2);
 
         });
+
+        // Agregar event listener para escuchar los cambios en los campos valorretefuenteInput y valoricaInput
+        valorretefuenteInput.addEventListener("input", calcularDeduccionImpuestos);
+        valoricaInput.addEventListener("input", calcularDeduccionImpuestos);
+
+        function calcularDeduccionImpuestos() {
+            // Obtener los valores de retefuente, ica y total, sino trae valor se pondra predeterminado el 0, para poder calcular la deduccionImpuestos
+            const retefuente = parseFloat(valorretefuenteInput.value || 0);
+            const valorica = parseFloat(valoricaInput.value || 0);
+            const totalFinal = parseFloat(totalFinalTd.textContent);
+
+            // Calcular el valor de la deducción de impuestos
+            const deduccionImpuestos = totalFinal - (retefuente + valorica);
+
+            // Actualizar el campo de valor de la deducción de impuestos
+            deduccionImpuestosTd.textContent = deduccionImpuestos.toFixed(2);
+        }
 
         function limpiarModal() {
             const modal = document.getElementById("modal-add-cuentas");
@@ -330,8 +336,6 @@ Cuentas por Pagar
         });
 
 
-
-
         function ajaxRequest(url, data) {
             $.ajax({
                 url: url,
@@ -345,7 +349,6 @@ Cuentas por Pagar
                 }
             });
         }
-
 
 
         // Funcion para pintar con data table la pestaña de Cuentas por Pagar
@@ -759,9 +762,9 @@ Cuentas por Pagar
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    $('#modalNumFactura').text(data.result.numFactura); // Esta funcion captura el numero de la factura numFactura que envia la respuesta JSON de la funcion getPagos del CuentasxPagarController
+                    $('#modalNumFactura').text(data.result.numFactura); // Esta funcion captura el numero de la factura numFactura que envia la respuesta JSON de la funcion getPagos de CuentasxPagarController
 
-                    var totalPago = 0; // Variable totalPago inicializada en cero que suma en cada iteración el valor de pago.valordelpago.
+                    var totalPago = 0; // Variable totalPago inicializada en cero que suma en cada iteración el valor de pago.valordelpago
                     $.each(data.result.pagos, function(index, pago) {
                         /* console.log(pago.valordelpago); */
                         var valordelpagoFormatted = parseFloat(pago.valordelpago).toLocaleString('es-CO', {
