@@ -20,7 +20,9 @@ class CreateIngesosvspagosTable extends Migration
             $table->string('tipodepago');
             $table->string('numerotransaccion');
             $table->longText('observacion');
+            $table->unsignedBigInteger('consecutivopago');
             $table->unsignedBigInteger('totalingreso');
+            $table->BigInteger('saldo');
             $table->unsignedBigInteger('cuentasxpagas_id');
             $table->foreign('cuentasxpagas_id', 'fk_cuentasxpagas_ingresosvspagos')->references('id')->on('cuentasxpagar')->onDelete('restrict')->onUpdate('restrict');
             $table->unsignedBigInteger('ingresos_id');
