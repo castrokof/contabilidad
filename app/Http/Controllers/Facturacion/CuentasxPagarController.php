@@ -156,7 +156,7 @@ class CuentasxPagarController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    /* public function getPagos(Request $request)
+    public function getPagosList(Request $request)
     {
         $idlist = $request->id;
 
@@ -164,17 +164,29 @@ class CuentasxPagarController extends Controller
 
             $datast = DB::table('cuentasxpagas')
                 ->join('cuentasxpagar', 'cuentasxpagas.cuentasxpagar_id', '=', 'cuentasxpagar.id')
-                ->select('cuentasxpagas.*', 'cuentasxpagar.numerofactura as numFactura')
+                ->select(
+                    'cuentasxpagas.id as idd',
+                    'cuentasxpagas.fechadepago',
+                    'cuentasxpagas.valordelpago',
+                    'cuentasxpagas.tipodepago',
+                    'cuentasxpagar.numerofactura as numFactura'
+                )
                 ->where('cuentasxpagas.cuentasxpagar_id', '=', $idlist)
                 ->get();
 
+            return DataTables()->of($datast)
+                ->addColumn('actionlv', function ($datast) {
+                    $button = '<button type="button" name="eliminarlv" id="' . $datast->idd . '"
+                class = "eliminarlv btn-float  bg-gradient-danger btn-sm tooltipsC"  title="Eliminar Pago"><i class=""><i class="fa fa-trash"></i></i></a>';
 
-
-            return DataTables()->of($datast);
+                    return $button;
+                })
+                ->rawColumns(['actionlv'])
+                ->make(true);
         }
 
         return view('facturacion.cuentasxpagar.indexCuentas');
-    } */
+    }
 
     /* public function getPagos($id)
     {
@@ -450,26 +462,13 @@ class CuentasxPagarController extends Controller
         }
     } */
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function eliminar(Request $request, $id)
     {
-        //
-    }
+        if($request->ajax()){
 
+            Pagos::where('id', $id)->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->json(['success' => 'ok5']);
+        }
     }
 }

@@ -169,6 +169,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     //RUTAS PARA AGREGAR PAGO TOTAL O PARCIAL DE LAS CUENTAS POR PAGAR
     /* Route::get('pagos_cuenta/{id}', 'Facturacion\CuentasxPagarController@getPagos')->name('lista_pagos')->middleware('superEditor'); */
+    Route::get('pagos_cuenta', 'Facturacion\CuentasxPagarController@getPagosList')->name('pagos_cuenta')->middleware('superEditor');
+    Route::delete('rel_pago_cuenta/{id}', 'Facturacion\CuentasxPagarController@eliminar')->name('eliminar_pago')->middleware('superEditor');
 
     Route::get('pagos/cuenta/{id}', 'Facturacion\CuentasxPagarController@getPagos')->name('lista_pagos')->middleware('superEditor');
     Route::get('paycuentasxpagar/{id}/addpay', 'Facturacion\CuentasxPagarController@addpay')->name('cuentasxpagar-pay')->middleware('superEditor');

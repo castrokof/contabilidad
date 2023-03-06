@@ -56,6 +56,9 @@
             <label for="observacion" class="col-xs-4 control-label requerido">Observaciones:</label>
             <textarea id="observacion" name="observacion" class="form-control" rows="3" required></textarea>
         </div>
+        <div class="col-lg-6 text-left mt-auto">
+            <button type="button" class="btn btn-primary">Ver Pagos</button>
+        </div>
     </div>
 
     <input type="hidden" name="cuentasxpagar_id" id="cuentasxpagar_id" class="form-control">

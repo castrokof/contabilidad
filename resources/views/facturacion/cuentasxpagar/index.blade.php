@@ -159,7 +159,6 @@
                         title: "Control de horas",
                         className: "btn  btn-outline-primary btn-sm"
 
-
                     },
                     {
 
@@ -167,7 +166,6 @@
                         titleAttr: 'Exportar Excel',
                         title: "Control de horas",
                         className: "btn  btn-outline-success btn-sm"
-
 
                     },
                     {

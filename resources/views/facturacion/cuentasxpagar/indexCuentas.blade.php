@@ -239,7 +239,7 @@ Cuentas por Pagar
                                 $('#pcuentas').DataTable().ajax.reload();
                                 Swal.fire({
                                     icon: 'success',
-                                    title: 'cuenta por pagar creada correctamente',
+                                    title: 'Cuenta por pagar creada correctamente',
                                     showConfirmButton: false,
                                     timer: 1500
 
@@ -793,9 +793,24 @@ Cuentas por Pagar
 
 
 
+        /* $('.nav-tabs a').on('shown.bs.tab', function(event) {
+            var target = $(event.target).data('target');
+            $('.tab-pane').not(target).hide();
+            $(target).show();
+        }); */
+
         //Función para abrir modal del detalle de la cuenta por pagar para registrar un pago total o parcial
         $(document).on('click', '.payment', function() {
             var id = $(this).attr('id');
+            var nivel_idp2 = $(this).attr('id');
+
+            if (nivel_idp2 != '') {
+                /* $('#tniveles').DataTable().ajax.destroy(); */
+                if ($.fn.DataTable.isDataTable('#tniveles')) {
+                    $('#tniveles').DataTable().destroy();
+                }
+                fill_datatable_f(nivel_idp2);
+            }
 
             $.ajax({
                 url: "/paycuentasxpagar/" + id + "/addpay",
@@ -807,7 +822,6 @@ Cuentas por Pagar
                     $('#saldo_p').val(data.saldo_pendiente); // Agregamos el saldo pendiente que se calcula dentro de la funcion addpay
 
                     $('#cuentasxpagar_id').val(id);
-
                     //$('.card-title').text('Registrar Pago');
                     $('#action_button').val('Add');
                     $('#action').val('Add');
@@ -881,6 +895,7 @@ Cuentas por Pagar
                                 $('#form-general-p')[0].reset();
                                 $('#modal-payment').modal('hide');
                                 $('#pcuentas').DataTable().ajax.reload();
+                                $('#tniveles').DataTable().ajax.reload();
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Pago creado correctamente',
@@ -923,6 +938,137 @@ Cuentas por Pagar
                 }
             });
 
+
+        });
+
+        //--------------------------------Tabla relacion Cuentas por Pagar y los Pagos realizados----------------------------//
+        function fill_datatable_f(nivel_idp2 = '') {
+            var tniveles = $('#tniveles').DataTable({
+                language: idioma_espanol,
+                processing: true,
+                lengthMenu: [
+                    [25, 50, 100, 500, -1],
+                    [25, 50, 100, 500, "Mostrar Todo"]
+                ],
+                processing: true,
+                serverSide: true,
+                aaSorting: [
+                    [1, "asc"]
+                ],
+                ajax: {
+                    url: "{{ route('pagos_cuenta')}}",
+                    //type: "get",
+                    data: {
+                        id: nivel_idp2
+                    }
+                },
+                columns: [{
+                        data: 'actionlv',
+                        name: 'actionlv',
+                        orderable: false
+                    },
+                    {
+                        data: 'fechadepago',
+                        name: 'fechadepago'
+                    },
+                    {
+                        data: 'valordelpago',
+                        name: 'valordelpago'
+                    },
+                    {
+                        data: 'tipodepago',
+                        name: 'tipodepago'
+                    }
+
+                ],
+
+                //Botones----------------------------------------------------------------------
+
+                "dom": '<"row"<"col-xs-1 form-inline"><"col-md-4 form-inline"l><"col-md-5 form-inline"f><"col-md-3 form-inline"B>>rt<"row"<"col-md-8 form-inline"i> <"col-md-4 form-inline"p>>',
+
+
+                buttons: [{
+
+                        extend: 'copyHtml5',
+                        titleAttr: 'Copiar Registros',
+                        title: "seguimiento",
+                        className: "btn  btn-outline-primary btn-sm"
+
+
+                    },
+                    {
+
+                        extend: 'excelHtml5',
+                        titleAttr: 'Exportar Excel',
+                        title: "seguimiento",
+                        className: "btn  btn-outline-success btn-sm"
+
+
+                    },
+                    {
+
+                        extend: 'csvHtml5',
+                        titleAttr: 'Exportar csv',
+                        className: "btn  btn-outline-warning btn-sm"
+                        //text: '<i class="fas fa-file-excel"></i>'
+
+                    },
+                    {
+
+                        extend: 'pdfHtml5',
+                        titleAttr: 'Exportar pdf',
+                        className: "btn  btn-outline-secondary btn-sm"
+
+
+                    }
+                ],
+
+            });
+
+        }
+
+        //-- Funcion para Eliminar un pago seleccionado
+        $(document).on('click', '.eliminarlv', function() {
+            var id = $(this).attr('id');
+
+            var text = "Estás por Eliminar un pago registrado a esta Cuenta por Pagar"
+            var url = "/rel_pago_cuenta/" + id;
+            var method = 'delete';
+
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: text,
+                icon: "success",
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: 'Aceptar',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: url,
+                        method: method,
+                        data: {
+                            "_token": $("meta[name='csrf-token']").attr("content")
+                        },
+                        dataType: "json",
+                        success: function(data) {
+                            if (data.success == 'ok5') {
+
+                                $('#tniveles').DataTable().ajax.reload();
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Pago ha sido eliminado correctamente',
+                                    showConfirmButton: false,
+                                    timer: 1000
+
+                                })
+
+                            }
+                        }
+                    });
+
+                }
+            })
 
         });
 
