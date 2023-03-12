@@ -16,6 +16,8 @@ class PermisoAdministrador
     public function handle($request, Closure $next)
     {
 
+
+
         if ((session()->get('rol_nombre') == ('administrador')))
 
         return $next($request);

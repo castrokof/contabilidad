@@ -20,6 +20,11 @@ class CreateCuentasxpagasTable extends Migration
             $table->string('tipodepago');
             $table->string('numerotransaccion');
             $table->longText('observacion');
+            $table->unsignedBigInteger('porcentaje_gasto_fidem_1')->nullable();
+            $table->unsignedBigInteger('porcentaje_gasto_fidem_2')->nullable();
+            $table->unsignedBigInteger('sede_fidem_1')->nullable();
+            $table->unsignedBigInteger('sede_fidem_2')->nullable();
+            $table->unsignedBigInteger('sede_id');
             $table->unsignedBigInteger('cuentasxpagar_id');
             $table->foreign('cuentasxpagar_id', 'fk_cuentasxpagar_cuentasxpagas')->references('id')->on('cuentasxpagar')->onDelete('restrict')->onUpdate('restrict');
             $table->timestamps();

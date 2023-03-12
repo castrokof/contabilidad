@@ -1,7 +1,7 @@
 @extends("theme.$theme.layout")
 
 @section('titulo')
-    Proveedores
+    Ingresos
 @endsection
 @section('styles')
     <link href="{{ asset("assets/$theme/plugins/datatables-bs4/css/dataTables.bootstrap4.css") }}" rel="stylesheet"
@@ -16,8 +16,8 @@
 @endsection
 
 @section('contenido')
-    @include('facturacion.proveedores.tablas.tablaIndexProveedores')
-    @include('facturacion.proveedores.modal.modalProveedores')
+    @include('facturacion.ingresos.tablas.tablaIndexIngresos')
+    @include('facturacion.ingresos.modal.modalIngresos')
 @endsection
 
 
@@ -41,20 +41,21 @@
 
 
 
+
             //Consulta de datos de la tabla lista-detalle
-            $("#pais").select2({
+            $("#cuenta").select2({
                 language: "es",
                 theme: "bootstrap4",
-                placeholder: 'Seleccione un pais',
+                placeholder: 'Seleccione una cuenta',
                 allowClear: true,
                 ajax: {
-                    url: "{{ route('selectlist') }}",
+                    url: "{{ route('cuentas') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function(params) {
                         return {
                             q: params.term,
-                            id: 4
+
                         };
                     },
                     processResults: function(data) {
@@ -74,78 +75,29 @@
                 }
             });
 
+           var data = {
+                id: 1,
+                text: 'Barn owl'
+            };
 
-            //Consulta de datos de la tabla lista-detalle
-            $("#dpto").select2({
-                language: "es",
-                theme: "bootstrap4",
-                placeholder: 'Seleccione un dpto',
-                allowClear: true,
-                ajax: {
-                    url: "{{ route('selectlist') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            q: params.term,
-                            id: 5
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.array[0], function(datas) {
-
-                                return {
-
-                                    text: datas.nombre,
-                                    id: datas.nombre
-
-                                }
-                            })
-                        };
-                    },
-                    cache: true
-                }
-            });
+            var newOption = new Option(data.text, data.id, false, false);
+            $('#cuenta').append(newOption).trigger('change');
+            // Set the value, creating a new option if necessary
+            if ($('#cuenta').find("option[value='" + data.id + "']").length) {
+                $('#cuenta').val(data.id).trigger('change');
+            } else {
+                // Create a DOM Option and pre-select by default
+                var newOption = new Option(data.text, data.id, true, true);
+                // Append it to the select
+                $('#cuenta').append(newOption).trigger('change');
+            }
 
 
-            //Consulta de datos de la tabla lista-detalle
-            $("#ciudad").select2({
-                language: "es",
-                theme: "bootstrap4",
-                placeholder: 'Seleccione la ciudad',
-                allowClear: true,
-                ajax: {
-                    url: "{{ route('selectlist') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            q: params.term,
-                            id: 6
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.array[0], function(datas) {
-
-                                return {
-
-                                    text: datas.nombre,
-                                    id: datas.nombre
-
-                                }
-                            })
-                        };
-                    },
-                    cache: true
-                }
-            });
 
 
 
             var myTable =
-                $('#proveedores').DataTable({
+                $('#ingresos').DataTable({
                     language: idioma_espanol,
                     processing: true,
                     lengthMenu: [
@@ -159,7 +111,7 @@
                     ],
 
                     ajax: {
-                        url: "{{route('proveedores')}}",
+                        url: "{{route('ingresos')}}",
                     },
                     columns: [{
                             data: 'action',
@@ -296,10 +248,32 @@
 
             // });
 
-            $('#create_proveedor').click(function() {
+            $('#create_cuenta').click(function() {
                 $('#form-general')[0].reset();
                 $('#email').prop('disabled', false).prop('required', true);
-                $('.card-title').text('Estas creando un nuevo proveedor');
+                $('.card-title').text('Estas creando una nueva cuenta');
+                $('#action_button').val('Add');
+                $('#action').val('Add');
+                $('#form_result').html('');
+                $('#card-drawel').removeClass('card card-warning');
+                $('#card-drawel').addClass('card card-info');
+                $('#cardtabspro').removeClass('card card-warning card-tabs');
+                $('#cardtabspro').addClass('card card-info card-tabs');
+
+
+                $('#modal-cuenta').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+
+
+
+            });
+
+            $('#create_ingreso').click(function() {
+                $('#form-general')[0].reset();
+                $('#email').prop('disabled', false).prop('required', true);
+                $('.card-title').text('Estas creando un nuevo ingreso');
                 $('#action_button').val('Add');
                 $('#action').val('Add');
                 $('#form_result').html('');
@@ -311,7 +285,7 @@
                 $('#dpto').val('').trigger('change');
                 $('#ciudad').val('').trigger('change');
 
-                $('#modal-proveedor').modal({
+                $('#modal-ingreso').modal({
                     backdrop: 'static',
                     keyboard: false
                 });
@@ -321,22 +295,22 @@
             });
 
 
-            $(document).on('click', '.addproveedor', function(event) {
+            $(document).on('click', '.addingreso', function(event) {
                 event.preventDefault();
                 var url = '';
                 var method = '';
                 var text = '';
 
                 if ($('#action').val() == 'Add') {
-                    text = "Estás por crear un proveedor"
-                    url = "{{ route('proveedores_store') }}";
+                    text = "Estás por crear un ingreso"
+                    url = "{{ route('ingresos_store') }}";
                     method = 'post';
                 }
 
                 if ($('#action').val() == 'Edit') {
                     text = "Estás por actualizar un proveedor"
                     var updateid = $('#hidden_id').val();
-                    url = "proveedores/" + updateid;
+                    url = "ingresos/" + updateid;
                     method = 'put';
                 }
                 Swal.fire({
@@ -356,8 +330,8 @@
                             success: function(data) {
                                 if (data.success == 'ok') {
                                     $('#form-general')[0].reset();
-                                    $('#modal-proveedor').modal('hide');
-                                    $('#proveedores').DataTable().ajax.reload();
+                                    $('#modal-ingresos').modal('hide');
+                                    $('#ingresos').DataTable().ajax.reload();
                                     Swal.fire({
                                         icon: 'success',
                                         title: 'proveedor creado correctamente',
@@ -369,11 +343,11 @@
 
                                 } else if (data.success == 'ok1') {
                                     $('#form-general')[0].reset();
-                                    $('#modal-proveedor').modal('hide');
-                                    $('#proveedores').DataTable().ajax.reload();
+                                    $('#modal-ingresos').modal('hide');
+                                    $('#ingresos').DataTable().ajax.reload();
                                     Swal.fire({
                                         icon: 'warning',
-                                        title: 'proveedor actualizado correctamente',
+                                        title: 'ingreso actualizado correctamente',
                                         showConfirmButton: false,
                                         timer: 1500
 
@@ -441,13 +415,13 @@
 
             // Edición de proveedor
 
-            $(document).on('click', '.edit_proveedor', function() {
+            $(document).on('click', '.edit_ingreso', function() {
 
                 $('#form-general')[0].reset();
                 var id = $(this).attr('id');
 
                 $.ajax({
-                    url: "editproveedores/" + id ,
+                    url: "editingresos/" + id ,
                     dataType: "json",
                     success: function(data) {
 

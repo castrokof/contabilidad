@@ -32,13 +32,15 @@ class CreateCuentasxpagarfijosTable extends Migration
             $table->longText('observacion');
             $table->unsignedBigInteger('porcentaje_gasto_fidem_1')->nullable();
             $table->unsignedBigInteger('porcentaje_gasto_fidem_2')->nullable();
-            $table->string('sede_ips')->nullable();
-            $table->string('future4')->nullable();
+            $table->unsignedBigInteger('sede_fidem_1')->nullable();
+            $table->unsignedBigInteger('sede_fidem_2')->nullable();
             $table->string('future5')->nullable();
+            $table->unsignedBigInteger('sede_id');
+            $table->foreign('sede_id', 'fk_sede_id_cuentasxpagarfijos')->references('id')->on('listasdetalle')->onDelete('restrict')->onUpdate('restrict');
             $table->unsignedInteger('user_id');
-            $table->foreign('user_id', 'fk_usuario_cuentasxpagar')->references('id')->on('usuario')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('user_id', 'fk_usuario_cuentasxpagarfijos')->references('id')->on('usuario')->onDelete('restrict')->onUpdate('restrict');
             $table->unsignedBigInteger('proveedor_id');
-            $table->foreign('proveedor_id', 'fk_proveedor_cuentasxpagar')->references('id')->on('proveedores')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreign('proveedor_id', 'fk_proveedor_cuentasxpagarfijos')->references('id')->on('proveedores')->onDelete('restrict')->onUpdate('restrict');
             $table->timestamps();
         });
     }

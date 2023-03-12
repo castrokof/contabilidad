@@ -27,7 +27,7 @@ class CreateUsuarioTable extends Migration
             $table->string('email',100)->unique();
             $table->string('celular',50)->nullable();
             $table->string('observacion',200)->nullable();
-            $table->string('ips',50);
+            $table->unsignedBigInteger('ips');
             $table->char('activo',1);
             $table->timestamps();
         });
