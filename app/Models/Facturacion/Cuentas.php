@@ -29,9 +29,10 @@ class Cuentas extends Model
         'observacion',
         'porcentaje_gasto_fidem_1',
         'porcentaje_gasto_fidem_2',
-        'sede_ips',
-        'future4',
+        'sede_fidem_1',
+        'sede_fidem_2',
         'future5',
+        'sede_id',
         'user_id',
         'proveedor_id'
     ];
@@ -42,7 +43,8 @@ class Cuentas extends Model
         return $this->belongsTo(Usuario::class, 'user_id');
     }
 
-    public function proveedorId(){
+    public function proveedorId()
+    {
         return $this->belongsTo(Proveedores::class, 'proveedor_id');
     }
 
@@ -55,5 +57,4 @@ class Cuentas extends Model
     {
         return $this->belongsTo(Pagos::class, 'cuentasxpagar_id');
     }
-
 }

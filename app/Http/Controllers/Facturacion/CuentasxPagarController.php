@@ -82,9 +82,10 @@ class CuentasxPagarController extends Controller
             'observacion' => 'max:500',
             'porcentaje_gasto_fidem_1',
             'porcentaje_gasto_fidem_2',
-            'sede_ips' => 'max:255',
-            'future4' => 'max:255',
+            'sede_fidem_1',
+            'sede_fidem_2',
             'future5' => 'max:255',
+            'sede_id',
             'user_id' => 'required|numeric',
             'proveedor_id' => 'required|numeric'
 
@@ -126,12 +127,13 @@ class CuentasxPagarController extends Controller
             'descuento',
             'valordescuento',
             'total' => 'required|numeric',
-            'observacion' => 'max:500',
+            'observacion',
             'porcentaje_gasto_fidem_1',
             'porcentaje_gasto_fidem_2',
-            'sede_ips' => 'max:255',
-            'future4' => 'max:255',
+            'sede_fidem_1',
+            'sede_fidem_2',
             'future5' => 'max:255',
+            'sede_id',
             'user_id' => 'required|numeric',
             'proveedor_id' => 'required|numeric'
 
@@ -145,7 +147,19 @@ class CuentasxPagarController extends Controller
             return response()->json(['errors' => $error->errors()->all()]);
         }
 
+        /* $data = $request->all();
+
+        if ($data['sede_id'] = '6') {
+            $extra = array(
+                'sede_fidem_1' => 4,
+                'sede_fidem_2' => 5
+            );
+
+            $data = array_merge($data, $extra);
+        } */
+
         Cuentas::create($request->all());
+        /* Cuentas::create($data); */
         return response()->json(['success' => 'ok']);
     }
 
@@ -229,7 +243,23 @@ class CuentasxPagarController extends Controller
     {
         if (request()->ajax()) {
 
-            $cuenta = Cuentas::where('id', $id)->first();
+            $cuenta = DB::table('cuentasxpagar')
+                ->join('proveedores', 'cuentasxpagar.proveedor_id', '=', 'proveedores.id')
+                ->join('usuario', 'cuentasxpagar.user_id', '=', 'usuario.id')
+                /* ->Join('listasdetalle', 'cuentasxpagar.sede_id', '=', 'listasdetalle.id') */
+                ->leftJoin('listasdetalle as ld1', 'cuentasxpagar.sede_id', '=', 'ld1.id')
+                ->leftJoin('listasdetalle as ld2', 'cuentasxpagar.sede_fidem_1', '=', 'ld2.id')
+                ->leftJoin('listasdetalle as ld3', 'cuentasxpagar.sede_fidem_2', '=', 'ld3.id')
+                ->select(
+                    'cuentasxpagar.*',
+                    'proveedores.nombre as proveedor_nombre',
+                    'usuario.usuario as username',
+                    'ld1.nombre as sede_nombre',
+                    'ld2.nombre as sede_fidem_1_nombre',
+                    'ld3.nombre as sede_fidem_2_nombre'
+                )
+                ->where('cuentasxpagar.id', $id)
+                ->first();
             if (!$cuenta) {
                 return response()->json(['error' => 'No se encontró la cuenta por pagar'], 404);
             } else {
@@ -284,6 +314,11 @@ class CuentasxPagarController extends Controller
                 $cuenta_pagas->tipodepago = $request->input('tipodepago');
                 $cuenta_pagas->numerotransaccion = $request->input('numerotransaccion');
                 $cuenta_pagas->observacion = $request->input('observacion');
+                $cuenta_pagas->porcentaje_gasto_fidem_1 = $request->input('gasto_fidem_1_n');
+                $cuenta_pagas->porcentaje_gasto_fidem_2 = $request->input('gasto_fidem_2_n');
+                $cuenta_pagas->sede_fidem_1 = $request->input('sede_fidem_1_n');
+                $cuenta_pagas->sede_fidem_2 = $request->input('sede_fidem_2_n');
+                $cuenta_pagas->sede_id = $request->input('sede_id_n');
                 $cuenta_pagas->save();
             } else {
                 /* Si ya existe un registro en la tabla Pagos para la cuenta por pagar,
@@ -302,6 +337,11 @@ class CuentasxPagarController extends Controller
                     $cuenta_pagas->tipodepago = $request->input('tipodepago');
                     $cuenta_pagas->numerotransaccion = $request->input('numerotransaccion');
                     $cuenta_pagas->observacion = $request->input('observacion');
+                    $cuenta_pagas->porcentaje_gasto_fidem_1 = $request->input('gasto_fidem_1_n');
+                    $cuenta_pagas->porcentaje_gasto_fidem_2 = $request->input('gasto_fidem_2_n');
+                    $cuenta_pagas->sede_fidem_1 = $request->input('sede_fidem_1_n');
+                    $cuenta_pagas->sede_fidem_2 = $request->input('sede_fidem_2_n');
+                    $cuenta_pagas->sede_id = $request->input('sede_id_n');
                     $cuenta_pagas->save();
                 }
             }
@@ -325,7 +365,17 @@ class CuentasxPagarController extends Controller
             $datas = DB::table('cuentasxpagar')
                 ->leftJoin('proveedores', 'cuentasxpagar.proveedor_id', '=', 'proveedores.id')
                 ->leftJoin('usuario', 'cuentasxpagar.user_id', '=', 'usuario.id')
-                ->select('cuentasxpagar.*', 'proveedores.nombre as proveedor_nombre', 'usuario.usuario as username')
+                ->leftJoin('listasdetalle as ld1', 'cuentasxpagar.sede_id', '=', 'ld1.id')
+                ->leftJoin('listasdetalle as ld2', 'cuentasxpagar.sede_fidem_1', '=', 'ld2.id')
+                ->leftJoin('listasdetalle as ld3', 'cuentasxpagar.sede_fidem_2', '=', 'ld3.id')
+                ->select(
+                    'cuentasxpagar.*',
+                    'proveedores.nombre as proveedor_nombre',
+                    'usuario.usuario as username',
+                    'ld1.nombre as sede_nombre',
+                    'ld2.nombre as sede_fidem_1_nombre',
+                    'ld3.nombre as sede_fidem_2_nombre'
+                )
                 ->whereNotIn('cuentasxpagar.id', $subquery)
                 ->orderBy('cuentasxpagar.id')
                 ->get();
@@ -362,9 +412,19 @@ class CuentasxPagarController extends Controller
                 ->groupBy('cuentasxpagas.cuentasxpagar_id');
 
             $datas = DB::table('cuentasxpagar')
-                ->join('proveedores', 'cuentasxpagar.proveedor_id', '=', 'proveedores.id')
-                ->join('usuario', 'cuentasxpagar.user_id', '=', 'usuario.id')
-                ->selectRaw('cuentasxpagar.*, proveedores.nombre as proveedor_nombre, usuario.usuario as username')
+                ->leftJoin('proveedores', 'cuentasxpagar.proveedor_id', '=', 'proveedores.id')
+                ->leftJoin('usuario', 'cuentasxpagar.user_id', '=', 'usuario.id')
+                ->leftJoin('listasdetalle as ld1', 'cuentasxpagar.sede_id', '=', 'ld1.id')
+                ->leftJoin('listasdetalle as ld2', 'cuentasxpagar.sede_fidem_1', '=', 'ld2.id')
+                ->leftJoin('listasdetalle as ld3', 'cuentasxpagar.sede_fidem_2', '=', 'ld3.id')
+                ->select(
+                    'cuentasxpagar.*',
+                    'proveedores.nombre as proveedor_nombre',
+                    'usuario.usuario as username',
+                    'ld1.nombre as sede_nombre',
+                    'ld2.nombre as sede_fidem_1_nombre',
+                    'ld3.nombre as sede_fidem_2_nombre'
+                )
                 ->whereExists(function ($query) use ($subquery) {
                     $query->select(DB::raw(1))
                         ->fromSub($subquery, 'subquery')
@@ -405,9 +465,19 @@ class CuentasxPagarController extends Controller
                 ->groupBy('cuentasxpagas.cuentasxpagar_id');
 
             $datas = DB::table('cuentasxpagar')
-                ->join('proveedores', 'cuentasxpagar.proveedor_id', '=', 'proveedores.id')
-                ->join('usuario', 'cuentasxpagar.user_id', '=', 'usuario.id')
-                ->selectRaw('cuentasxpagar.*, proveedores.nombre as proveedor_nombre, usuario.usuario as username')
+                ->leftJoin('proveedores', 'cuentasxpagar.proveedor_id', '=', 'proveedores.id')
+                ->leftJoin('usuario', 'cuentasxpagar.user_id', '=', 'usuario.id')
+                ->leftJoin('listasdetalle as ld1', 'cuentasxpagar.sede_id', '=', 'ld1.id')
+                ->leftJoin('listasdetalle as ld2', 'cuentasxpagar.sede_fidem_1', '=', 'ld2.id')
+                ->leftJoin('listasdetalle as ld3', 'cuentasxpagar.sede_fidem_2', '=', 'ld3.id')
+                ->select(
+                    'cuentasxpagar.*',
+                    'proveedores.nombre as proveedor_nombre',
+                    'usuario.usuario as username',
+                    'ld1.nombre as sede_nombre',
+                    'ld2.nombre as sede_fidem_1_nombre',
+                    'ld3.nombre as sede_fidem_2_nombre'
+                )
                 ->whereExists(function ($query) use ($subquery) {
                     $query->select(DB::raw(1))
                         ->fromSub($subquery, 'subquery')
@@ -464,11 +534,11 @@ class CuentasxPagarController extends Controller
 
     public function eliminar(Request $request, $id)
     {
-        if($request->ajax()){
+        if ($request->ajax()) {
 
             Pagos::where('id', $id)->delete();
 
-        return response()->json(['success' => 'ok5']);
+            return response()->json(['success' => 'ok5']);
         }
     }
 }

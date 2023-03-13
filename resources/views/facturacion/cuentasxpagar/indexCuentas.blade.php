@@ -170,11 +170,47 @@ Cuentas por Pagar
             }
         });
 
+        //Consulta de datos de la tabla lista-detalle para seleccionar la Sede
+        $("#sede_id").select2({
+            language: "es",
+            theme: "bootstrap4",
+            placeholder: 'Seleccione la Sede',
+            allowClear: true,
+            ajax: {
+                url: "{{ route('selectlist') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        q: params.term,
+                        id: 2
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: $.map(data.array[0], function(datas) {
+
+                            return {
+
+                                text: datas.nombre,
+                                id: datas.id
+
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
+
+
 
         //Funcion que abre modal donde se debe registrar los datos de la factura o cuenta por pagar
         $('#create_cuenta').click(function() {
             $('#form-general')[0].reset();
             $('#proveedor_id').val('').trigger('change');
+            /* $('#sede_id').val('').trigger('change'); */
             $('#action_button').val('Add');
             $('#action').val('Add');
             $('#form_result').html('');
@@ -187,6 +223,7 @@ Cuentas por Pagar
         // Función que envían los datos de la factura al controlador
         $('#form-general').on('submit', function(event) {
             event.preventDefault();
+            /* guardar($(this).serialize()); */
             var url = '';
             var method = '';
             var text = '';
@@ -305,8 +342,8 @@ Cuentas por Pagar
                     $('#porcentaje_gasto_fidem_1').val(data.cuenta.porcentaje_gasto_fidem_1);
                     $('#porcentaje_gasto_fidem_2').val(data.cuenta.porcentaje_gasto_fidem_2);
                     $('#sede_ips').val(data.cuenta.sede_ips);
-                    $('#future4').val(data.cuenta.future4);
-                    $('#future5').val(data.cuenta.future5);
+                    $('#sede_fidem_1').val(data.cuenta.sede_fidem_1);
+                    $('#sede_fidem_2').val(data.cuenta.sede_fidem_2);
                     $('#user_id').val(data.cuenta.user_id);
                     $('#proveedor_id').val(data.cuenta.proveedor_id);
 
@@ -363,7 +400,7 @@ Cuentas por Pagar
                 processing: true,
                 serverSide: true,
                 aaSorting: [
-                    [20, "desc"]
+                    [2, "desc"]
                 ],
                 ajax: {
                     url: "{{route('cuentas_payless')}}",
@@ -427,13 +464,13 @@ Cuentas por Pagar
                         data: 'porcentaje_gasto_fidem_2'
                     },
                     {
-                        data: 'sede_ips'
+                        data: 'sede_nombre'
                     },
                     {
-                        data: 'future4'
+                        data: 'sede_fidem_1_nombre'
                     },
                     {
-                        data: 'future5'
+                        data: 'sede_fidem_2_nombre'
                     },
                     {
                         data: 'username'
@@ -560,13 +597,13 @@ Cuentas por Pagar
                         data: 'porcentaje_gasto_fidem_2'
                     },
                     {
-                        data: 'sede_ips'
+                        data: 'sede_nombre'
                     },
                     {
-                        data: 'future4'
+                        data: 'sede_fidem_1_nombre'
                     },
                     {
-                        data: 'future5'
+                        data: 'sede_fidem_2_nombre'
                     },
                     {
                         data: 'username'
@@ -629,7 +666,7 @@ Cuentas por Pagar
                 processing: true,
                 serverSide: true,
                 aaSorting: [
-                    [20, "desc"]
+                    [1, "desc"]
                 ],
                 ajax: {
                     url: "{{route('cuentas_canceladas')}}",
@@ -693,13 +730,13 @@ Cuentas por Pagar
                         data: 'porcentaje_gasto_fidem_2'
                     },
                     {
-                        data: 'sede_ips'
+                        data: 'sede_nombre'
                     },
                     {
-                        data: 'future4'
+                        data: 'sede_fidem_1_nombre'
                     },
                     {
-                        data: 'future5'
+                        data: 'sede_fidem_2_nombre'
                     },
                     {
                         data: 'username'
@@ -817,8 +854,16 @@ Cuentas por Pagar
                 dataType: "json",
                 success: function(data) {
                     $('#numerofactura_n').val(data.result.numerofactura);
+                    $('#gasto_fidem_1_n').val(data.result.porcentaje_gasto_fidem_1);
+                    $('#gasto_fidem_2_n').val(data.result.porcentaje_gasto_fidem_2);
+                    $('#sede_fidem_1_n').val(data.result.sede_fidem_1);
+                    $('#sede_fidem_2_n').val(data.result.sede_fidem_2);
+                    $('#sede_id_n').val(data.result.sede_id);
+
                     $('#total_n').val(data.result.total);
-                    $('#sede_ips_n').val(data.result.sede_ips);
+                    $('#sede_ips_n').val(data.result.sede_nombre);
+                    $('#fidem_1_nombre_n').val(data.result.sede_fidem_1_nombre);
+                    $('#fidem_2_nombre_n').val(data.result.sede_fidem_2_nombre);
                     $('#saldo_p').val(data.saldo_pendiente); // Agregamos el saldo pendiente que se calcula dentro de la funcion addpay
 
                     $('#cuentasxpagar_id').val(id);
@@ -1126,13 +1171,25 @@ Cuentas por Pagar
 
     //funcion que va ocultar o mostrar los campos futuro1 y futuro2 siempre y cuando en el campo futuro 3 se seleccionar la opcion FIDEMCOMPARTIDO
     function mostrarOcultarCampos() {
-        var sede_ips = document.getElementById("sede_ips");
+        var sede_ips = document.getElementById("sede_id");
+        /* se utiliza sede_ips.options[sede_ips.selectedIndex] para obtener el option seleccionado dentro del select.
+           Finalmente, se utiliza la propiedad innerText de ese option para obtener su texto. Si el texto es igual a "FIDEMC" */
+        var sede_texto = sede_ips.options[sede_ips.selectedIndex].innerText;
         var futuro1 = document.getElementById("futuro1");
         var futuro2 = document.getElementById("futuro2");
+        var sede_fidem_1 = document.getElementById("sede_fidem_1");
+        var sede_fidem_2 = document.getElementById("sede_fidem_2");
 
-        if (sede_ips.value == "FIDEMCOMPARTIDO") {
+        /* console.log("sede_ips:", sede_ips); */ // depurar la variable sede_ips
+        /* console.log("sede_ips.value:", sede_ips.value); */ // depurar la propiedad "value" de la variable sede_ips
+        /* console.log("sede_ips.value:", sede_ips.innerText); */ // depurar la propiedad "value" de la variable sede_ips
+
+        /* if (sede_ips.value = "6") { */
+        if (sede_texto == "FIDEMC") {
             futuro1.style.display = "block";
             futuro2.style.display = "block";
+            sede_fidem_1.value = 4;
+            sede_fidem_2.value = 5;
         } else {
             futuro1.style.display = "none";
             futuro2.style.display = "none";
@@ -1158,6 +1215,15 @@ Cuentas por Pagar
             impuestos_check.style.display = "block";
         } else {
             impuestos_check.style.display = "none";
+        }
+    }
+
+    function mostrarDetalleSede() {
+        var detailSede = document.getElementById("detailSede");
+        if (detailSede.style.display === "none") {
+            detailSede.style.display = "block";
+        } else {
+            detailSede.style.display = "none";
         }
     }
 

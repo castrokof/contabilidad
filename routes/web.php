@@ -97,8 +97,6 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 
-
-
     //RUTA PARA CONSULTA DE CUENTASXPAGAR, PARCIALES Y TOTALES
 
     Route::get('cuentasxpagar', 'Facturacion\CuentasxPagarController@index')->name('cuentasxpagar')->middleware('superPsicologica');
@@ -145,10 +143,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::get('cuentaslist', 'Facturacion\CuentasIngresoController@select')->name('cuentaslist')->middleware('superEditor');
 
 
-
-
     //RUTA PARA LISTAS DE PALIATIVOS
-
     Route::get('/listas-index', 'Paliativos\Listas\ListasController@index')->name('listasIndex')->middleware('superEditor');
     Route::post('/crear-listas', 'Paliativos\Listas\ListasController@store')->name('crearlistas')->middleware('superEditor');
     Route::get('/editar-listas/{id}', 'Paliativos\Listas\ListasController@show')->name('editar-listas')->middleware('superEditor');
@@ -168,9 +163,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/detalle-estado', 'Paliativos\Listas\ListasDetalleController@updateestado')->name('detestado')->middleware('superEditor');
 
 
-
-
     //SELECT DE LISTAS
-
     route::get('selectlist', 'Paliativos\Listas\ListasDetalleController@select')->name('selectlist')->middleware('superEditor');
 });

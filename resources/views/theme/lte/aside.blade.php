@@ -27,7 +27,7 @@
            </div>
           <div class="info">
             <i class="nav-item has-treeview">
-            <H5 alignt="center">Control Nomina</H5>
+            <H5 alignt="center">Control Financiero</H5>
             </i>
          </div>
           </div>
