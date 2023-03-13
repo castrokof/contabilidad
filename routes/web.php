@@ -171,6 +171,6 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     //SELECT DE LISTAS
-
+    Route::get('selectlist1', 'Paliativos\Listas\ListasDetalleController@select1')->name('selectlist1')->middleware('superEditor');
     route::get('selectlist', 'Paliativos\Listas\ListasDetalleController@select')->name('selectlist')->middleware('superEditor');
 });

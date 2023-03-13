@@ -17,15 +17,12 @@
                             <tr>
                                 <th>Acciones</th>
                                 <th>Id</th>
-                                <th>tipodocumento</th>
-                                <th>documento</th>
-                                <th>nombre</th>
-                                <th>direccion</th>
-                                <th>telefono</th>
-                                <th>pais</th>
-                                <th>ciudad</th>
-                                <th>dpto</th>
-                                <th>correo</th>
+                                <th>Cuenta</th>
+                                <th>Proveedor</th>
+                                <th># ingreso</th>
+                                <th>Total ingresos</th>
+                                <th>Forma de pago</th>
+                                <th>Fecha de ingreso</th>
                                 <th>Usuario</th>
                                 <th>Fecha de creacion</th>
                             </tr>

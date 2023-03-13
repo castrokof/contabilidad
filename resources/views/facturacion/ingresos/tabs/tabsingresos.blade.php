@@ -10,22 +10,10 @@
                             Ingreso</a>
                     </li>
                      <li class="nav-item">
-                        <button type="button" class="btn btn-default" name="create_cuenta" id="create_cuenta"
-                            data-toggle="modal" data-target="#modal-u"><i class="fa fa-fw fa-plus-circle"></i> Nueva cuenta</button>
-                        </button>
+                        <button type="button" class="btn create_cuenta btn-default" name="create_cuenta" id="create_cuenta"><i class="fa fa-fw fa-plus-circle"></i> Nueva cuenta</button>
 
                     </li>
-                    {{--<li class="nav-item">
-                        <a class="nav-link " id="custom-tabs-one-datos-del-empleado-contrac-tab" data-toggle="pill"
-                            href="#custom-tabs-one-datos-del-empleado-contrac" role="tab"
-                            aria-controls="custom-tabs-one-datos-del-empleado-contrac"
-                            aria-selected="false">Contrato</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " id="custom-tabs-one-datos-del-empleado-salario-tab" data-toggle="pill"
-                            href="#custom-tabs-one-datos-del-empleado-salario" role="tab"
-                            aria-controls="custom-tabs-one-datos-del-empleado-salario" aria-selected="false">Salario</a>
-                    </li> --}}
+
                 </ul>
             </div>
             <div class="card-body">

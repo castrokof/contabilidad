@@ -147,6 +147,19 @@ class ListasDetalleController extends Controller
         }
     }
 
+
+    public function select1(Request $request)
+    {
+      if(request()->ajax())
+      {
+        $sedes=ListasDetalle::orderBy('slug') ->where([
+            ['activo', 'SI'],['listas_id',$request->id],['nombre',"!=", 'FIDEMC']])->orderBy('nombre')->pluck('nombre','id');
+
+          return response()->json($sedes);
+      }
+
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

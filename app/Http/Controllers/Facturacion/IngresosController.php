@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Facturacion;
 use App\Http\Controllers\Controller;
 use App\Models\Facturacion\Ingresos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use App\Models\Seguridad\Usuario;
+use App\Models\Facturacion\Proveedores;
+use App\Models\Facturacion\CuentasIng;
 
 class IngresosController extends Controller
 {
@@ -17,7 +21,7 @@ class IngresosController extends Controller
     {
         if ($request->ajax()) {
 
-            $datas = Ingresos::orderBy('.id')->with('userId:usuario,id', 'proveedorId')
+            $datas = Ingresos::orderBy('id')->with('userId', 'proveedorId','cuentas')
                 ->get();
 
 
@@ -52,7 +56,30 @@ class IngresosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = array(
+
+            'numeroingreso'=> 'required',
+            'tipoingreso'=> 'required',
+            'formadepago'=> 'required',
+            'fechadeingreso'=> 'required',
+            'totalingreso'=> 'required|numeric|min:99999',
+            'observacion'=> 'required',
+            'proveedor_id'=> 'required|numeric',
+            'cuenta_id'=> 'required|numeric',
+            'user_id' => 'required|numeric'
+
+
+        );
+
+        $error = Validator::make($request->all(), $rules);
+
+        if($error->fails()) {
+            return response()->json(['errors' => $error->errors()->all()]);
+        }else{
+
+        Ingresos::create($request->all());
+            return response()->json(['success' => 'ok']);
+        }
     }
 
     /**

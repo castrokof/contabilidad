@@ -3,23 +3,31 @@
             <div class="modal-content">
                 <div class="row">
                     <div class="col-lg-12">
-                        @include('includes.form-error')
-                        @include('includes.form-mensaje')
-                        <span id="form_result"></span>
-                        <div id="card-drawel" class="card card-info">
+                        <div id="card-drawel" class="card card-success">
                             <div class="card-header">
-                                <h3 class="card-title"></h3>
-                                <div class="card-tools pull-right">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <h3 id="cardtitle" class="card-title accent-dark"></h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                                        <i class="fas fa-expand"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-tool" data-dismiss="modal">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+
                                 </div>
                             </div>
-                            <form id="form-general" class="form-horizontal" method="POST">
+                            <div class="card-body">
+                            <form id="form-generalc" class="form-horizontal" method="POST">
                                 @csrf
-                                <div class="card-body">
-                                    @include('facturacion.ingresos.tabs.tabscuenta')
-                                </div>
+
+                                    @include('facturacion.ingresos.form.formdatoscuenta')
+
                                 <!-- /.card-body -->
-                                <div class="card-footer">
+                               <div class="card-footer">
 
                                     <div class="col-lg-3"></div>
                                     <div class="col-lg-6">
@@ -28,7 +36,7 @@
                                 </div>
                                 <!-- /.card-footer -->
                             </form>
-
+                        </div>
                         </div>
                     </div>
                 </div>

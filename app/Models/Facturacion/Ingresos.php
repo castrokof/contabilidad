@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models\Facturacion;
+use App\Models\Seguridad\Usuario;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

@@ -16,7 +16,7 @@ class CreateCuentasTable extends Migration
         Schema::create('cuentas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nombrecuenta');
-            $table->string('tipodecuenta');
+            $table->string('tipodecuenta')->nullable();
             $table->longText('observacion');
             $table->string('future4')->nullable();
             $table->string('future5')->nullable();

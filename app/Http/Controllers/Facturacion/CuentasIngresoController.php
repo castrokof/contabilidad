@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Facturacion;
 use App\Http\Controllers\Controller;
 use App\Models\Facturacion\CuentasIng;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CuentasIngresoController extends Controller
 {
@@ -62,7 +63,24 @@ class CuentasIngresoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = array(
+
+            'nombrecuenta'=> 'required',
+            'sede_id'=> 'required|numeric',
+            'user_id' => 'required|numeric'
+
+
+        );
+
+        $error = Validator::make($request->all(), $rules);
+
+        if($error->fails()) {
+            return response()->json(['errors' => $error->errors()->all()]);
+        }else{
+
+        CuentasIng::create($request->all());
+            return response()->json(['success' => 'ok']);
+        }
     }
 
     /**

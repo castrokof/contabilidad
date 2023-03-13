@@ -1,28 +1,29 @@
 
 
         <div class="form-group row">
-            <div class="col-lg-2">
-                <label for="cuenta" class="col-xs-4 control-label requerido"><i class="fas fa-id-badge">Cuenta</i></label>
+            <div class="col-lg-3">
+                <label for="cuenta" class="col-xs-4 control-label requerido"><i class="fas fa-home">Cuenta</i></label>
 
-                <select name="cuenta" id="cuenta" class="form-control select2bs4" required>
+                <select name="cuenta_id" id="cuenta" class="form-control select2bs4" required>
+                </select>
+            </div>
+            <div class="col-lg-3">
+                <label for="proveedor_id" class="col-xs-4 control-label requerido"><i class="fas fa-shipping-fast">Proveedor</i></label>
+                <select name="proveedor_id" id="proveedor_id" class="form-control select2bs4" style="width: 100%;" required>
                 </select>
             </div>
             <div class="col-lg-2">
-                <label for="documento" class="col-xs-4 control-label requerido"><i class="fas fa-hashtag"> Documento</i></label>
-                <input type="text" name="documento" id="documento" class="form-control" value="{{ old('documento') }}"
-                    minlength="6" required>
-            </div>
-            <div class="col-lg-3">
-                <label for="nombre" class="col-xs-4 control-label requerido"><i class="far fa-address-card"> Nombre</i></label>
-                <input type="text" name="nombre" id="nombre" class="form-control" value="{{ old('nombre') }}" required>
+                <label for="numeroingreso" class="col-xs-4 control-label requerido"><i class="far fa-address-card"> # Ingreso</i></label>
+                <input type="text" name="numeroingreso" id="numeroingreso" class="form-control" value="{{ old('numeroingreso') }}" required>
             </div>
             <div class="col-lg-2">
-                <label for="direccion" class="col-xs-4 control-label "><i class="fas fa-map-pin"> Dirección</i> </label>
-                <input type="text" name="direccion" id="direccion" class="form-control" value="{{ old('direccion') }}">
+                <label for="tipoingreso" class="col-xs-4 control-label requerido"><i class="fas fa-date"> Tipo ingreso</i></label>
+                <select name="tipoingreso" id="tipoingreso" class="form-control select2bs4" style="width: 100%;" required>
+                </select>
             </div>
-            <div class="col-lg-3">
-                <label for="telefono" class="col-xs-4 control-label requerido"><i class="fas fa-phone"> Telefono</i></label>
-                <input type="text" name="telefono" id="telefono" class="form-control" value="{{ old('telefono') }}"
+            <div class="col-lg-2">
+                <label for="fechadeingreso" class="col-xs-4 control-label requerido"><i class="fas fa-date"> Fecha ingreso</i></label>
+                <input type="date" name="fechadeingreso" id="fechadeingreso" class="form-control" value="{{ old('fechadeingreso') }}"
                     required>
             </div>
 
@@ -30,26 +31,22 @@
 
         <div class="form-group row">
             <div class="col-lg-3">
-                <label for="pais" class="col-xs-4 control-label requerido"><i class="fas fa-globe"> Pais</i></label>
-                <select name="pais" id="pais" class="form-control select2bs4" style="width: 100%;" required>
-                </select>
+                <label for="totalingreso" class="col-xs-4 control-label requerido"><i class="fas fa-comment-dollar"> Total ingreso</i></label>
+                <input type="number" name="totalingreso" id="totalingreso" class="form-control validanumericos" value="{{ old('totalingreso') }}"
+                required>
             </div>
             <div class="col-lg-3">
-                <label for="dpto" class="col-xs-4 control-label requerido"><i class="fas fa-map"> Dpto</i></label>
-                <select name="dpto" id="dpto" class="form-control select2bs4" style="width: 100%;" required>
+                <label for="formadepago" class="col-xs-4 control-label requerido"><i class="fas fa-map"> Forma de pago</i></label>
+                <select name="formadepago" id="formadepago" class="form-control select2bs4" style="width: 100%;" required>
                 </select>
             </div>
-            <div class="col-lg-3">
-                <label for="ciudad" class="col-xs-4 control-label requerido"><i class="fas fa-city"> Ciudad</i></label>
-                <select name="ciudad" id="ciudad" class="form-control select2bs4" style="width: 100%;" required>
-                </select>
+            <div class="col-lg-6">
+                <label for="observacion" class="col-xs-8 control-label ">Observación</label>
+            <textarea name="observacion" id="observacion" class="form-control" rows="3" placeholder="Enter ..."></textarea>
             </div>
 
-            <div class="col-lg-2">
-                <label for="correo" class="col-xs-4 control-label requerido"><i class="fas fa-envelope"> Correo</i></label>
-                <input type="correo" name="correo" id="correo" class="form-control" value="{{ old('correo') }}" required>
-            </div>
+
 
 
         </div>
-        <input type="hidden" name="user_id" id="user_id" class="form-control" value="{{Session()->get('usuario_id')}}" >
+        <input type="hidden" name="user_id" id="user_ids" class="form-control" value="{{Session()->get('usuario_id')}}" >
