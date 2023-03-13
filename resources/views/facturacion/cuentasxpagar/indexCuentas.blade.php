@@ -901,7 +901,7 @@ Cuentas por Pagar
                 method = 'post';
             }
             if ($('#action').val() == 'Edit') {
-                text = "Estás por actualizar un Nivel"
+                text = "Estás por actualizar un Pago"
                 var updateid = $('#id_eps_niveles').val();
                 url = "/eps_niveles/" + updateid;
                 method = 'put';
@@ -941,6 +941,8 @@ Cuentas por Pagar
                                 $('#modal-payment').modal('hide');
                                 $('#pcuentas').DataTable().ajax.reload();
                                 $('#tniveles').DataTable().ajax.reload();
+                                $('#pcuentas_canceladas').DataTable().ajax.reload();
+
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Pago creado correctamente',
