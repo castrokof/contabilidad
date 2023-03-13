@@ -269,8 +269,9 @@ class CuentasxPagarController extends Controller
                     ->sum('valordelpago');
 
                 $total_factura = DB::table('cuentasxpagar')
+                    ->select(DB::raw('SUM(total + valoriva) as subtotal'))
                     ->where('id', $id)
-                    ->value('total');
+                    ->value('subtotal');
 
                 $saldo_pendiente = $total_factura - $total_pagos;
 

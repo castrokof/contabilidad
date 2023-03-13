@@ -859,8 +859,8 @@ Cuentas por Pagar
                     $('#sede_fidem_1_n').val(data.result.sede_fidem_1);
                     $('#sede_fidem_2_n').val(data.result.sede_fidem_2);
                     $('#sede_id_n').val(data.result.sede_id);
-
                     $('#total_n').val(data.result.total);
+                    $('#iva_n').val(data.result.valoriva);
                     $('#sede_ips_n').val(data.result.sede_nombre);
                     $('#fidem_1_nombre_n').val(data.result.sede_fidem_1_nombre);
                     $('#fidem_2_nombre_n').val(data.result.sede_fidem_2_nombre);
@@ -1162,8 +1162,9 @@ Cuentas por Pagar
     //función de validación en JavaScript para mostrar una alerta si el valor ingresado en el campo "valordelpago" es mayor que el valor del campo "total_n"
     function validarPago() {
         var total = parseFloat(document.getElementById('total_n').value);
+        var valoriva = parseFloat(document.getElementById('iva_n').value);
         var pago = parseFloat(document.getElementById('valordelpago').value);
-        if (pago > total) {
+        if (pago > (total + valoriva)) {
             alert('El valor del pago no puede ser mayor que el total de la factura.');
             document.getElementById('valordelpago').value = '';
             return false;

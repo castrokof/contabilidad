@@ -16,11 +16,15 @@
             <input type="text" id="numerofactura_n" name="numerofactura_n" class="form-control" readonly>
         </div>
 
-        <div class="col-lg-3">
-            <label for="total_n" class="col-xs-4 control-label ">Total:</label>
+        <div class="col-lg-2">
+            <label for="total_n" class="col-xs-4 control-label ">Subtotal:</label>
             <input type="number" id="total_n" name="total_n" class="form-control" readonly>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-2">
+            <label for="iva_n" class="col-xs-4 control-label ">Valor Iva:</label>
+            <input type="number" id="iva_n" name="iva_n" class="form-control" readonly>
+        </div>
+        <div class="col-lg-2">
             <label for="saldo_p" class="col-xs-4 control-label ">Saldo Pendiente:</label>
             <input type="number" id="saldo_p" name="saldo_p" class="form-control" style="color: red;" readonly>
         </div>
