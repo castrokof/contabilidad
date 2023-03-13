@@ -302,6 +302,22 @@ class UsuarioAdministradorSeeder extends Seeder
             'activo' => 'SI',
             'user_id' => 1
         ]);
+        DB::table('listas')->insert([
+            'slug' => 'TYPE_IN',
+            'nombre' => 'TIPO_INGRESO',
+            'descripcion' => 'TIPO DE INGRESO',
+            'activo' => 'SI',
+            'user_id' => 1
+        ]);
+
+        DB::table('listas')->insert([
+            'slug' => 'FPAGO',
+            'nombre' => 'FPAGO',
+            'descripcion' => 'FORMA DE PAGO',
+            'activo' => 'SI',
+            'user_id' => 1
+        ]);
+
 
 
 
@@ -1506,6 +1522,23 @@ class UsuarioAdministradorSeeder extends Seeder
             ['slug' => strtoupper('CIUDAD'), 'nombre' => strtoupper('PUERTO CARREÑO'), 'descripcion' => strtoupper('PUERTO CARREÑO'), 'activo' => 'SI', 'listas_id' => 6, 'user_id' => 1, 'created_at' => Carbon::now()->format('Y-m-d H:i:s')],
             ['slug' => strtoupper('CIUDAD'), 'nombre' => strtoupper('SANTA ROSALÍA'), 'descripcion' => strtoupper('SANTA ROSALÍA'), 'activo' => 'SI', 'listas_id' => 6, 'user_id' => 1, 'created_at' => Carbon::now()->format('Y-m-d H:i:s')],
 
+            [
+                'slug' => strtoupper('PGP'), 'nombre' => strtoupper('PGP'), 'descripcion' => strtoupper('PAGO PAQUETE'),
+                'activo' => 'SI', 'listas_id' => 7, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'slug' => strtoupper('PFM'), 'nombre' => strtoupper('PFM'), 'descripcion' => strtoupper('PAGP FIJO MENSUAL'),
+                'activo' => 'SI', 'listas_id' => 7, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'slug' => strtoupper('EFEC'), 'nombre' => strtoupper('EFECTIVO'), 'descripcion' => strtoupper('EFECTIVO'),
+                'activo' => 'SI', 'listas_id' => 8, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+
+            [
+                'slug' => strtoupper('TRAF'), 'nombre' => strtoupper('TRANSFERENCIA'), 'descripcion' => strtoupper('TRANSFERENCIA A CUENTA'),
+                'activo' => 'SI', 'listas_id' => 8, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
         ]);
     }
 }
