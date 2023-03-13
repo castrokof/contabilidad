@@ -1,5 +1,10 @@
 <fieldset>
-    <legend style="color: #31df9d;">Información de la factura</legend>
+    <legend style="color: #31df9d;position: relative;">Información de la factura
+        <button type="button" class="btn btn-info" style="position: absolute;top: 0; right: 0;" onclick="mostrarDetalleSede()">Ver detalle de la Sede</button>
+    </legend>
+    <!-- <label for="descuento" style="color: #17a2b8;">Ver detalle de la Sede</label>
+    <input type="checkbox" id="descuento" onchange="mostrarDescuento()" > -->
+
 
     <div class="form-group row">
         <div class="col-lg-3">
@@ -21,6 +26,39 @@
         </div>
     </div>
 </fieldset>
+
+<fieldset id="detailSede" style="display:none;">
+    <legend style="color: #1f7386;">Distribución del gasto entre sedes</legend>
+    <div class="form-group row">
+        <div class="col-lg-3">
+            <label for="gasto_fidem_1_n">Gasto Fidem 1:</label>
+            <div class="input-group">
+                <input type="text" name="gasto_fidem_1_n" id="gasto_fidem_1_n" class="form-control" readonly>
+                <div class="input-group-append">
+                    <span class="input-group-text">%</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <label for="gasto_fidem_2_n">Gasto Fidem 2:</label>
+            <div class="input-group">
+                <input type="text" name="gasto_fidem_2_n" id="gasto_fidem_2_n" class="form-control" readonly>
+                <div class="input-group-append">
+                    <span class="input-group-text">%</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <label for="fidem_1_nombre_n">Sede Fidem 1:</label>
+            <input type="text" name="fidem_1_nombre_n" id="fidem_1_nombre_n" class="form-control" readonly>
+        </div>
+        <div class="col-lg-3">
+            <label for="fidem_2_nombre_n">Sede Fidem 2:</label>
+            <input type="text" name="fidem_2_nombre_n" id="fidem_2_nombre_n" class="form-control" readonly>
+        </div>
+    </div>
+</fieldset>
+
 
 <fieldset>
 
@@ -56,11 +94,16 @@
             <label for="observacion" class="col-xs-4 control-label requerido">Observaciones:</label>
             <textarea id="observacion" name="observacion" class="form-control" rows="3" required></textarea>
         </div>
-        <div class="col-lg-6 text-left mt-auto">
+        <!-- <div class="col-lg-6 text-left mt-auto">
             <button type="button" class="btn btn-primary">Ver Pagos</button>
-        </div>
+        </div> -->
     </div>
 
     <input type="hidden" name="cuentasxpagar_id" id="cuentasxpagar_id" class="form-control">
+    <!-- <input type="hidden" name="gasto_fidem_1_n" id="gasto_fidem_1_n" class="form-control">
+    <input type="hidden" name="gasto_fidem_2_n" id="gasto_fidem_2_n" class="form-control"> -->
+    <input type="hidden" name="sede_fidem_1_n" id="sede_fidem_1_n" class="form-control">
+    <input type="hidden" name="sede_fidem_2_n" id="sede_fidem_2_n" class="form-control">
+    <input type="hidden" name="sede_id_n" id="sede_id_n" class="form-control">
 </fieldset>
 <!-- <input type="hidden" name="user_id" id="user_id" class="form-control" value="{{Session()->get('usuario_id')}}"> -->

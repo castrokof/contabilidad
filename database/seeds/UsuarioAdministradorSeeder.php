@@ -324,15 +324,15 @@ class UsuarioAdministradorSeeder extends Seeder
             ],
 
             [
-                'slug' => strtoupper('FIDEM1'), 'nombre' => strtoupper('FIDEM1'), 'descripcion' => strtoupper('DESCRIPCION FIDEM1'),
+                'slug' => strtoupper('FIDEM1'), 'nombre' => strtoupper('FIDEM1'), 'descripcion' => strtoupper('ATENCIÓN FIDEM 1'),
                 'activo' => 'SI', 'listas_id' => 2, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
-                'slug' => strtoupper('FIDEM2'), 'nombre' => strtoupper('FIDEM2'), 'descripcion' => strtoupper('DESCRIPCION FIDEM2'),
+                'slug' => strtoupper('FIDEM2'), 'nombre' => strtoupper('FIDEM2'), 'descripcion' => strtoupper('ATENCIÓN FIDEM 2'),
                 'activo' => 'SI', 'listas_id' => 2, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
-                'slug' => strtoupper('FIDEMC'), 'nombre' => strtoupper('FIDEMC'), 'descripcion' => strtoupper('DESCRPCION FIDEMC'),
+                'slug' => strtoupper('FIDEMC'), 'nombre' => strtoupper('FIDEMC'), 'descripcion' => strtoupper('FIDEM COMPARTIDO'),
                 'activo' => 'SI', 'listas_id' => 2, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
 

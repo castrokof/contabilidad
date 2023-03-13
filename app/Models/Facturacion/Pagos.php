@@ -16,6 +16,11 @@ class Pagos extends Model
         'tipodepago',
         'numerotransaccion',
         'observacion',
+        'porcentaje_gasto_fidem_1',
+        'porcentaje_gasto_fidem_2',
+        'sede_fidem_1',
+        'sede_fidem_2',
+        'sede_id',
         'cuentasxpagar_id'
     ];
 
