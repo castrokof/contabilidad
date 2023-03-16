@@ -48,7 +48,8 @@ class CuentasxPagarController extends Controller
     public function edit($id)
     {
         if (request()->ajax()) {
-            $cuenta = Cuentas::where('id', '=', $id)->first();
+            $cuenta = Cuentas::join('listasdetalle', 'cuentasxpagar.sede_id', '=', 'listasdetalle.id')->with('proveedorId')->where('cuentasxpagar.id', '=', $id)->first();
+
             return response()->json(['cuenta' => $cuenta]);
         }
         return view('facturacion.cuentasxpagar.indexCuentas');
@@ -146,17 +147,6 @@ class CuentasxPagarController extends Controller
 
             return response()->json(['errors' => $error->errors()->all()]);
         }
-
-        /* $data = $request->all();
-
-        if ($data['sede_id'] = '6') {
-            $extra = array(
-                'sede_fidem_1' => 4,
-                'sede_fidem_2' => 5
-            );
-
-            $data = array_merge($data, $extra);
-        } */
 
         Cuentas::create($request->all());
         /* Cuentas::create($data); */
@@ -505,34 +495,6 @@ class CuentasxPagarController extends Controller
         return view('facturacion.cuentasxpagar.indexCuentas');
     }
 
-
-    // Deprecated
-    /* public function guardarpago(Request $request)
-    {
-
-        if ($request->ajax()) {
-
-            $rules = array(
-                'fechadepago' => 'required',
-                'valordelpago' => 'required',
-                'tipodepago' => 'required',
-                'numerotransaccion' => 'required',
-                'observacion' => 'required',
-                'cuentasxpagar_id' => 'required|numeric'
-
-            );
-
-            $error = Validator::make($request->all(), $rules);
-
-            if ($error->fails()) {
-                return response()->json(['errors' => $error->errors()->all()]);
-            }
-
-            Pagos::create($request->all());
-            return response()->json(['success' => 'okn1']);
-        }
-    } */
-
     public function eliminar(Request $request, $id)
     {
         if ($request->ajax()) {
@@ -543,3 +505,4 @@ class CuentasxPagarController extends Controller
         }
     }
 }
+

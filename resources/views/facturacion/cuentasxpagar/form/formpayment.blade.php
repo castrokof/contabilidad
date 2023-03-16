@@ -1,6 +1,6 @@
 <fieldset>
     <legend style="color: #31df9d;position: relative;">Información de la factura
-        <button type="button" class="btn btn-info" style="position: absolute;top: 0; right: 0;" onclick="mostrarDetalleSede()">Ver detalle de la Sede</button>
+        <button type="button" class="btn btn-info" id="detallesede_btn" style="position: absolute;top: 0; right: 0;" >Ver detalle de la Sede</button>
     </legend>
     <!-- <label for="descuento" style="color: #17a2b8;">Ver detalle de la Sede</label>
     <input type="checkbox" id="descuento" onchange="mostrarDescuento()" > -->

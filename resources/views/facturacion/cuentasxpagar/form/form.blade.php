@@ -53,18 +53,23 @@
     <div class="form-group row">
         <div class="col-lg-3">
             <label for="sede_id" class="col-xs-4 control-label requerido">Sede:</label>
-            <select name="sede_id" id="sede_id" class="form-control select2bs4" onchange="mostrarOcultarCampos()" style="width: 100%;" required>
+            <select name="sede_id" id="sede_id" class="form-control select2bs4" style="width: 100%;" required>
+            </select>
+        </div>
+        <div class="col-lg-3">
+            <label for="clasificacion" class="col-xs-4 control-label requerido">Clasificación</label>
+            <select name="future5" id="clasificacion" class="form-control select2bs4" style="width: 100%;" required>
             </select>
         </div>
         <div id="futuro1" class="col-lg-3" style="display:none;">
             <label for="porcentaje_gasto_fidem_1" class="col-xs-4 control-label ">% FIDEM 1:</label>
             <input type="number" id="porcentaje_gasto_fidem_1" name="porcentaje_gasto_fidem_1" class="form-control">
-            <input type="hidden" id="sede_fidem_1" name="sede_fidem_1" class="form-control" >
+            <input type="hidden" id="sede_fidem_1" name="sede_fidem_1" class="form-control">
         </div>
         <div id="futuro2" class="col-lg-3" style="display:none;">
             <label for="porcentaje_gasto_fidem_2" class="col-xs-4 control-label ">% FIDEM 2:</label>
             <input type="number" id="porcentaje_gasto_fidem_2" name="porcentaje_gasto_fidem_2" class="form-control">
-            <input type="hidden" id="sede_fidem_2" name="sede_fidem_2" class="form-control" >
+            <input type="hidden" id="sede_fidem_2" name="sede_fidem_2" class="form-control">
         </div>
     </div>
 </fieldset>
@@ -101,10 +106,16 @@
             <input type="number" id="valoriva" name="valoriva" class="form-control">
         </div>
         <div class="col-lg-3">
+            <!-- <div class="icheck-primary d-inline ml-2">
+                <input type="checkbox" id="descuento" name="todo2" />
+                <label for="descuento"> </label>
+            </div>
+            <span class="text" style="color: #ff0000">¿Aplica descuento?</span> -->
             <label for="descuento" style="color: #ff0000;">¿Aplica descuento? </label>
-            <input type="checkbox" id="descuento" onchange="mostrarDescuento()">
+            <input type="checkbox" id="descuento">
+
             <label for="impuestos" style="color: #ff0000;">¿Aplica retenciones? </label>
-            <input type="checkbox" id="impuestos" onchange="mostrarImpuestos()">
+            <input type="checkbox" id="impuestos">
         </div>
     </div>
 </fieldset>

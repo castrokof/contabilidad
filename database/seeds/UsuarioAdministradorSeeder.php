@@ -317,11 +317,13 @@ class UsuarioAdministradorSeeder extends Seeder
             'activo' => 'SI',
             'user_id' => 1
         ]);
-
-
-
-
-
+        DB::table('listas')->insert([
+            'slug' => 'CLAS',
+            'nombre' => 'CLASIFICACION',
+            'descripcion' => 'CLASIFICACION DE LA FACTURA',
+            'activo' => 'SI',
+            'user_id' => 1
+        ]);
 
 
 
@@ -1538,6 +1540,38 @@ class UsuarioAdministradorSeeder extends Seeder
             [
                 'slug' => strtoupper('TRAF'), 'nombre' => strtoupper('TRANSFERENCIA'), 'descripcion' => strtoupper('TRANSFERENCIA A CUENTA'),
                 'activo' => 'SI', 'listas_id' => 8, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'slug' => strtoupper('COMI'), 'nombre' => strtoupper('COMISIONES'), 'descripcion' => strtoupper('COMISIONES'),
+                'activo' => 'SI', 'listas_id' => 9, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'slug' => strtoupper('IMPUESTOS'), 'nombre' => strtoupper('IMPUESTOS'), 'descripcion' => strtoupper('IMPUESTOS'),
+                'activo' => 'SI', 'listas_id' => 9, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'slug' => strtoupper('INFRA'), 'nombre' => strtoupper('INFRAESTRUCTURA'), 'descripcion' => strtoupper('INFRAESTRUCTURA'),
+                'activo' => 'SI', 'listas_id' => 9, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'slug' => strtoupper('MEDI'), 'nombre' => strtoupper('MEDICAMENTOS'), 'descripcion' => strtoupper('MEDICAMENTOS'),
+                'activo' => 'SI', 'listas_id' => 9, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'slug' => strtoupper('INSU'), 'nombre' => strtoupper('INSUMOS'), 'descripcion' => strtoupper('INSUMOS'),
+                'activo' => 'SI', 'listas_id' => 9, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'slug' => strtoupper('PERS'), 'nombre' => strtoupper('PERSONAL'), 'descripcion' => strtoupper('PERSONAL'),
+                'activo' => 'SI', 'listas_id' => 9, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'slug' => strtoupper('GASTOSF'), 'nombre' => strtoupper('GASTOS FIJOS F'), 'descripcion' => strtoupper('GASTOS FIJOS FUNCIONAMIENTO'),
+                'activo' => 'SI', 'listas_id' => 9, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'slug' => strtoupper('EVEN'), 'nombre' => strtoupper('EVENTOS OCASIONALES'), 'descripcion' => strtoupper('EVENTOS OCASIONALES'),
+                'activo' => 'SI', 'listas_id' => 9, 'user_id' => 1,  'created_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
         ]);
     }

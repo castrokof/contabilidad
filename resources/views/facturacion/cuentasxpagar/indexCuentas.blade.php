@@ -86,8 +86,11 @@ Cuentas por Pagar
             valordescuentoInput.value = valordescuento.toFixed(2);
         });
 
-        // Agregar event listener para escuchar los cambios en el campo iva
-        ivaInput.addEventListener("change", () => {
+        // Agregar event listener para escuchar los cambios en los campos total e iva
+        totalInput.addEventListener("input", calcularTotal);
+        ivaInput.addEventListener("input", calcularTotal);
+
+        function calcularTotal() {
             // Obtener el valor de iva y total
             const iva = ivaInput.value;
             const total = totalInput.value;
@@ -102,14 +105,14 @@ Cuentas por Pagar
             ivaTd.textContent = valoriva.toFixed(2);
 
             // Actualizar el campo de TOTAL en la tabla de resultados
-            const subtotal = parseFloat(totalInput.value);
-            const totalFinal = subtotal + parseFloat(valorivaInput.value);
+            const subtotal = parseFloat(totalInput.value || 0);
+            const totalFinal = subtotal + parseFloat(valorivaInput.value || 0);
             totalFinalTd.textContent = totalFinal.toFixed(2);
 
             // Actualizar el campo de SUBTOTAL en la tabla de resultados
             subtotalTd.textContent = subtotal.toFixed(2);
 
-        });
+        }
 
         // Agregar event listener para escuchar los cambios en los campos valorretefuenteInput y valoricaInput
         valorretefuenteInput.addEventListener("input", calcularDeduccionImpuestos);
@@ -203,6 +206,38 @@ Cuentas por Pagar
             }
         });
 
+        //Consulta de datos de la tabla lista-detalle para seleccionar la Sede
+        $("#clasificacion").select2({
+            language: "es",
+            theme: "bootstrap4",
+            placeholder: 'Clasificacion',
+            allowClear: true,
+            ajax: {
+                url: "{{ route('selectlist') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        q: params.term,
+                        id: 9
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: $.map(data.array[0], function(datas) {
+
+                            return {
+
+                                text: datas.nombre,
+                                id: datas.nombre
+
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
 
 
 
@@ -237,7 +272,7 @@ Cuentas por Pagar
             if ($('#action').val() == 'Edit') {
                 text = "Estás por actualizar una factura o cuenta por pagar"
                 var updateid = $('#hidden_id').val();
-                url = "/cuentasxpagar/" + updateid;
+                url = "cuentasxpagar/" + updateid;
                 method = 'put';
             }
             Swal.fire({
@@ -341,15 +376,23 @@ Cuentas por Pagar
                     $('#observacion').val(data.cuenta.observacion);
                     $('#porcentaje_gasto_fidem_1').val(data.cuenta.porcentaje_gasto_fidem_1);
                     $('#porcentaje_gasto_fidem_2').val(data.cuenta.porcentaje_gasto_fidem_2);
-                    $('#sede_ips').val(data.cuenta.sede_ips);
+
+                    var newsede = new Option(data.cuenta.nombre, data.cuenta.id, true, true);
+                    $('#sede_id').append(newsede).trigger('change');
+
+                    var newinfra = new Option(data.cuenta.future5, data.cuenta.future5, true, true);
+                    $('#infraestructura').append(newinfra).trigger('change');
+
                     $('#sede_fidem_1').val(data.cuenta.sede_fidem_1);
                     $('#sede_fidem_2').val(data.cuenta.sede_fidem_2);
                     $('#user_id').val(data.cuenta.user_id);
-                    $('#proveedor_id').val(data.cuenta.proveedor_id);
+
+                    var newproveedor = new Option(data.cuenta.proveedor_id.nombre, data.cuenta.proveedor_id.id, true, true);
+                    $('#proveedor_id').append(newproveedor).trigger('change');
 
                     $('#hidden_id').val(id)
                     $('.card-title').text("Editando cuenta por pagar: " + data.cuenta.numerofactura +
-                        "-" + data.cuenta.sede_ips);
+                        "-" + data.cuenta.nombre);
                     $('#action_button').val('Editar').removeClass('btn-sucess')
                     $('#action_button').addClass('btn-danger')
                     $('#action_button').val('Edit');
@@ -388,453 +431,406 @@ Cuentas por Pagar
         }
 
 
-        // Funcion para pintar con data table la pestaña de Cuentas por Pagar
-        var datatable =
-            $('#pcuentas').DataTable({
-                language: idioma_espanol,
-                processing: true,
-                lengthMenu: [
-                    [25, 50, 100, 500, -1],
-                    [25, 50, 100, 500, "Mostrar Todo"]
-                ],
-                processing: true,
-                serverSide: true,
-                aaSorting: [
-                    [2, "desc"]
-                ],
-                ajax: {
-                    url: "{{route('cuentas_payless')}}",
-                },
-                columns: [{
-                        data: 'action',
-                        orderable: false
-                    },
-                    {
-                        data: 'id'
-                    },
-                    {
-                        data: 'numerofactura'
-                    },
-                    {
-                        data: 'tipofactura'
-                    },
-                    {
-                        data: 'formadepago'
-                    },
-                    {
-                        data: 'fechafactura'
-                    },
-                    {
-                        data: 'fechavencimiento'
-                    },
-                    {
-                        data: 'ica'
-                    },
-                    {
-                        data: 'valorica'
-                    },
-                    {
-                        data: 'retefuente'
-                    },
-                    {
-                        data: 'valorretefuente'
-                    },
-                    {
-                        data: 'iva'
-                    },
-                    {
-                        data: 'valoriva'
-                    },
-                    {
-                        data: 'descuento'
-                    },
-                    {
-                        data: 'valordescuento'
-                    },
-                    {
-                        data: 'total'
-                    },
-                    {
-                        data: 'observacion'
-                    },
-                    {
-                        data: 'porcentaje_gasto_fidem_1'
-                    },
-                    {
-                        data: 'porcentaje_gasto_fidem_2'
-                    },
-                    {
-                        data: 'sede_nombre'
-                    },
-                    {
-                        data: 'sede_fidem_1_nombre'
-                    },
-                    {
-                        data: 'sede_fidem_2_nombre'
-                    },
-                    {
-                        data: 'username'
-                    },
-                    {
-                        data: 'proveedor_nombre'
-                    }
-                ],
+        $(function() {
+            // Se llama a la función correspondiente al tab activo al cargar la página
+            var activeTab = $(".nav-tabs .active");
+            var activeTabId = activeTab.attr("id");
+            callFunction(activeTabId);
 
-                //Botones----------------------------------------------------------------------
-
-                "dom": '<"row"<"col-xs-1 form-inline"><"col-md-4 form-inline"l><"col-md-5 form-inline"f><"col-md-3 form-inline"B>>rt<"row"<"col-md-8 form-inline"i> <"col-md-4 form-inline"p>>',
-
-                buttons: [{
-
-                        extend: 'copyHtml5',
-                        titleAttr: 'Copiar Registros',
-                        title: "Control de horas",
-                        className: "btn  btn-outline-primary btn-sm"
-
-
-                    },
-                    {
-
-                        extend: 'excelHtml5',
-                        titleAttr: 'Exportar Excel',
-                        title: "Control de horas",
-                        className: "btn  btn-outline-success btn-sm"
-
-
-                    },
-                    {
-
-                        extend: 'csvHtml5',
-                        titleAttr: 'Exportar csv',
-                        className: "btn  btn-outline-warning btn-sm"
-
-                    },
-                    {
-
-                        extend: 'pdfHtml5',
-                        titleAttr: 'Exportar pdf',
-                        className: "btn  btn-outline-secondary btn-sm"
-
-                    }
-                ],
-
+            // Se llama a la función correspondiente al tab seleccionado al cambiar de tab
+            $('a[data-toggle="pill"]').on("shown.bs.tab", function(e) {
+                var target = $(e.target);
+                var targetId = target.attr("id");
+                callFunction(targetId);
             });
 
+            function callFunction(tabId) {
+                if (tabId === "custom-tabs-one-datos-del-paciente-tab") {
+                    // Llamar a la función correspondiente al tab "Cuentas por Pagar"
+                    /* console.log("Cuentas por Pagar"); */
 
-        // Funcion para pintar con data table la pestaña de Pagos Parciales
-        var datatable =
-            $('#pcuentas_parcial').DataTable({
-                language: idioma_espanol,
-                processing: true,
-                lengthMenu: [
-                    [25, 50, 100, 500, -1],
-                    [25, 50, 100, 500, "Mostrar Todo"]
-                ],
-                processing: true,
-                serverSide: true,
-                aaSorting: [
-                    [21, "desc"]
-                ],
-                ajax: {
-                    url: "{{route('cuentas_parciales')}}",
-                },
-                columns: [{
-                        data: 'action',
-                        orderable: false
-                    },
-                    {
-                        data: 'id'
-                    },
-                    {
-                        data: 'numerofactura'
-                    },
-                    {
-                        data: 'tipofactura'
-                    },
-                    {
-                        data: 'formadepago'
-                    },
-                    {
-                        data: 'fechafactura'
-                    },
-                    {
-                        data: 'fechavencimiento'
-                    },
-                    {
-                        data: 'ica'
-                    },
-                    {
-                        data: 'valorica'
-                    },
-                    {
-                        data: 'retefuente'
-                    },
-                    {
-                        data: 'valorretefuente'
-                    },
-                    {
-                        data: 'iva'
-                    },
-                    {
-                        data: 'valoriva'
-                    },
-                    {
-                        data: 'descuento'
-                    },
-                    {
-                        data: 'valordescuento'
-                    },
-                    {
-                        data: 'total'
-                    },
-                    {
-                        data: 'observacion'
-                    },
-                    {
-                        data: 'porcentaje_gasto_fidem_1'
-                    },
-                    {
-                        data: 'porcentaje_gasto_fidem_2'
-                    },
-                    {
-                        data: 'sede_nombre'
-                    },
-                    {
-                        data: 'sede_fidem_1_nombre'
-                    },
-                    {
-                        data: 'sede_fidem_2_nombre'
-                    },
-                    {
-                        data: 'username'
-                    },
-                    {
-                        data: 'proveedor_nombre'
+                    // Destruir la tabla existente
+                    if ($.fn.DataTable.isDataTable("#pcuentas")) {
+                        $("#pcuentas").DataTable().destroy();
                     }
-                ],
+                    // Funcion para Inicializar la tabla de datos Cuentas por Pagar
+                    var datatable = $("#pcuentas").DataTable({
+                        language: idioma_espanol,
+                        processing: true,
+                        lengthMenu: [
+                            [25, 50, 100, 500, -1],
+                            [25, 50, 100, 500, "Mostrar Todo"],
+                        ],
+                        processing: true,
+                        serverSide: true,
+                        aaSorting: [
+                            [2, "desc"]
+                        ],
+                        ajax: {
+                            url: "{{route('cuentas_payless')}}",
+                        },
+                        columns: [{
+                                data: "action",
+                                orderable: false,
+                            },
+                            {
+                                data: "id",
+                            },
+                            {
+                                data: "numerofactura",
+                            },
+                            {
+                                data: "tipofactura",
+                            },
+                            {
+                                data: "formadepago",
+                            },
+                            {
+                                data: "fechafactura",
+                            },
+                            {
+                                data: "fechavencimiento",
+                            },
+                            {
+                                data: "ica",
+                            },
+                            {
+                                data: "valorica",
+                            },
+                            {
+                                data: "retefuente",
+                            },
+                            {
+                                data: "valorretefuente",
+                            },
+                            {
+                                data: "iva",
+                            },
+                            {
+                                data: "valoriva",
+                            },
+                            {
+                                data: "descuento",
+                            },
+                            {
+                                data: "valordescuento",
+                            },
+                            {
+                                data: "total",
+                            },
+                            {
+                                data: "observacion",
+                            },
+                            {
+                                data: "porcentaje_gasto_fidem_1",
+                            },
+                            {
+                                data: "porcentaje_gasto_fidem_2",
+                            },
+                            {
+                                data: "sede_nombre",
+                            },
+                            {
+                                data: "sede_fidem_1_nombre",
+                            },
+                            {
+                                data: "sede_fidem_2_nombre",
+                            },
+                            {
+                                data: "username",
+                            },
+                            {
+                                data: "proveedor_nombre",
+                            },
+                        ],
 
-                //Botones----------------------------------------------------------------------
+                        //Botones----------------------------------------------------------------------
 
-                "dom": '<"row"<"col-xs-1 form-inline"><"col-md-4 form-inline"l><"col-md-5 form-inline"f><"col-md-3 form-inline"B>>rt<"row"<"col-md-8 form-inline"i> <"col-md-4 form-inline"p>>',
+                        dom: '<"row"<"col-xs-1 form-inline"><"col-md-4 form-inline"l><"col-md-5 form-inline"f><"col-md-3 form-inline"B>>rt<"row"<"col-md-8 form-inline"i> <"col-md-4 form-inline"p>>',
 
-                buttons: [{
-
-                        extend: 'copyHtml5',
-                        titleAttr: 'Copiar Registros',
-                        title: "Control de horas",
-                        className: "btn  btn-outline-primary btn-sm"
-
-
-                    },
-                    {
-
-                        extend: 'excelHtml5',
-                        titleAttr: 'Exportar Excel',
-                        title: "Control de horas",
-                        className: "btn  btn-outline-success btn-sm"
-
-
-                    },
-                    {
-
-                        extend: 'csvHtml5',
-                        titleAttr: 'Exportar csv',
-                        className: "btn  btn-outline-warning btn-sm"
-
-                    },
-                    {
-
-                        extend: 'pdfHtml5',
-                        titleAttr: 'Exportar pdf',
-                        className: "btn  btn-outline-secondary btn-sm"
-
-
-                    }
-                ],
-
-            });
-
-        // Funcion para pintar con data table la pestaña Cuentas Canceladas 'tablaIndexCuentasCanceladas'
-        var datatable =
-            $('#pcuentas_canceladas').DataTable({
-                language: idioma_espanol,
-                processing: true,
-                lengthMenu: [
-                    [25, 50, 100, 500, -1],
-                    [25, 50, 100, 500, "Mostrar Todo"]
-                ],
-                processing: true,
-                serverSide: true,
-                aaSorting: [
-                    [1, "desc"]
-                ],
-                ajax: {
-                    url: "{{route('cuentas_canceladas')}}",
-                },
-                columns: [{
-                        data: 'action',
-                        orderable: false
-                    },
-                    {
-                        data: 'id'
-                    },
-                    {
-                        data: 'numerofactura'
-                    },
-                    {
-                        data: 'tipofactura'
-                    },
-                    {
-                        data: 'formadepago'
-                    },
-                    {
-                        data: 'fechafactura'
-                    },
-                    {
-                        data: 'fechavencimiento'
-                    },
-                    {
-                        data: 'ica'
-                    },
-                    {
-                        data: 'valorica'
-                    },
-                    {
-                        data: 'retefuente'
-                    },
-                    {
-                        data: 'valorretefuente'
-                    },
-                    {
-                        data: 'iva'
-                    },
-                    {
-                        data: 'valoriva'
-                    },
-                    {
-                        data: 'descuento'
-                    },
-                    {
-                        data: 'valordescuento'
-                    },
-                    {
-                        data: 'total'
-                    },
-                    {
-                        data: 'observacion'
-                    },
-                    {
-                        data: 'porcentaje_gasto_fidem_1'
-                    },
-                    {
-                        data: 'porcentaje_gasto_fidem_2'
-                    },
-                    {
-                        data: 'sede_nombre'
-                    },
-                    {
-                        data: 'sede_fidem_1_nombre'
-                    },
-                    {
-                        data: 'sede_fidem_2_nombre'
-                    },
-                    {
-                        data: 'username'
-                    },
-                    {
-                        data: 'proveedor_nombre'
-                    }
-                ],
-
-                //Botones----------------------------------------------------------------------
-
-                "dom": '<"row"<"col-xs-1 form-inline"><"col-md-4 form-inline"l><"col-md-5 form-inline"f><"col-md-3 form-inline"B>>rt<"row"<"col-md-8 form-inline"i> <"col-md-4 form-inline"p>>',
-
-                buttons: [{
-
-                        extend: 'copyHtml5',
-                        titleAttr: 'Copiar Registros',
-                        title: "Control de horas",
-                        className: "btn  btn-outline-primary btn-sm"
-
-
-                    },
-                    {
-
-                        extend: 'excelHtml5',
-                        titleAttr: 'Exportar Excel',
-                        title: "Control de horas",
-                        className: "btn  btn-outline-success btn-sm"
-
-
-                    },
-                    {
-
-                        extend: 'csvHtml5',
-                        titleAttr: 'Exportar csv',
-                        className: "btn  btn-outline-warning btn-sm"
-
-                    },
-                    {
-
-                        extend: 'pdfHtml5',
-                        titleAttr: 'Exportar pdf',
-                        className: "btn  btn-outline-secondary btn-sm"
-
-
-                    }
-                ],
-
-            });
-
-
-        $(document).on('click', '.paylist', function() {
-            var cuenta_id = $(this).attr('id');
-            $('#modalPagosCuentaId').text(cuenta_id);
-            $('#modalPagosTable tbody').empty();
-
-            $('#modalPagos').modal('show');
-            $.ajax({
-                url: '/pagos/cuenta/' + cuenta_id,
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    $('#modalNumFactura').text(data.result.numFactura); // Esta funcion captura el numero de la factura numFactura que envia la respuesta JSON de la funcion getPagos de CuentasxPagarController
-
-                    var totalPago = 0; // Variable totalPago inicializada en cero que suma en cada iteración el valor de pago.valordelpago
-                    $.each(data.result.pagos, function(index, pago) {
-                        /* console.log(pago.valordelpago); */
-                        var valordelpagoFormatted = parseFloat(pago.valordelpago).toLocaleString('es-CO', {
-                            style: 'currency',
-                            currency: 'COP'
-                        }); // Formatea el valor de pago como moneda colombiana
-                        var row = '<tr><td>' + pago.id + '</td><td>' + valordelpagoFormatted + '</td><td>' + pago.fechadepago + '</td></tr>';
-                        $('#modalPagosTable tbody').append(row);
-                        totalPago += parseFloat(pago.valordelpago);
+                        buttons: [{
+                                extend: "copyHtml5",
+                                titleAttr: "Copiar Registros",
+                                title: "Control de horas",
+                                className: "btn  btn-outline-primary btn-sm",
+                            },
+                            {
+                                extend: "excelHtml5",
+                                titleAttr: "Exportar Excel",
+                                title: "Control de horas",
+                                className: "btn  btn-outline-success btn-sm",
+                            },
+                            {
+                                extend: "csvHtml5",
+                                titleAttr: "Exportar csv",
+                                className: "btn  btn-outline-warning btn-sm",
+                            },
+                            {
+                                extend: "pdfHtml5",
+                                titleAttr: "Exportar pdf",
+                                className: "btn  btn-outline-secondary btn-sm",
+                            },
+                        ],
                     });
-                    /* var totalPagoEntero = totalPago.toFixed(0); */ // Redondea el valor de un campo al entero más cercano
+                } else if (tabId === "custom-tabs-one-datos-agendados-tab") {
+                    // Llamar a la función correspondiente al tab "Pagos Parciales"
+                    /* console.log("Pagos Parciales"); */
 
-                    // Agrega una fila con el total de los pagos
-                    var totalPagoFormatted = totalPago.toLocaleString('es-CO', {
-                        style: 'currency',
-                        currency: 'COP'
-                    }); // Formatea el valor totalPago como moneda peso colombiano
-                    var rowTotal = '<tr><td><b>Total:</b></td><td><b>' + totalPagoFormatted + '</b></td><td></td></tr>';
-                    $('#modalPagosTable tbody').append(rowTotal);
-                },
-                error: function(data) {
-                    console.log('Error:', data);
+                    // Destruir la tabla existente
+                    if ($.fn.DataTable.isDataTable("#pcuentas_parcial")) {
+                        $("#pcuentas_parcial").DataTable().destroy();
+                    }
+                    // Funcion para Inicializar la tabla de datos Pagos Parciales
+                    var datatable = $("#pcuentas_parcial").DataTable({
+                        language: idioma_espanol,
+                        processing: true,
+                        lengthMenu: [
+                            [25, 50, 100, 500, -1],
+                            [25, 50, 100, 500, "Mostrar Todo"],
+                        ],
+                        processing: true,
+                        serverSide: true,
+                        aaSorting: [
+                            [21, "desc"]
+                        ],
+                        ajax: {
+                            url: "{{route('cuentas_parciales')}}",
+                        },
+                        columns: [{
+                                data: "action",
+                                orderable: false,
+                            },
+                            {
+                                data: "id",
+                            },
+                            {
+                                data: "numerofactura",
+                            },
+                            {
+                                data: "tipofactura",
+                            },
+                            {
+                                data: "formadepago",
+                            },
+                            {
+                                data: "fechafactura",
+                            },
+                            {
+                                data: "fechavencimiento",
+                            },
+                            {
+                                data: "ica",
+                            },
+                            {
+                                data: "valorica",
+                            },
+                            {
+                                data: "retefuente",
+                            },
+                            {
+                                data: "valorretefuente",
+                            },
+                            {
+                                data: "iva",
+                            },
+                            {
+                                data: "valoriva",
+                            },
+                            {
+                                data: "descuento",
+                            },
+                            {
+                                data: "valordescuento",
+                            },
+                            {
+                                data: "total",
+                            },
+                            {
+                                data: "observacion",
+                            },
+                            {
+                                data: "porcentaje_gasto_fidem_1",
+                            },
+                            {
+                                data: "porcentaje_gasto_fidem_2",
+                            },
+                            {
+                                data: "sede_nombre",
+                            },
+                            {
+                                data: "sede_fidem_1_nombre",
+                            },
+                            {
+                                data: "sede_fidem_2_nombre",
+                            },
+                            {
+                                data: "username",
+                            },
+                            {
+                                data: "proveedor_nombre",
+                            },
+                        ],
+
+                        //Botones----------------------------------------------------------------------
+
+                        dom: '<"row"<"col-xs-1 form-inline"><"col-md-4 form-inline"l><"col-md-5 form-inline"f><"col-md-3 form-inline"B>>rt<"row"<"col-md-8 form-inline"i> <"col-md-4 form-inline"p>>',
+
+                        buttons: [{
+                                extend: "copyHtml5",
+                                titleAttr: "Copiar Registros",
+                                title: "Control de horas",
+                                className: "btn  btn-outline-primary btn-sm",
+                            },
+                            {
+                                extend: "excelHtml5",
+                                titleAttr: "Exportar Excel",
+                                title: "Control de horas",
+                                className: "btn  btn-outline-success btn-sm",
+                            },
+                            {
+                                extend: "csvHtml5",
+                                titleAttr: "Exportar csv",
+                                className: "btn  btn-outline-warning btn-sm",
+                            },
+                            {
+                                extend: "pdfHtml5",
+                                titleAttr: "Exportar pdf",
+                                className: "btn  btn-outline-secondary btn-sm",
+                            },
+                        ],
+                    });
+                } else if (tabId === "custom-tabs-one-datos-seguimiento-tab") {
+                    // Llamar a la función correspondiente al tab "Cuentas Canceladas"
+                    /* console.log("Cuentas Canceladas"); */
+
+                    // Destruir la tabla existente
+                    if ($.fn.DataTable.isDataTable("#pcuentas_canceladas")) {
+                        $("#pcuentas_canceladas").DataTable().destroy();
+                    }
+                    // Funcion para Inicializar la tabla de datos "Cuentas Canceladas"
+                    var datatable = $("#pcuentas_canceladas").DataTable({
+                        language: idioma_espanol,
+                        processing: true,
+                        lengthMenu: [
+                            [25, 50, 100, 500, -1],
+                            [25, 50, 100, 500, "Mostrar Todo"],
+                        ],
+                        processing: true,
+                        serverSide: true,
+                        aaSorting: [
+                            [1, "desc"]
+                        ],
+                        ajax: {
+                            url: "{{route('cuentas_canceladas')}}",
+                        },
+                        columns: [{
+                                data: "action",
+                                orderable: false,
+                            },
+                            {
+                                data: "id",
+                            },
+                            {
+                                data: "numerofactura",
+                            },
+                            {
+                                data: "tipofactura",
+                            },
+                            {
+                                data: "formadepago",
+                            },
+                            {
+                                data: "fechafactura",
+                            },
+                            {
+                                data: "fechavencimiento",
+                            },
+                            {
+                                data: "ica",
+                            },
+                            {
+                                data: "valorica",
+                            },
+                            {
+                                data: "retefuente",
+                            },
+                            {
+                                data: "valorretefuente",
+                            },
+                            {
+                                data: "iva",
+                            },
+                            {
+                                data: "valoriva",
+                            },
+                            {
+                                data: "descuento",
+                            },
+                            {
+                                data: "valordescuento",
+                            },
+                            {
+                                data: "total",
+                            },
+                            {
+                                data: "observacion",
+                            },
+                            {
+                                data: "porcentaje_gasto_fidem_1",
+                            },
+                            {
+                                data: "porcentaje_gasto_fidem_2",
+                            },
+                            {
+                                data: "sede_nombre",
+                            },
+                            {
+                                data: "sede_fidem_1_nombre",
+                            },
+                            {
+                                data: "sede_fidem_2_nombre",
+                            },
+                            {
+                                data: "username",
+                            },
+                            {
+                                data: "proveedor_nombre",
+                            },
+                        ],
+
+                        //Botones----------------------------------------------------------------------
+
+                        dom: '<"row"<"col-xs-1 form-inline"><"col-md-4 form-inline"l><"col-md-5 form-inline"f><"col-md-3 form-inline"B>>rt<"row"<"col-md-8 form-inline"i> <"col-md-4 form-inline"p>>',
+
+                        buttons: [{
+                                extend: "copyHtml5",
+                                titleAttr: "Copiar Registros",
+                                title: "Control de horas",
+                                className: "btn  btn-outline-primary btn-sm",
+                            },
+                            {
+                                extend: "excelHtml5",
+                                titleAttr: "Exportar Excel",
+                                title: "Control de horas",
+                                className: "btn  btn-outline-success btn-sm",
+                            },
+                            {
+                                extend: "csvHtml5",
+                                titleAttr: "Exportar csv",
+                                className: "btn  btn-outline-warning btn-sm",
+                            },
+                            {
+                                extend: "pdfHtml5",
+                                titleAttr: "Exportar pdf",
+                                className: "btn  btn-outline-secondary btn-sm",
+                            },
+                        ],
+                    });
                 }
-            });
+            }
         });
 
 
-
-        /* $('.nav-tabs a').on('shown.bs.tab', function(event) {
-            var target = $(event.target).data('target');
-            $('.tab-pane').not(target).hide();
-            $(target).show();
-        }); */
 
         //Función para abrir modal del detalle de la cuenta por pagar para registrar un pago total o parcial
         $(document).on('click', '.payment', function() {
@@ -903,7 +899,7 @@ Cuentas por Pagar
             if ($('#action').val() == 'Edit') {
                 text = "Estás por actualizar un Pago"
                 var updateid = $('#id_eps_niveles').val();
-                url = "/eps_niveles/" + updateid;
+                url = "eps_niveles/" + updateid;
                 method = 'put';
             }
 
@@ -941,6 +937,7 @@ Cuentas por Pagar
                                 $('#modal-payment').modal('hide');
                                 $('#pcuentas').DataTable().ajax.reload();
                                 $('#tniveles').DataTable().ajax.reload();
+                                $('#pcuentas_parcial').DataTable().ajax.reload();
                                 $('#pcuentas_canceladas').DataTable().ajax.reload();
 
                                 Swal.fire({
@@ -955,6 +952,8 @@ Cuentas por Pagar
                                 $('#form-general-p')[0].reset();
                                 $('#modal-payment').modal('hide');
                                 $('#pcuentas').DataTable().ajax.reload();
+                                $('#pcuentas_parcial').DataTable().ajax.reload();
+                                $('#pcuentas_canceladas').DataTable().ajax.reload();
                                 Swal.fire({
                                     icon: 'warning',
                                     title: 'NIVEL actualizado correctamente',
@@ -1079,7 +1078,7 @@ Cuentas por Pagar
             var id = $(this).attr('id');
 
             var text = "Estás por Eliminar un pago registrado a esta Cuenta por Pagar"
-            var url = "/rel_pago_cuenta/" + id;
+            var url = "rel_pago_cuenta/" + id;
             var method = 'delete';
 
             Swal.fire({
@@ -1159,86 +1158,86 @@ Cuentas por Pagar
     **FUNCIONES PARA VALIDACIONES DEL FORMULARIO REGISTRO DE PAGOS**
 -->
 <script>
-    //función de validación en JavaScript para mostrar una alerta si el valor ingresado en el campo "valordelpago" es mayor que el valor del campo "total_n"
-    function validarPago() {
-        var total = parseFloat(document.getElementById('total_n').value);
-        var valoriva = parseFloat(document.getElementById('iva_n').value);
-        var pago = parseFloat(document.getElementById('valordelpago').value);
-        if (pago > (total + valoriva)) {
-            alert('El valor del pago no puede ser mayor que el total de la factura.');
-            document.getElementById('valordelpago').value = '';
-            return false;
+    $(document).ready(function() {
+        //función de validación en JavaScript para mostrar una alerta si el valor ingresado en el campo "valordelpago" es mayor que el valor del campo "total_n"
+        function validarPago() {
+            var total = parseFloat($('#total_n').val());
+            var valoriva = parseFloat($('#iva_n').val());
+            var pago = parseFloat($('#valordelpago').val());
+            if (pago > (total + valoriva)) {
+                alert('El valor del pago no puede ser mayor que el total de la factura.');
+                $('#valordelpago').val('');
+                return false;
+            }
+            return true;
         }
-        return true;
-    }
 
-    //funcion que va ocultar o mostrar los campos futuro1 y futuro2 siempre y cuando en el campo futuro 3 se seleccionar la opcion FIDEMCOMPARTIDO
-    function mostrarOcultarCampos() {
-        var sede_ips = document.getElementById("sede_id");
-        /* se utiliza sede_ips.options[sede_ips.selectedIndex] para obtener el option seleccionado dentro del select.
-           Finalmente, se utiliza la propiedad innerText de ese option para obtener su texto. Si el texto es igual a "FIDEMC" */
-        var sede_texto = sede_ips.options[sede_ips.selectedIndex].innerText;
-        var futuro1 = document.getElementById("futuro1");
-        var futuro2 = document.getElementById("futuro2");
-        var sede_fidem_1 = document.getElementById("sede_fidem_1");
-        var sede_fidem_2 = document.getElementById("sede_fidem_2");
+        //funcion que va ocultar o mostrar los campos futuro1 y futuro2 siempre y cuando en el campo futuro 3 se seleccionar la opcion FIDEMCOMPARTIDO
 
-        /* console.log("sede_ips:", sede_ips); */ // depurar la variable sede_ips
-        /* console.log("sede_ips.value:", sede_ips.value); */ // depurar la propiedad "value" de la variable sede_ips
-        /* console.log("sede_ips.value:", sede_ips.innerText); */ // depurar la propiedad "value" de la variable sede_ips
+        function mostrarOcultarCampos() {
+            var sede_ips = $('#sede_id option:selected');
+            /* se utiliza sede_ips.options[sede_ips.selectedIndex] para obtener el option seleccionado dentro del select.
+               Finalmente, se utiliza la propiedad innerText de ese option para obtener su texto. Si el texto es igual a "FIDEMC" */
+            var sede_texto = sede_ips.text();
+            var futuro1 = $('#futuro1');
+            var futuro2 = $('#futuro2');
+            var sede_fidem_1 = $('#sede_fidem_1');
+            var sede_fidem_2 = $('#sede_fidem_2');
 
-        /* if (sede_ips.value = "6") { */
-        if (sede_texto == "FIDEMC") {
-            futuro1.style.display = "block";
-            futuro2.style.display = "block";
-            sede_fidem_1.value = 4;
-            sede_fidem_2.value = 5;
-        } else {
-            futuro1.style.display = "none";
-            futuro2.style.display = "none";
+            if (sede_texto == "FIDEMC") {
+                futuro1.show();
+                futuro2.show();
+                sede_fidem_1.val(4);
+                sede_fidem_2.val(5);
+            } else {
+                futuro1.hide();
+                futuro2.hide();
+            }
         }
-    }
 
-    function mostrarDescuento() {
-        var descuentos_check = document.getElementById("descuentos_check");
-        var descuento = document.getElementById("descuento");
+        //Lllamda a la funcion cuando sucede un cambio en el sect sede_id
+        /* $('#sede_id').change(function() {
+            mostrarOcultarCampos();
+        }); */
 
-        if (descuento.checked) {
-            descuentos_check.style.display = "block";
-        } else {
-            descuentos_check.style.display = "none";
+        function mostrarDescuento() {
+            var descuentos_check = $('#descuentos_check');
+            var descuento = $('#descuento');
+
+            if (descuento.prop('checked')) {
+                descuentos_check.show();
+            } else {
+                descuentos_check.hide();
+            }
         }
-    }
 
-    function mostrarImpuestos() {
-        var impuestos_check = document.getElementById("impuestos_check");
-        var impuestos = document.getElementById("impuestos");
+        function mostrarImpuestos() {
+            var impuestos_check = $('#impuestos_check');
+            var impuestos = $('#impuestos');
 
-        if (impuestos.checked) {
-            impuestos_check.style.display = "block";
-        } else {
-            impuestos_check.style.display = "none";
+            if (impuestos.prop('checked')) {
+                impuestos_check.show();
+            } else {
+                impuestos_check.hide();
+            }
         }
-    }
 
-    function mostrarDetalleSede() {
-        var detailSede = document.getElementById("detailSede");
-        if (detailSede.style.display === "none") {
-            detailSede.style.display = "block";
-        } else {
-            detailSede.style.display = "none";
+        function mostrarDetalleSede() {
+            var detailSede = $('#detailSede');
+            if (detailSede.css('display') === 'none') {
+                detailSede.show();
+            } else {
+                detailSede.hide();
+            }
         }
-    }
 
-    /* function validarPago() {
-    var valorPago = document.getElementById("valordelpago").value;
-    var total = document.getElementById("total_n").value;
-    if (parseInt(valorPago) > parseInt(total)) {
-        var mensaje = "<div class='alert alert-danger'>El valor del pago no puede ser mayor al total de la factura</div>";
-        document.getElementById("alerta").innerHTML = mensaje;
-        return false;
-    }
-    return true;
-} */
+        $('#valordelpago').blur(validarPago);
+        $('#sede_id').change(mostrarOcultarCampos);
+        $('#descuento').click(mostrarDescuento);
+        $('#impuestos').click(mostrarImpuestos);
+        $('#detallesede_btn').click(mostrarDetalleSede);
+    });
 </script>
+
+
 @endsection
