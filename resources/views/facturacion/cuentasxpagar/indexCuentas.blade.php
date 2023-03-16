@@ -830,7 +830,45 @@ Cuentas por Pagar
             }
         });
 
+        $(document).on('click', '.paylist', function() {
+            var cuenta_id = $(this).attr('id');
+            $('#modalPagosCuentaId').text(cuenta_id);
+            $('#modalPagosTable tbody').empty();
 
+            $('#modalPagos').modal('show');
+            $.ajax({
+                url: 'pagos/cuenta/' + cuenta_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#modalNumFactura').text(data.result.numFactura); // Esta funcion captura el numero de la factura numFactura que envia la respuesta JSON de la funcion getPagos de CuentasxPagarController
+
+                    var totalPago = 0; // Variable totalPago inicializada en cero que suma en cada iteración el valor de pago.valordelpago
+                    $.each(data.result.pagos, function(index, pago) {
+                        /* console.log(pago.valordelpago); */
+                        var valordelpagoFormatted = parseFloat(pago.valordelpago).toLocaleString('es-CO', {
+                            style: 'currency',
+                            currency: 'COP'
+                        }); // Formatea el valor de pago como moneda colombiana
+                        var row = '<tr><td>' + pago.id + '</td><td>' + valordelpagoFormatted + '</td><td>' + pago.fechadepago + '</td></tr>';
+                        $('#modalPagosTable tbody').append(row);
+                        totalPago += parseFloat(pago.valordelpago);
+                    });
+                    /* var totalPagoEntero = totalPago.toFixed(0); */ // Redondea el valor de un campo al entero más cercano
+
+                    // Agrega una fila con el total de los pagos
+                    var totalPagoFormatted = totalPago.toLocaleString('es-CO', {
+                        style: 'currency',
+                        currency: 'COP'
+                    }); // Formatea el valor totalPago como moneda peso colombiano
+                    var rowTotal = '<tr><td><b>Total:</b></td><td><b>' + totalPagoFormatted + '</b></td><td></td></tr>';
+                    $('#modalPagosTable tbody').append(rowTotal);
+                },
+                error: function(data) {
+                    console.log('Error:', data);
+                }
+            });
+        });
 
         //Función para abrir modal del detalle de la cuenta por pagar para registrar un pago total o parcial
         $(document).on('click', '.payment', function() {
@@ -1238,7 +1276,7 @@ Cuentas por Pagar
                 input2.val('');
                 input3.val('');
                 input4.val('');
-                deduccionImpuestosTd.text('0.00');
+                deduccionImpuestosTd.text('0.00'); //Limpia el campo deduccionImpuestos
                 /* limpiarDeduccionImpuestos(); */ // Aquí se llama a la función que limpiar el campo deduccionImpuestos
             }
         }
