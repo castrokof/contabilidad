@@ -106,16 +106,11 @@
             <input type="number" id="valoriva" name="valoriva" class="form-control">
         </div>
         <div class="col-lg-3">
-            <!-- <div class="icheck-primary d-inline ml-2">
-                <input type="checkbox" id="descuento" name="todo2" />
-                <label for="descuento"> </label>
-            </div>
-            <span class="text" style="color: #ff0000">¿Aplica descuento?</span> -->
-            <label for="descuento" style="color: #ff0000;">¿Aplica descuento? </label>
-            <input type="checkbox" id="descuento">
+            <label for="add_descuento" style="color: #ff0000;">¿Aplica descuento? </label>
+            <input type="checkbox" id="add_descuento">
 
-            <label for="impuestos" style="color: #ff0000;">¿Aplica retenciones? </label>
-            <input type="checkbox" id="impuestos">
+            <label for="add_impuestos" style="color: #ff0000;">¿Aplica retenciones? </label>
+            <input type="checkbox" id="add_impuestos">
         </div>
     </div>
 </fieldset>

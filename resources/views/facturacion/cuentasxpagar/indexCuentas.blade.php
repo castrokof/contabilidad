@@ -1202,23 +1202,44 @@ Cuentas por Pagar
 
         function mostrarDescuento() {
             var descuentos_check = $('#descuentos_check');
-            var descuento = $('#descuento');
+            var add_descuento = $('#add_descuento');
+            var input1 = $('#descuento');
+            var input2 = $('#valordescuento');
 
-            if (descuento.prop('checked')) {
+            if (add_descuento.prop('checked')) {
                 descuentos_check.show();
             } else {
                 descuentos_check.hide();
+                input1.val('');
+                input2.val('');
             }
         }
 
+        /* function limpiarDeduccionImpuestos() {
+            if (!$("#add_impuestos").prop("checked")) {
+                $("#deduccionImpuestos").text("0.00");
+            }
+        } */
+
         function mostrarImpuestos() {
             var impuestos_check = $('#impuestos_check');
-            var impuestos = $('#impuestos');
+            var add_impuestos = $('#add_impuestos');
+            var input1 = $('#retefuente');
+            var input2 = $('#valorretefuente');
+            var input3 = $('#ica');
+            var input4 = $('#valorica');
+            var deduccionImpuestosTd = $('#deduccionImpuestos');
 
-            if (impuestos.prop('checked')) {
+            if (add_impuestos.prop('checked')) {
                 impuestos_check.show();
             } else {
                 impuestos_check.hide();
+                input1.val('');
+                input2.val('');
+                input3.val('');
+                input4.val('');
+                deduccionImpuestosTd.text('0.00');
+                /* limpiarDeduccionImpuestos(); */ // Aquí se llama a la función que limpiar el campo deduccionImpuestos
             }
         }
 
@@ -1233,8 +1254,8 @@ Cuentas por Pagar
 
         $('#valordelpago').blur(validarPago);
         $('#sede_id').change(mostrarOcultarCampos);
-        $('#descuento').click(mostrarDescuento);
-        $('#impuestos').click(mostrarImpuestos);
+        $('#add_descuento').click(mostrarDescuento);
+        $('#add_impuestos').click(mostrarImpuestos);
         $('#detallesede_btn').click(mostrarDetalleSede);
     });
 </script>
