@@ -136,8 +136,10 @@ Cuentas por Pagar
             const form = modal.querySelector("form");
             form.reset();
 
-            const tabla = document.getElementById("resultados").querySelector("tbody");
-            tabla.innerHTML = "";
+            const tabla = document.getElementById("resultados").querySelectorAll("tbody td");
+            tabla.forEach(td => {
+                td.innerHTML = "";
+            });
         }
 
 
@@ -241,15 +243,18 @@ Cuentas por Pagar
 
 
 
+
+
         //Funcion que abre modal donde se debe registrar los datos de la factura o cuenta por pagar
         $('#create_cuenta').click(function() {
             $('#form-general')[0].reset();
             $('#proveedor_id').val('').trigger('change');
-            /* $('#sede_id').val('').trigger('change'); */
+            $('#sede_id').val('').trigger('change');
+            $('#clasificacion').val('').trigger('change');
             $('#action_button').val('Add');
             $('#action').val('Add');
             $('#form_result').html('');
-            /* limpiarModal(); */
+            limpiarModal();
             $('#modal-add-cuentas').modal('show');
         });
 
@@ -348,7 +353,7 @@ Cuentas por Pagar
         $(document).on('click', '.edit_cuenta', function() {
 
 
-            $('#form-general')[0].reset();
+            /* $('#form-general')[0].reset(); */
             var id = $(this).attr('id');
 
             $.ajax({
@@ -362,8 +367,6 @@ Cuentas por Pagar
                     $('#formadepago').val(data.cuenta.formadepago);
                     $('#fechafactura').val(moment(data.cuenta.fechafactura).format('YYYY-MM-DD'));
                     $('#fechavencimiento').val(moment(data.cuenta.fechavencimiento).format('YYYY-MM-DD'));
-                    /* $('#fechafactura').val(data.cuenta.fechafactura); */
-                    /* $('#fechavencimiento').val(data.cuenta.fechavencimiento); */
                     $('#ica').val(data.cuenta.ica);
                     $('#valorica').val(data.cuenta.valorica);
                     $('#retefuente').val(data.cuenta.retefuente);
@@ -381,7 +384,7 @@ Cuentas por Pagar
                     $('#sede_id').append(newsede).trigger('change');
 
                     var newinfra = new Option(data.cuenta.future5, data.cuenta.future5, true, true);
-                    $('#infraestructura').append(newinfra).trigger('change');
+                    $('#clasificacion').append(newinfra).trigger('change');
 
                     $('#sede_fidem_1').val(data.cuenta.sede_fidem_1);
                     $('#sede_fidem_2').val(data.cuenta.sede_fidem_2);
@@ -1219,17 +1222,21 @@ Cuentas por Pagar
             var sede_texto = sede_ips.text();
             var futuro1 = $('#futuro1');
             var futuro2 = $('#futuro2');
-            var sede_fidem_1 = $('#sede_fidem_1');
-            var sede_fidem_2 = $('#sede_fidem_2');
+            var input1 = $('#porcentaje_gasto_fidem_1');
+            var input2 = $('#porcentaje_gasto_fidem_2');
+            /* var sede_fidem_1 = $('#sede_fidem_1');
+            var sede_fidem_2 = $('#sede_fidem_2'); */
 
             if (sede_texto == "FIDEMC") {
                 futuro1.show();
                 futuro2.show();
-                sede_fidem_1.val(4);
-                sede_fidem_2.val(5);
+                /* sede_fidem_1.val(4);
+                sede_fidem_2.val(5); */
             } else {
                 futuro1.hide();
                 futuro2.hide();
+                input1.val('');
+                input2.val('');
             }
         }
 

@@ -48,7 +48,10 @@ class CuentasxPagarController extends Controller
     public function edit($id)
     {
         if (request()->ajax()) {
-            $cuenta = Cuentas::join('listasdetalle', 'cuentasxpagar.sede_id', '=', 'listasdetalle.id')->with('proveedorId')->where('cuentasxpagar.id', '=', $id)->first();
+            $cuenta = Cuentas::join('listasdetalle', 'cuentasxpagar.sede_id', '=', 'listasdetalle.id')
+                ->with('proveedorId')
+                ->where('cuentasxpagar.id', '=', $id)
+                ->first();
 
             return response()->json(['cuenta' => $cuenta]);
         }
@@ -65,7 +68,6 @@ class CuentasxPagarController extends Controller
     public function update(Request $request, $id)
     {
         $rules = array(
-
             'numerofactura' => 'required',
             'tipofactura' => 'required',
             'formadepago' => 'required',
@@ -89,8 +91,6 @@ class CuentasxPagarController extends Controller
             'sede_id',
             'user_id' => 'required|numeric',
             'proveedor_id' => 'required|numeric'
-
-
         );
 
         $error = Validator::make($request->all(), $rules);
@@ -100,11 +100,24 @@ class CuentasxPagarController extends Controller
         }
 
         if (request()->ajax()) {
-            Cuentas::findOrFail($id)
-                ->update($request->all());
+            $cuenta = Cuentas::findOrFail($id);
+            $cuenta->fill($request->all());
+
+            // Verificar si sede_id es igual a 6 y actualizar sede_fidem_1 y sede_fidem_2 en consecuencia
+            if ($request->input('sede_id') == 6) {
+                $cuenta->sede_fidem_1 = 4;
+                $cuenta->sede_fidem_2 = 5;
+            } else {
+                $cuenta->sede_fidem_1 = null;
+                $cuenta->sede_fidem_2 = null;
+            }
+
+            $cuenta->save();
         }
+
         return response()->json(['success' => 'ok1']);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -137,21 +150,30 @@ class CuentasxPagarController extends Controller
             'sede_id',
             'user_id' => 'required|numeric',
             'proveedor_id' => 'required|numeric'
-
-
         );
 
         $error = Validator::make($request->all(), $rules);
 
         if ($error->fails()) {
-
             return response()->json(['errors' => $error->errors()->all()]);
         }
+
+        $sede_id = $request->input('sede_id');
+        if ($sede_id == 6) {
+            $sede_fidem_1 = 4;
+            $sede_fidem_2 = 5;
+        } else {
+            $sede_fidem_1 = null;
+            $sede_fidem_2 = null;
+        }
+
+        $request->merge(['sede_fidem_1' => $sede_fidem_1, 'sede_fidem_2' => $sede_fidem_2]);
 
         Cuentas::create($request->all());
         /* Cuentas::create($data); */
         return response()->json(['success' => 'ok']);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -346,7 +368,8 @@ class CuentasxPagarController extends Controller
 
         if ($request->ajax()) {
             /*
-            ** Se agrega una subconsulta adicional a la consulta existente. La subconsulta seleccionará todas las cuentas por pagar que no tienen ningún registro en la tabla cuentasxpagas con el mismo cuentasxpagar_id. Con la cláusula whereNotIn
+            ** Se agrega una subconsulta adicional a la consulta existente. La subconsulta seleccionará todas las cuentas por pagar
+            ** que no tienen ningún registro en la tabla cuentasxpagas con el mismo cuentasxpagar_id. Con la cláusula whereNotIn
             ** se usa para filtrar los resultados por 'cuentasxpagar.id' que no estén presentes en los resultados de la subconsulta.
             */
             $subquery = DB::table('cuentasxpagas')
@@ -505,4 +528,3 @@ class CuentasxPagarController extends Controller
         }
     }
 }
-

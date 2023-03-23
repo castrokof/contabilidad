@@ -64,12 +64,12 @@
         <div id="futuro1" class="col-lg-3" style="display:none;">
             <label for="porcentaje_gasto_fidem_1" class="col-xs-4 control-label ">% FIDEM 1:</label>
             <input type="number" id="porcentaje_gasto_fidem_1" name="porcentaje_gasto_fidem_1" class="form-control">
-            <input type="hidden" id="sede_fidem_1" name="sede_fidem_1" class="form-control">
+            <!-- <input type="hidden" id="sede_fidem_1" name="sede_fidem_1" class="form-control"> -->
         </div>
         <div id="futuro2" class="col-lg-3" style="display:none;">
             <label for="porcentaje_gasto_fidem_2" class="col-xs-4 control-label ">% FIDEM 2:</label>
             <input type="number" id="porcentaje_gasto_fidem_2" name="porcentaje_gasto_fidem_2" class="form-control">
-            <input type="hidden" id="sede_fidem_2" name="sede_fidem_2" class="form-control">
+            <!-- <input type="hidden" id="sede_fidem_2" name="sede_fidem_2" class="form-control"> -->
         </div>
     </div>
 </fieldset>
@@ -164,21 +164,21 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><strong>SUBTOTAL:</strong></td>
+                    <th><strong>SUBTOTAL:</strong></th>
                     <td id="subtotal"></td>
                 </tr>
                 <tr>
-                    <th style="font-weight: bold;">IVA:</th>
+                    <th><strong>IVA:</strong></th>
                     <td id="ivaFinal"></td>
                     <!-- <td><input type="text" id="ivaFinal" readonly></td> -->
                 </tr>
                 <tr>
-                    <th style="font-weight: bold;">TOTAL:</th>
+                    <th><strong>TOTAL:</strong></th>
                     <td id="totalFinal"></td>
                     <!-- <td><input type="number" name="totalFinal" id="totalFinal" readonly></td> -->
                 </tr>
                 <tr>
-                    <th style="font-weight: bold;">TOTAL DEDUCIDO:</th> <!-- TOTAL - IMPUESTOS -->
+                    <th><strong>TOTAL DEDUCIDO:</strong></th> <!-- TOTAL - IMPUESTOS -->
                     <td id="deduccionImpuestos"></td>
                 </tr>
             </tbody>
