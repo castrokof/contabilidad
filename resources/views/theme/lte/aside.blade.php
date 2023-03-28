@@ -2,8 +2,8 @@
   <aside class="main-sidebar  sidebar-light-info elevation-4 ">
     <!-- Brand Logo -->
     <a href="#" class="brand-link logo-switch">
-    <img src="{{asset("assets/img/icon_aside.jpeg")}}" alt="fidem_icon _aside" class="brand-image-xl logo-xs" style="left: 2px">
-    <img src="{{asset("assets/img/logo_aside.jpeg")}}" alt="fidem_logo_aside" class="brand-image-l logo-xl" style="left: 12px">
+    <img src="{{asset("assets/img/icon_aside.jpeg")}}" alt="contabilidad_icon _aside" class="brand-image-xl logo-l" style="left: 2px">
+    <img src="{{asset("assets/img/icon_aside1.jpeg")}}" alt="contabilidad_icon_logo_aside" class="brand-image-l logo-l" style="left: 12px">
     </a>
 
     <!-- Sidebar -->

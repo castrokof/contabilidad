@@ -5,7 +5,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^7.1|^8.0.2",
+        "php": "^7.4",
         "ext-gd": "*",
         "barryvdh/laravel-dompdf": "^2",
         "doctrine/dbal": "^2.10",
