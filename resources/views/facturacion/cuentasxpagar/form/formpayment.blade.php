@@ -1,6 +1,6 @@
 <fieldset>
     <legend style="color: #31df9d;position: relative;">Información de la factura
-        <button type="button" class="btn btn-info" id="detallesede_btn" style="position: absolute;top: 0; right: 0;" >Ver detalle de la Sede</button>
+        <button type="button" class="btn btn-info" id="detallesede_btn" style="position: absolute;top: 0; right: 0;">Ver detalle de la Sede</button>
     </legend>
     <!-- <label for="descuento" style="color: #17a2b8;">Ver detalle de la Sede</label>
     <input type="checkbox" id="descuento" onchange="mostrarDescuento()" > -->
@@ -25,8 +25,25 @@
             <input type="number" id="iva_n" name="iva_n" class="form-control" readonly>
         </div>
         <div class="col-lg-2">
-            <label for="saldo_p" class="col-xs-4 control-label ">Saldo Pendiente:</label>
+            <label for="saldo_p" class="col-xs-4 control-label ">Valor a Pagar:</label>
             <input type="number" id="saldo_p" name="saldo_p" class="form-control" style="color: red;" readonly>
+        </div>
+    </div>
+</fieldset>
+
+<fieldset>
+    <div class="form-group row">
+        <div class="col-lg-3">
+            <label for="valordescuento_n" class="col-xs-4 control-label ">Descuentos:</label>
+            <input type="text" id="valordescuento_n" name="valordescuento_n" class="form-control" placeholder="0.0" readonly>
+        </div>
+        <div class="col-lg-3">
+            <label for="valorica_n" class="col-xs-4 control-label ">Retención ICA:</label>
+            <input type="text" id="valorica_n" name="valorica_n" class="form-control" readonly>
+        </div>
+        <div class="col-lg-3">
+            <label for="valorretefuente_n" class="col-xs-4 control-label ">Retefuente:</label>
+            <input type="text" id="valorretefuente_n" name="valorretefuente_n" class="form-control" readonly>
         </div>
     </div>
 </fieldset>

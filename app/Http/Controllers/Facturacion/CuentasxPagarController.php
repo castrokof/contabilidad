@@ -281,9 +281,9 @@ class CuentasxPagarController extends Controller
                     ->sum('valordelpago');
 
                 $total_factura = DB::table('cuentasxpagar')
-                    ->select(DB::raw('SUM(total + valoriva) as subtotal'))
+                    ->select(DB::raw('SUM(total + valoriva) - SUM(COALESCE(valorica,0) + COALESCE(valorretefuente,0)) as total_deuda'))
                     ->where('id', $id)
-                    ->value('subtotal');
+                    ->value('total_deuda');
 
                 $saldo_pendiente = $total_factura - $total_pagos;
 
@@ -425,6 +425,10 @@ class CuentasxPagarController extends Controller
                 ->selectRaw('SUM(cuentasxpagas.valordelpago) as total_pagos, cuentasxpagas.cuentasxpagar_id')
                 ->groupBy('cuentasxpagas.cuentasxpagar_id');
 
+            $subquery_2 = DB::table('cuentasxpagar')
+                ->selectRaw('SUM(total + valoriva) - SUM(COALESCE(valorica,0) + COALESCE(valorretefuente,0)) as total_deuda, cuentasxpagar.id')
+                ->groupBy('cuentasxpagar.id');
+
             $datas = DB::table('cuentasxpagar')
                 ->leftJoin('proveedores', 'cuentasxpagar.proveedor_id', '=', 'proveedores.id')
                 ->leftJoin('usuario', 'cuentasxpagar.user_id', '=', 'usuario.id')
@@ -439,11 +443,15 @@ class CuentasxPagarController extends Controller
                     'ld2.nombre as sede_fidem_1_nombre',
                     'ld3.nombre as sede_fidem_2_nombre'
                 )
-                ->whereExists(function ($query) use ($subquery) {
+                ->whereExists(function ($query) use ($subquery, $subquery_2) {
                     $query->select(DB::raw(1))
-                        ->fromSub($subquery, 'subquery')
+                        ->fromSub(function ($subquery3) use ($subquery, $subquery_2) {
+                            $subquery3->fromSub($subquery, 'sq1')
+                                ->joinSub($subquery_2, 'sq2', 'sq1.cuentasxpagar_id', '=', 'sq2.id')
+                                ->select('sq1.cuentasxpagar_id', 'sq1.total_pagos', 'sq2.total_deuda');
+                        }, 'subquery')
                         ->whereRaw('subquery.cuentasxpagar_id = cuentasxpagar.id')
-                        ->whereRaw('subquery.total_pagos < cuentasxpagar.total');
+                        ->whereRaw('subquery.total_pagos < subquery.total_deuda');
                 })
                 ->orderBy('cuentasxpagar.id')
                 ->get();
@@ -467,6 +475,8 @@ class CuentasxPagarController extends Controller
     public function indexTotales(Request $request)
     {
 
+
+
         if ($request->ajax()) {
             /* Esta consulta selecciona todas las columnas de la tabla cuentasxpagar y agrega una columna adicional llamada total_pagos que es la suma de los valores de pago (valordelpago)
             ** en la tabla cuentasxpagas para la cuenta por pagar correspondiente (cuentasxpagar_id). Luego, la consulta filtra los resultados por el ID de la cuenta por pagar (c.id) y utiliza
@@ -477,6 +487,13 @@ class CuentasxPagarController extends Controller
             $subquery = DB::table('cuentasxpagas')
                 ->selectRaw('SUM(cuentasxpagas.valordelpago) as total_pagos, cuentasxpagas.cuentasxpagar_id')
                 ->groupBy('cuentasxpagas.cuentasxpagar_id');
+
+            $subquery_2 = DB::table('cuentasxpagar')
+                ->selectRaw('SUM(total + valoriva) - SUM(COALESCE(valorica,0) + COALESCE(valorretefuente,0)) as total_deuda, cuentasxpagar.id')
+                ->groupBy('cuentasxpagar.id');
+
+            /* DD($subquery); */
+
 
             $datas = DB::table('cuentasxpagar')
                 ->leftJoin('proveedores', 'cuentasxpagar.proveedor_id', '=', 'proveedores.id')
@@ -491,12 +508,17 @@ class CuentasxPagarController extends Controller
                     'ld1.nombre as sede_nombre',
                     'ld2.nombre as sede_fidem_1_nombre',
                     'ld3.nombre as sede_fidem_2_nombre'
+
                 )
-                ->whereExists(function ($query) use ($subquery) {
+                ->whereExists(function ($query) use ($subquery, $subquery_2) {
                     $query->select(DB::raw(1))
-                        ->fromSub($subquery, 'subquery')
+                        ->fromSub(function ($subquery3) use ($subquery, $subquery_2) {
+                            $subquery3->fromSub($subquery, 'sq1')
+                                ->joinSub($subquery_2, 'sq2', 'sq1.cuentasxpagar_id', '=', 'sq2.id')
+                                ->select('sq1.cuentasxpagar_id', 'sq1.total_pagos', 'sq2.total_deuda');
+                        }, 'subquery')
                         ->whereRaw('subquery.cuentasxpagar_id = cuentasxpagar.id')
-                        ->whereRaw('subquery.total_pagos = cuentasxpagar.total');
+                        ->whereRaw('subquery.total_pagos = subquery.total_deuda');
                 })
                 ->orderBy('cuentasxpagar.id')
                 ->get();
