@@ -72,6 +72,7 @@ Cuentas por Pagar
         const ivaTd = document.getElementById("ivaFinal");
         const totalFinalTd = document.getElementById("totalFinal");
         const deduccionImpuestosTd = document.getElementById("deduccionImpuestos");
+        const retencionesTd = document.getElementById("retenciones");
 
         // Agregar event listener para escuchar los cambios en el campo descuento
         descuentoInput.addEventListener("change", () => {
@@ -125,10 +126,14 @@ Cuentas por Pagar
             const totalFinal = parseFloat(totalFinalTd.textContent);
 
             // Calcular el valor de la deducción de impuestos
+            const retencionesTotal = retefuente + valorica;
             const deduccionImpuestos = totalFinal - (retefuente + valorica);
 
             // Actualizar el campo de valor de la deducción de impuestos
             deduccionImpuestosTd.textContent = deduccionImpuestos.toFixed(2);
+
+            // Actualiza campo retenciones
+            retencionesTd.textContent = retencionesTotal.toFixed(2);
         }
 
         function limpiarModal() {
@@ -349,11 +354,9 @@ Cuentas por Pagar
         });
 
         // Funcion para editar las cuentas por pagar
-
         $(document).on('click', '.edit_cuenta', function() {
 
-
-            /* $('#form-general')[0].reset(); */
+            $('#form-general')[0].reset();
             var id = $(this).attr('id');
 
             $.ajax({
@@ -400,6 +403,9 @@ Cuentas por Pagar
                     $('#action_button').addClass('btn-danger')
                     $('#action_button').val('Edit');
                     $('#action').val('Edit');
+                    calcularTotal();
+                    /* calcularDeduccionImpuestos();
+                    $('#add_impuestos').prop('checked', true); */
                     $('#modal-add-cuentas').modal('show');
 
                 },
@@ -898,6 +904,9 @@ Cuentas por Pagar
                     $('#sede_id_n').val(data.result.sede_id);
                     $('#total_n').val(data.result.total);
                     $('#iva_n').val(data.result.valoriva);
+                    $('#valorica_n').val(data.result.valorica);
+                    $('#valorretefuente_n').val(data.result.valorretefuente);
+                    $('#valordescuento_n').val(data.result.valordescuento);
                     $('#sede_ips_n').val(data.result.sede_nombre);
                     $('#fidem_1_nombre_n').val(data.result.sede_fidem_1_nombre);
                     $('#fidem_2_nombre_n').val(data.result.sede_fidem_2_nombre);
@@ -905,6 +914,7 @@ Cuentas por Pagar
 
                     $('#cuentasxpagar_id').val(id);
                     //$('.card-title').text('Registrar Pago');
+                    $('#titleNumFact').text("Registrar Pago - Factura N° " + data.result.numerofactura);
                     $('#action_button').val('Add');
                     $('#action').val('Add');
                     $('#modal-payment').modal({
@@ -1273,6 +1283,7 @@ Cuentas por Pagar
             var input2 = $('#valorretefuente');
             var input3 = $('#ica');
             var input4 = $('#valorica');
+            var retencionesTd = $('#retenciones');
             var deduccionImpuestosTd = $('#deduccionImpuestos');
 
             if (add_impuestos.prop('checked')) {
@@ -1283,6 +1294,7 @@ Cuentas por Pagar
                 input2.val('');
                 input3.val('');
                 input4.val('');
+                retencionesTd.text('0.00');
                 deduccionImpuestosTd.text('0.00'); //Limpia el campo deduccionImpuestos
                 /* limpiarDeduccionImpuestos(); */ // Aquí se llama a la función que limpiar el campo deduccionImpuestos
             }

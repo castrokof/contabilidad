@@ -89,7 +89,7 @@
             </select>
         </div>
         <div class="col-lg-3">
-            <label for="total" class="col-xs-4 control-label requerido">Total Factura:</label>
+            <label for="total" class="col-xs-4 control-label requerido">Valor Factura:</label>
             <input type="number" id="total" name="total" class="form-control">
         </div>
         <div class="col-lg-2">
@@ -160,27 +160,36 @@
                 <tr>
                     <th></th>
                     <th></th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <th><strong>SUBTOTAL:</strong></th>
+                    <!-- Valor neto = (valor de los productos o servicios + otros cargos) - descuentos -->
+                    <th><strong>VALOR NETO:</strong></th>
                     <td id="subtotal"></td>
+
+                    <!-- Es la suma de Valor de la retención en la fuente y Valor de la retención en el ICA -->
+                    <th><strong>IMPUESTOS:</strong></th>
+                    <td id="retenciones"></td>
                 </tr>
                 <tr>
                     <th><strong>IVA:</strong></th>
                     <td id="ivaFinal"></td>
-                    <!-- <td><input type="text" id="ivaFinal" readonly></td> -->
+
+                    <!-- <th><strong>DESCUENTOS:</strong></th>
+                    <td id="ivaFinal"></td> -->
                 </tr>
                 <tr>
                     <th><strong>TOTAL:</strong></th>
                     <td id="totalFinal"></td>
-                    <!-- <td><input type="number" name="totalFinal" id="totalFinal" readonly></td> -->
-                </tr>
-                <tr>
-                    <th><strong>TOTAL DEDUCIDO:</strong></th> <!-- TOTAL - IMPUESTOS -->
+
+                    <!-- Valor bruto = (valor neto + valor del IVA) - (valor de la retención en la fuente + valor de la retención en el ICA) -->
+                    <th><strong>VALOR BRUTO:</strong></th>
                     <td id="deduccionImpuestos"></td>
                 </tr>
+
             </tbody>
         </table>
     </div>
