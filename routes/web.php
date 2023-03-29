@@ -142,7 +142,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('cuentasstore', 'Facturacion\CuentasIngresoController@store')->name('cuentas_store')->middleware('superPsicologica');
     Route::get('editcuentas/{id}', 'Facturacion\CuentasIngresoController@edit')->name('cuentas-edit')->middleware('superEditor');
     Route::put('cuentas/{id}', 'Facturacion\CuentasIngresoController@update')->name('cuentas_update')->middleware('superPsicologica');
-    route::get('cuentaslist', 'Facturacion\CuentasIngresoController@select')->name('cuentaslist')->middleware('superEditor');
+    Route::get('cuentaslist', 'Facturacion\CuentasIngresoController@select')->name('cuentaslist')->middleware('superEditor');
+
+
+    Route::get('informe', 'Facturacion\IngresosController@informe')->name('informe')->middleware('superPsicologica');
 
 
 

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Seguridad\Usuario;
 use App\Models\Facturacion\Proveedores;
 use App\Models\Facturacion\CuentasIng;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class IngresosController extends Controller
 {
@@ -43,11 +45,68 @@ class IngresosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function informe(Request $request)
     {
-        //
-    }
+        if($request->ajax()){
 
+            $fechaini = new Carbon($request->fechaini);
+            $fechaini = $fechaini->toDateString();
+
+            $fechafin = new Carbon($request->fechafin);
+            $fechafin = $fechafin->toDateString();
+
+            $ingresosfill = DB::table('ingresos')->select(DB::raw('sum(ingresos.totalingreso) as totalingreso'))->where([
+                ['ingresos.fechadeingreso', '>=', $fechaini.' 00:00:00'],
+                ['ingresos.fechadeingreso', '<=', $fechafin.' 23:59:59'],
+                 ])->get();
+
+
+                 $pagosfill = DB::table('cuentasxpagas')->select(DB::raw('sum(cuentasxpagas.valordelpago) as totalpagos'))->where([
+                    ['cuentasxpagas.fechadepago', '>=', $fechaini.' 00:00:00'],
+                    ['cuentasxpagas.fechadepago', '<=', $fechafin.' 23:59:59'],
+                     ])->get();
+
+
+                 $cuentasfill = DB::table('ingresos')
+                 ->join('cuentas', 'ingresos.cuenta_id', '=', 'cuentas.id')
+                 ->select(DB::raw('sum(ingresos.totalingreso) as ingresoxcuenta'))->where([
+                    ['ingresos.fechadeingreso', '>=', $fechaini.' 00:00:00'],
+                    ['ingresos.fechadeingreso', '<=', $fechafin.' 23:59:59'],
+                     ])->groupBy('ingresos.cuenta_id')->get();
+
+                     $labelfill = DB::table('cuentas')->select('nombrecuenta')->get();
+
+
+                     $pagosedefill = DB::table('cuentasxpagas')
+                     ->join('listasdetalle', 'cuentasxpagas.sede_id', '=', 'listasdetalle.id')
+                     ->select(DB::raw('sum(cuentasxpagas.valordelpago) as pagoxsede'))->where([
+                        ['cuentasxpagas.fechadepago', '>=', $fechaini.' 00:00:00'],
+                        ['cuentasxpagas.fechadepago', '<=', $fechafin.' 23:59:59'],
+                         ])->groupBy('cuentasxpagas.sede_id')->get();
+
+                         $labelsedefill = DB::table('cuentasxpagas')
+                         ->join('listasdetalle', 'cuentasxpagas.sede_id', '=', 'listasdetalle.id')
+                         ->select('listasdetalle.nombre as nombresede')->where([
+                            ['cuentasxpagas.fechadepago', '>=', $fechaini.' 00:00:00'],
+                            ['cuentasxpagas.fechadepago', '<=', $fechafin.' 23:59:59'],
+                             ])->groupBy('cuentasxpagas.sede_id','nombresede')->get();
+
+
+                             $pagoclasificacionfill = DB::table('cuentasxpagas')
+                             ->join('cuentasxpagar', 'cuentasxpagas.cuentasxpagar_id', '=', 'cuentasxpagar.id')
+                             ->select(DB::raw('sum(cuentasxpagas.valordelpago) as pagoxclasificacion'), 'cuentasxpagar.future5')->where([
+                                ['cuentasxpagas.fechadepago', '>=', $fechaini.' 00:00:00'],
+                                ['cuentasxpagas.fechadepago', '<=', $fechafin.' 23:59:59'],
+                                 ])->groupBy('cuentasxpagar.future5')->get();
+
+
+
+            return response()->json(['ingresos' =>  $ingresosfill, 'pagost' =>  $pagosfill, 'cuentas' => $cuentasfill,
+             'labels' => $labelfill, 'labelsede' => $labelsedefill, 'cuentasxsede' => $pagosedefill , 'clasificacion'=>$pagoclasificacionfill]);
+
+
+        }
+    }
     /**
      * Store a newly created resource in storage.
      *

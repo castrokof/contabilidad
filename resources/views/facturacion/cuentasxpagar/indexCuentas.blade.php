@@ -893,7 +893,7 @@ Cuentas por Pagar
             }
 
             $.ajax({
-                url: "/paycuentasxpagar/" + id + "/addpay",
+                url: "paycuentasxpagar/" + id + "/addpay",
                 dataType: "json",
                 success: function(data) {
                     $('#numerofactura_n').val(data.result.numerofactura);
