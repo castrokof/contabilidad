@@ -18,15 +18,15 @@
 
         <div class="col-lg-2">
             <label for="total_n" class="col-xs-4 control-label ">Subtotal:</label>
-            <input type="number" id="total_n" name="total_n" class="form-control" readonly>
+            <input id="total_n" name="total_n" class="form-control" readonly>
         </div>
         <div class="col-lg-2">
             <label for="iva_n" class="col-xs-4 control-label ">Valor Iva:</label>
-            <input type="number" id="iva_n" name="iva_n" class="form-control" readonly>
+            <input  id="iva_n" name="iva_n" class="form-control" readonly>
         </div>
         <div class="col-lg-2">
             <label for="saldo_p" class="col-xs-4 control-label ">Valor a Pagar:</label>
-            <input type="number" id="saldo_p" name="saldo_p" class="form-control" style="color: red;" readonly>
+            <input id="saldo_p" name="saldo_p" class="form-control" style="color: red;" readonly>
         </div>
     </div>
 </fieldset>
@@ -35,15 +35,15 @@
     <div class="form-group row">
         <div class="col-lg-3">
             <label for="valordescuento_n" class="col-xs-4 control-label ">Descuentos:</label>
-            <input type="text" id="valordescuento_n" name="valordescuento_n" class="form-control" placeholder="0.0" readonly>
+            <input type="text" id="valordescuento_n" name="valordescuento_n" class="form-control" readonly>
         </div>
         <div class="col-lg-3">
             <label for="valorica_n" class="col-xs-4 control-label ">Retención ICA:</label>
-            <input type="text" id="valorica_n" name="valorica_n" class="form-control" placeholder="0.0" readonly>
+            <input type="text" id="valorica_n" name="valorica_n" class="form-control" readonly>
         </div>
         <div class="col-lg-3">
             <label for="valorretefuente_n" class="col-xs-4 control-label ">Retefuente:</label>
-            <input type="text" id="valorretefuente_n" name="valorretefuente_n" class="form-control" placeholder="0.0" readonly>
+            <input id="valorretefuente_n" name="valorretefuente_n" class="form-control" readonly>
         </div>
     </div>
 </fieldset>
@@ -92,7 +92,7 @@
         </div>
         <div class="col-lg-3">
             <label for="valordelpago" class="col-xs-4 control-label requerido">Valor del pago:</label>
-            <input type="number" id="valordelpago" name="valordelpago" class="form-control" required>
+            <input type="number" id="valordelpago" name="valordelpago" class="form-control"  required>
         </div>
         <div class="col-lg-3">
             <label for="tipodepago" class="col-xs-4 control-label requerido">Tipo de pago:</label>

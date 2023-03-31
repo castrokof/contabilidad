@@ -896,22 +896,41 @@ Cuentas por Pagar
                 url: "paycuentasxpagar/" + id + "/addpay",
                 dataType: "json",
                 success: function(data) {
+                    const currencyFormatter = new Intl.NumberFormat('es-CO', {
+                        style: 'currency',
+                        currency: 'COP'
+                    });
+                    const valorica = data.result.valorica != null ? currencyFormatter.format(data.result.valorica) : "$0.0";
+                    const valorretefuente = data.result.valorretefuente != null ? currencyFormatter.format(data.result.valorretefuente) : "$0.0";
+                    const valordescuento = data.result.valordescuento != null ? currencyFormatter.format(data.result.valordescuento) : "$0.0";
+
                     $('#numerofactura_n').val(data.result.numerofactura);
                     $('#gasto_fidem_1_n').val(data.result.porcentaje_gasto_fidem_1);
                     $('#gasto_fidem_2_n').val(data.result.porcentaje_gasto_fidem_2);
                     $('#sede_fidem_1_n').val(data.result.sede_fidem_1);
                     $('#sede_fidem_2_n').val(data.result.sede_fidem_2);
                     $('#sede_id_n').val(data.result.sede_id);
-                    $('#total_n').val(data.result.total);
-                    $('#iva_n').val(data.result.valoriva);
-                    $('#valorica_n').val(data.result.valorica);
-                    $('#valorretefuente_n').val(data.result.valorretefuente);
-                    $('#valordescuento_n').val(data.result.valordescuento);
+                    $('#total_n').val(data.result.total.toLocaleString('es-CO', {
+                        style: 'currency',
+                        currency: 'COP'
+                    }));
+
+                    $('#iva_n').val(data.result.valoriva.toLocaleString('es-CO', {
+                        style: 'currency',
+                        currency: 'COP'
+                    }));
+                    $('#valorica_n').val(valorica);
+                    $('#valorretefuente_n').val(valorretefuente);
+                    $('#valordescuento_n').val(valordescuento);
                     $('#sede_ips_n').val(data.result.sede_nombre);
                     $('#fidem_1_nombre_n').val(data.result.sede_fidem_1_nombre);
                     $('#fidem_2_nombre_n').val(data.result.sede_fidem_2_nombre);
-                    $('#saldo_p').val(data.saldo_pendiente); // Agregamos el saldo pendiente que se calcula dentro de la funcion addpay
+                    $('#saldo_p').val(data.saldo_pendiente.toLocaleString('es-CO', {
+                        style: 'currency',
+                        currency: 'COP'
+                    })); // Agregamos el saldo pendiente que se calcula dentro de la funcion addpay
                     $('#valordelpago').val(data.saldo_pendiente);
+                    /* $('#valordelpago').attr('data-value',data.saldo_pendiente); */
 
                     $('#cuentasxpagar_id').val(id);
                     //$('.card-title').text('Registrar Pago');
