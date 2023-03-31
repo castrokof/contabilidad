@@ -470,7 +470,6 @@ Cuentas por Pagar
                             [25, 50, 100, 500, -1],
                             [25, 50, 100, 500, "Mostrar Todo"],
                         ],
-                        processing: true,
                         serverSide: true,
                         aaSorting: [
                             [2, "desc"]

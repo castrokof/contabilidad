@@ -67,6 +67,7 @@ class IngresosController extends Controller
                      ])->get();
 
 
+
                  $cuentasfill = DB::table('ingresos')
                  ->join('cuentas', 'ingresos.cuenta_id', '=', 'cuentas.id')
                  ->select(DB::raw('sum(ingresos.totalingreso) as ingresoxcuenta'))->where([
@@ -100,12 +101,105 @@ class IngresosController extends Controller
                                  ])->groupBy('cuentasxpagar.future5')->get();
 
 
+                                 //Diferencia Ingresos menos Pagos
+
+                                 $ingresosfill1 = DB::table('ingresos')
+                                 ->select(DB::raw('sum(ingresos.totalingreso) as totalingreso'))->where([
+                                    ['ingresos.fechadeingreso', '>=', $fechaini.' 00:00:00'],
+                                    ['ingresos.fechadeingreso', '<=', $fechafin.' 23:59:59'],
+                                     ])->first();
+
+
+                                     $pagosfill1 = DB::table('cuentasxpagas')->select(DB::raw('sum(cuentasxpagas.valordelpago) as totalpagos'))->where([
+                                        ['cuentasxpagas.fechadepago', '>=', $fechaini.' 00:00:00'],
+                                        ['cuentasxpagas.fechadepago', '<=', $fechafin.' 23:59:59'],
+                                         ])->first();
+
+                                 $diferencia1 =  $ingresosfill1->totalingreso-$pagosfill1->totalpagos;
+
+                                 if ( $diferencia1 == 0) {
+                                    $diferencia = 0;
+                                    $diferencia2 = 0;
+                                 }else{
+                                    $diferencia = ((float)$pagosfill1->totalpagos*100)/$ingresosfill1->totalingreso;
+
+                                    $diferencia = round($diferencia,0);
+
+                                    $diferencia2 = ((float)$diferencia1*100)/$ingresosfill1->totalingreso;
+
+                                    $diferencia2 = round($diferencia2,0);
+                                 }
+
+
+                              // Pagos Fidem1
+
+                              $pagosfidem1 = DB::table('cuentasxpagas')->select(DB::raw('sum(cuentasxpagas.valordelpago) as totalpagos'))->where([
+                                ['cuentasxpagas.fechadepago', '>=', $fechaini.' 00:00:00'],
+                                ['cuentasxpagas.fechadepago', '<=', $fechafin.' 23:59:59'],
+                                ['cuentasxpagas.sede_id', 4]
+                                 ])->first();
+
+
+                                 // Pagos Fidem2
+
+                                 $pagosfidem2 = DB::table('cuentasxpagas')->select(DB::raw('sum(cuentasxpagas.valordelpago) as totalpagos'))->where([
+                                    ['cuentasxpagas.fechadepago', '>=', $fechaini.' 00:00:00'],
+                                    ['cuentasxpagas.fechadepago', '<=', $fechafin.' 23:59:59'],
+                                    ['cuentasxpagas.sede_id', 5]
+                                     ])->first();
+
+                              // Pagos FidemC
+
+                                $pagosfidem1c = DB::table('cuentasxpagas')
+                                ->select(
+                                DB::raw("sum(CASE WHEN cuentasxpagas.porcentaje_gasto_fidem_1 > 0 THEN (cuentasxpagas.porcentaje_gasto_fidem_1 * cuentasxpagas.valordelpago)/100 ELSE 0 END)  as sum_fidem1")
+                                )->where([
+                                ['cuentasxpagas.fechadepago', '>=', $fechaini.' 00:00:00'],
+                                ['cuentasxpagas.fechadepago', '<=', $fechafin.' 23:59:59'],
+                                ['cuentasxpagas.sede_fidem_1',4]
+                                 ])->first();
+
+
+                                $pagosfidem2c = DB::table('cuentasxpagas')
+                                ->select(
+                                DB::raw("sum(CASE WHEN cuentasxpagas.porcentaje_gasto_fidem_2 > 0 THEN (cuentasxpagas.porcentaje_gasto_fidem_2 * cuentasxpagas.valordelpago)/100 ELSE 0 END)  as sum_fidem2")
+                                )->where([
+                                ['cuentasxpagas.fechadepago', '>=', $fechaini.' 00:00:00'],
+                                ['cuentasxpagas.fechadepago', '<=', $fechafin.' 23:59:59'],
+                                ['cuentasxpagas.sede_fidem_2',5]
+                                 ])->first();
+
+
+
+                                 if ($pagosfidem1c == null ) {
+                                    $fidem1 = 0;
+                                 }else{
+                                    $fidem1 =  $pagosfidem1c->sum_fidem1 + $pagosfidem1->totalpagos;
+                                 }
+
+                                 if ( $pagosfidem2c == null ) {
+                                    $fidem2 = 0;
+                                 }else{
+                                    $fidem2 =  $pagosfidem2c->sum_fidem2 + $pagosfidem2->totalpagos;
+                                 }
+
+
+
+
+
+
+
+
+
 
             return response()->json(['ingresos' =>  $ingresosfill, 'pagost' =>  $pagosfill, 'cuentas' => $cuentasfill,
-             'labels' => $labelfill, 'labelsede' => $labelsedefill, 'cuentasxsede' => $pagosedefill , 'clasificacion'=>$pagoclasificacionfill]);
+             'labels' => $labelfill, 'labelsede' => $labelsedefill, 'cuentasxsede' => $pagosedefill , 'clasificacion'=>$pagoclasificacionfill,
+            'diferencia' =>  $diferencia, 'diferencia2' =>  $diferencia2,'fidem1' => $fidem1, 'fidem2'=> $fidem2 ]);
 
 
         }
+
+         return view('facturacion.informes.indexInforme');
     }
     /**
      * Store a newly created resource in storage.

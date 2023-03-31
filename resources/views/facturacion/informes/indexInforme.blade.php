@@ -662,6 +662,30 @@
 
                         })
 
+                          $("#detalle2").append(
+
+
+                                '<div class="small-box shadow-lg l-bg-green-dark"><div class="inner">' +
+                                '<h5>% PAGOS VS INGRESOS T</h5>' +
+                                '<p><h5><i class="fas fa-balance-scale"></i> ' + data.diferencia + '%'+ ' vs ' + data.diferencia2 + '%'+
+                                '</h5></p>' +
+                                '</div><div class="icon"><i class="fas fa-money-bill-alt"></i></div></div>'
+
+                            );
+
+                            $("#detalle3").append(
+
+
+                            '<div class="small-box shadow-lg l-bg-blue-dark"><div class="inner">' +
+                            '<h5>GASTO X SEDE</h5>' +
+                            '<p><h6><i class="fas fa-hospital">Fidem1 -- </i> ' + data.fidem1 + ' -- '+
+                            '<i class="far fa-hospital">Fidem2 -- </i> ' + data.fidem2 +
+                            '</h6></p>' +
+                            '</div><div class="icon"><i class="fas fa-money-bill-alt"></i></div></div>'
+
+                            );
+
+
                     }
                 })
             }
@@ -938,16 +962,20 @@
                     success: function(data) {
 
 
-                        $.each(data.labelsede, function(i, item) {
-                            var a = item.nombresede;
+                       // $.each(data.labelsede, function(i, item) {
+
+                            var a = 'FIDEM1';
+                            var d = 'FIDEM2';
                             labelsede.push(a);
+                            labelsede.push(d);
+                       // })
 
-                        })
-
-                        $.each(data.cuentasxsede, function(i, item) {
-                            var a = item.pagoxsede;
-                            datasede.push(a);
-                        })
+                        //$.each(data.cuentasxsede, function(i, item) {
+                            var b = data.fidem1;
+                            var c = data.fidem2;
+                            datasede.push(b);
+                            datasede.push(c);
+                        //})
 
 
                         console.log(labelsede);
