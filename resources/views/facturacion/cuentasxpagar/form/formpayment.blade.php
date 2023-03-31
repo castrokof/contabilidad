@@ -39,11 +39,11 @@
         </div>
         <div class="col-lg-3">
             <label for="valorica_n" class="col-xs-4 control-label ">Retención ICA:</label>
-            <input type="text" id="valorica_n" name="valorica_n" class="form-control" readonly>
+            <input type="text" id="valorica_n" name="valorica_n" class="form-control" placeholder="0.0" readonly>
         </div>
         <div class="col-lg-3">
             <label for="valorretefuente_n" class="col-xs-4 control-label ">Retefuente:</label>
-            <input type="text" id="valorretefuente_n" name="valorretefuente_n" class="form-control" readonly>
+            <input type="text" id="valorretefuente_n" name="valorretefuente_n" class="form-control" placeholder="0.0" readonly>
         </div>
     </div>
 </fieldset>

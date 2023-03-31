@@ -473,7 +473,7 @@ Cuentas por Pagar
                         processing: true,
                         serverSide: true,
                         aaSorting: [
-                            [2, "desc"]
+                            [1, "desc"]
                         ],
                         ajax: {
                             url: "{{route('cuentas_payless')}}",
@@ -600,7 +600,7 @@ Cuentas por Pagar
                         processing: true,
                         serverSide: true,
                         aaSorting: [
-                            [21, "desc"]
+                            [1, "desc"]
                         ],
                         ajax: {
                             url: "{{route('cuentas_parciales')}}",
@@ -911,6 +911,7 @@ Cuentas por Pagar
                     $('#fidem_1_nombre_n').val(data.result.sede_fidem_1_nombre);
                     $('#fidem_2_nombre_n').val(data.result.sede_fidem_2_nombre);
                     $('#saldo_p').val(data.saldo_pendiente); // Agregamos el saldo pendiente que se calcula dentro de la funcion addpay
+                    $('#valordelpago').val(data.saldo_pendiente);
 
                     $('#cuentasxpagar_id').val(id);
                     //$('.card-title').text('Registrar Pago');
