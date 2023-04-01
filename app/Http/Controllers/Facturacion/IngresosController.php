@@ -184,14 +184,6 @@ class IngresosController extends Controller
                                  }
 
 
-
-
-
-
-
-
-
-
             return response()->json(['ingresos' =>  $ingresosfill, 'pagost' =>  $pagosfill, 'cuentas' => $cuentasfill,
              'labels' => $labelfill, 'labelsede' => $labelsedefill, 'cuentasxsede' => $pagosedefill , 'clasificacion'=>$pagoclasificacionfill,
             'diferencia' =>  $diferencia, 'diferencia2' =>  $diferencia2,'fidem1' => $fidem1, 'fidem2'=> $fidem2 ]);

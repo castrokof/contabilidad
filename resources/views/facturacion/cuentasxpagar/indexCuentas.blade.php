@@ -1243,7 +1243,6 @@ Cuentas por Pagar
         }
 
         //funcion que va ocultar o mostrar los campos futuro1 y futuro2 siempre y cuando en el campo futuro 3 se seleccionar la opcion FIDEMCOMPARTIDO
-
         function mostrarOcultarCampos() {
             var sede_ips = $('#sede_id option:selected');
             /* se utiliza sede_ips.options[sede_ips.selectedIndex] para obtener el option seleccionado dentro del select.
@@ -1253,26 +1252,45 @@ Cuentas por Pagar
             var futuro2 = $('#futuro2');
             var input1 = $('#porcentaje_gasto_fidem_1');
             var input2 = $('#porcentaje_gasto_fidem_2');
-            /* var sede_fidem_1 = $('#sede_fidem_1');
-            var sede_fidem_2 = $('#sede_fidem_2'); */
 
             if (sede_texto == "FIDEMC") {
                 futuro1.show();
                 futuro2.show();
-                /* sede_fidem_1.val(4);
-                sede_fidem_2.val(5); */
+                // Adicionar listener al input porcentaje_gasto_fidem_1
+                input1.on('input', function() {
+                    var porcentaje1 = parseInt(input1.val());
+                    var porcentaje2 = parseInt(input2.val());
+                    var porcentajes = 100;
+                    // Validar que la suma de los porcentajes sea igual a 100
+                    if (porcentaje1 + porcentaje2 !== porcentajes) {
+                        // Si el porcentaje ingresado es menor a 100, calcular el faltante y asignar a porcentaje_gasto_fidem_2
+                        if (porcentaje1 < porcentajes) {
+                            input2.val(porcentajes - porcentaje1);
+                        }
+
+                    }
+                });
             } else {
                 futuro1.hide();
                 futuro2.hide();
                 input1.val('');
                 input2.val('');
+                // Eliminar listener del input porcentaje_gasto_fidem_1
+                input1.off('input');
             }
         }
 
-        //Lllamda a la funcion cuando sucede un cambio en el sect sede_id
-        /* $('#sede_id').change(function() {
-            mostrarOcultarCampos();
-        }); */
+        /* function validPorcentajes() {
+            var porcentaje = 100;
+            var fidem_1 = parseFloat($('#porcentaje_gasto_fidem_1').val());
+            var fidem_2 = parseFloat($('#porcentaje_gasto_fidem_2').val());
+            if ((fidem_1 + fidem_2) = porcentaje) {
+
+            }
+
+        } */
+
+
 
         function mostrarDescuento() {
             var descuentos_check = $('#descuentos_check');

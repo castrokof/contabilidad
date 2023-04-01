@@ -78,7 +78,7 @@
     <legend style="font-size: 20px; color: #1f7386;">Información de pago</legend>
 
     <div class="form-group row">
-        <div class="col-lg-3">
+        <div class="col-lg-2">
             <label for="formadepago" class="col-xs-4 control-label requerido">Forma de pago:</label>
             <select id="formadepago" name="formadepago" class="form-control select2bs4" required>
                 <option value="">---seleccione---</option>
@@ -101,7 +101,7 @@
                 <option value="19">19%</option>
             </select>
         </div>
-        <div id="ivalor" class="col-lg-3">
+        <div  class="col-lg-2">
             <label for="valoriva" class="col-xs-4 control-label ">Valor IVA:</label>
             <input type="number" id="valoriva" name="valoriva" class="form-control">
         </div>
