@@ -37,7 +37,6 @@ class Cuentas extends Model
         'proveedor_id'
     ];
 
-
     public function userId()
     {
         return $this->belongsTo(Usuario::class, 'user_id');

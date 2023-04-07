@@ -35,8 +35,8 @@
                             <th>% Gasto Fidem 1</th>
                             <th>% Gasto Fidem 2</th>
                             <th>Sede</th>
-                            <th>Future4</th>
-                            <th>Future5</th>
+                            <th>Sede Fidem 1</th>
+                            <th>Sede Fidem 2</th>
                             <th>Usuario</th>
                             <th>Proveedor</th>
                         </tr>

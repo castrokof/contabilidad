@@ -15,7 +15,7 @@
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
-                            <form id="form-general-p" class="form-horizontal" method="POST" onsubmit="return validarPago()">
+                            <form id="form-general-p" class="form-horizontal" method="POST" >
                                 @csrf
                                 <div class="card-body">
                                     @include('facturacion.cuentasxpagar.tabs.tabsIndexPayment')

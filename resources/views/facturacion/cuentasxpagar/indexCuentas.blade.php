@@ -1035,14 +1035,14 @@ Cuentas por Pagar
                             } else if (data.error1 == 'post1') {
                                 Swal.fire({
                                     icon: 'warning',
-                                    title: 'Error',
+                                    title: 'Advertencia',
                                     text: 'No se encontró información de la cuenta por pagar',
                                 });
                             } else if (data.error2 == 'post2') {
                                 Swal.fire({
                                     icon: 'warning',
-                                    title: 'Error',
-                                    text: 'El valor del pago no puede ser mayor al Saldo Pendiente o la Factura ya fue cancelada en su totalidad',
+                                    title: 'Advertencia',
+                                    text: 'El valor del pago no puede ser mayor al Valor a Pagar o la Factura ya fue cancelada en su totalidad',
                                 });
                             }
 
@@ -1230,17 +1230,20 @@ Cuentas por Pagar
 <script>
     $(document).ready(function() {
         //función de validación en JavaScript para mostrar una alerta si el valor ingresado en el campo "valordelpago" es mayor que el valor del campo "total_n"
-        function validarPago() {
+        /* function validarPago() {
             var total = parseFloat($('#total_n').val());
             var valoriva = parseFloat($('#iva_n').val());
+            var valorica = parseFloat($('#valorica_n').val());
+            var valorretefuente = parseFloat($('#valorretefuente_n').val());
+
             var pago = parseFloat($('#valordelpago').val());
-            if (pago > (total + valoriva)) {
-                alert('El valor del pago no puede ser mayor que el total de la factura.');
+            if (pago > ((total + valoriva)-(valorica + valorretefuente))) {
+                alert('El valor del pago no puede ser mayor que el Valor a Pagar:.');
                 $('#valordelpago').val('');
                 return false;
             }
             return true;
-        }
+        } */
 
         //funcion que va ocultar o mostrar los campos futuro1 y futuro2 siempre y cuando en el campo futuro 3 se seleccionar la opcion FIDEMCOMPARTIDO
         function mostrarOcultarCampos() {
@@ -1267,7 +1270,6 @@ Cuentas por Pagar
                         if (porcentaje1 < porcentajes) {
                             input2.val(porcentajes - porcentaje1);
                         }
-
                     }
                 });
             } else {
@@ -1346,7 +1348,7 @@ Cuentas por Pagar
             }
         }
 
-        $('#valordelpago').blur(validarPago);
+        /* $('#valordelpago').blur(validarPago); */
         $('#sede_id').change(mostrarOcultarCampos);
         $('#add_descuento').click(mostrarDescuento);
         $('#add_impuestos').click(mostrarImpuestos);
