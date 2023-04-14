@@ -36,9 +36,6 @@ Cuentas por Pagar
 @include('facturacion.cuentasxpagar.modal.modalPayCuentas')
 @include('facturacion.cuentasxpagar.modal.modalListPagos')
 
-
-
-
 @endsection
 
 @section("scriptsPlugins")

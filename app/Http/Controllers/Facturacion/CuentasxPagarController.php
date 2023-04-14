@@ -403,8 +403,12 @@ class CuentasxPagarController extends Controller
 
             return  DataTables()->of($datas)
                 ->addColumn('action', function ($datas) {
-                    $button = '<button type="button" name="payment" id="' . $datas->id . '" class="payment btn btn-app bg-success tooltipsC" title="Agregar Pago"  ><span class="badge bg-teal">Add Pago</span><i class="fas fa-notes-medical"></i> Detalle </button>';
-                    $button2 = '<button type="button" name="edit_cuenta" id="' . $datas->id . '" class="edit_cuenta btn btn-app bg-info tooltipsC" title="Editar"  ><span class="badge bg-teal">Editar</span><i class="fas fa-pencil-alt"></i> Editar </button>';
+                    $button = '<button type="button" name="payment" id="' . $datas->id . '
+                    " class="payment btn btn-app bg-success tooltipsC" title="Agregar Pago"  >
+                    <span class="badge bg-teal">Add Pago</span><i class="fas fa-notes-medical"></i> Detalle </button>';
+                    $button2 = '<button type="button" name="edit_cuenta" id="' . $datas->id . '
+                    " class="edit_cuenta btn btn-app bg-info tooltipsC" title="Editar"  >
+                    <span class="badge bg-teal">Editar</span><i class="fas fa-pencil-alt"></i> Editar </button>';
                     return $button . ' ' . $button2;
                 })
                 ->rawColumns(['action'])
