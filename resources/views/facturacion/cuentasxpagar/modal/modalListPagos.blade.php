@@ -17,6 +17,7 @@
                             <th>ID</th>
                             <th>Valor del Pago</th>
                             <th>Fecha del Pago</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody></tbody>

@@ -316,6 +316,8 @@ Cuentas por Pagar
                                 $('#modal-add-cuentas').modal('hide');
                                 /* limpiarModal(); */
                                 $('#pcuentas').DataTable().ajax.reload();
+                                $('#pcuentas_parcial').DataTable().ajax.reload();
+                                $('#pcuentas_canceladas').DataTable().ajax.reload();
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Cuenta por pagar creada correctamente',
@@ -329,6 +331,8 @@ Cuentas por Pagar
                                 $('#form-general')[0].reset();
                                 $('#modal-add-cuentas').modal('hide');
                                 $('#pcuentas').DataTable().ajax.reload();
+                                $('#pcuentas_parcial').DataTable().ajax.reload();
+                                $('#pcuentas_canceladas').DataTable().ajax.reload();
                                 Swal.fire({
                                     icon: 'warning',
                                     title: 'cuenta por pagar actualizada correctamente',
@@ -835,45 +839,110 @@ Cuentas por Pagar
             }
         });
 
-        $(document).on('click', '.paylist', function() {
-            var cuenta_id = $(this).attr('id');
-            $('#modalPagosCuentaId').text(cuenta_id);
-            $('#modalPagosTable tbody').empty();
+        $(document).on("click", ".paylist", function() {
+            var cuenta_id = $(this).attr("id");
+            $("#modalPagosCuentaId").text(cuenta_id);
+            $("#modalPagosTable tbody").empty();
 
-            $('#modalPagos').modal('show');
+            $("#modalPagos").modal("show");
             $.ajax({
-                url: 'pagos/cuenta/' + cuenta_id,
-                type: 'GET',
-                dataType: 'json',
+                url: "pagos/cuenta/" + cuenta_id,
+                type: "GET",
+                dataType: "json",
                 success: function(data) {
-                    $('#modalNumFactura').text(data.result.numFactura); // Esta funcion captura el numero de la factura numFactura que envia la respuesta JSON de la funcion getPagos de CuentasxPagarController
+                    $("#modalNumFactura").text(data.result.numFactura); // Esta funcion captura el numero de la factura numFactura que envia la respuesta JSON de la funcion getPagos de CuentasxPagarController
 
                     var totalPago = 0; // Variable totalPago inicializada en cero que suma en cada iteración el valor de pago.valordelpago
                     $.each(data.result.pagos, function(index, pago) {
                         /* console.log(pago.valordelpago); */
-                        var valordelpagoFormatted = parseFloat(pago.valordelpago).toLocaleString('es-CO', {
-                            style: 'currency',
-                            currency: 'COP'
+                        var valordelpagoFormatted = parseFloat(
+                            pago.valordelpago
+                        ).toLocaleString("es-CO", {
+                            style: "currency",
+                            currency: "COP",
                         }); // Formatea el valor de pago como moneda colombiana
-                        var row = '<tr><td>' + pago.id + '</td><td>' + valordelpagoFormatted + '</td><td>' + pago.fechadepago + '</td></tr>';
-                        $('#modalPagosTable tbody').append(row);
+                        var row =
+                            "<tr><td>" +
+                            pago.id +
+                            "</td><td>" +
+                            valordelpagoFormatted +
+                            "</td><td>" +
+                            pago.fechadepago +
+                            '</td><td><button type="button" name="eliminar" id="eliminar" class="btn-float btn-danger btn-sm delete-pago" title="eliminar" data-pago-id="' + pago.id + '"> <i class="fas fa-trash"></i></button></td></tr>';
+                        $("#modalPagosTable tbody").append(row);
                         totalPago += parseFloat(pago.valordelpago);
                     });
                     /* var totalPagoEntero = totalPago.toFixed(0); */ // Redondea el valor de un campo al entero más cercano
 
                     // Agrega una fila con el total de los pagos
-                    var totalPagoFormatted = totalPago.toLocaleString('es-CO', {
-                        style: 'currency',
-                        currency: 'COP'
+                    var totalPagoFormatted = totalPago.toLocaleString("es-CO", {
+                        style: "currency",
+                        currency: "COP",
                     }); // Formatea el valor totalPago como moneda peso colombiano
-                    var rowTotal = '<tr><td><b>Total:</b></td><td><b>' + totalPagoFormatted + '</b></td><td></td></tr>';
-                    $('#modalPagosTable tbody').append(rowTotal);
+                    var rowTotal =
+                        "<tr><td><b>Total:</b></td><td><b>" +
+                        totalPagoFormatted +
+                        "</b></td><td></td><td></td></tr>";
+                    $("#modalPagosTable tbody").append(rowTotal);
                 },
                 error: function(data) {
-                    console.log('Error:', data);
-                }
+                    console.log("Error:", data);
+                },
             });
         });
+
+        // eliminar filas de la tabla pagos modalPagosTable
+        $("#modalPagosTable").on("click", "#eliminar", function() {
+            $(this).closest("tr").remove();
+        });
+
+        $(document).on("click", ".delete-pago", function() {
+            var pago_id = $(this).data("pago-id");
+            var text = "Estás por Eliminar un pago registrado a esta Cuenta por Pagar"
+            var url = 'pagos/delete/' + pago_id;
+            var method = 'delete';
+
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: text,
+                icon: "success",
+                showCancelButton: true,
+                showCloseButton: true,
+                confirmButtonText: 'Aceptar',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: url,
+                        method: method,
+                        data: {
+                            "_token": $("meta[name='csrf-token']").attr("content")
+                        },
+                        dataType: "json",
+                        success: function(data) {
+                            if (data.success == 'ok6') {
+
+                                /* $('#modalPagosTable').DataTable().ajax.reload(); */
+                                /* $('#form-general')[0].reset(); */
+                                $('#modalPagos').modal('hide');
+                                $('#pcuentas').DataTable().ajax.reload();
+                                $('#pcuentas_parcial').DataTable().ajax.reload();
+                                $('#pcuentas_canceladas').DataTable().ajax.reload();
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Pago ha sido eliminado correctamente',
+                                    showConfirmButton: false,
+                                    timer: 1000
+
+                                })
+
+                            }
+                        }
+                    });
+
+                }
+            })
+        });
+
 
         //Función para abrir modal del detalle de la cuenta por pagar para registrar un pago total o parcial
         $(document).on('click', '.payment', function() {

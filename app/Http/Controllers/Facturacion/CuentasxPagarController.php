@@ -559,6 +559,16 @@ class CuentasxPagarController extends Controller
         }
     }
 
+    public function delPagos(Request $request, $id)
+    {
+        if ($request->ajax()) {
+
+            Pagos::where('id', $id)->delete();
+
+            return response()->json(['success' => 'ok6']);
+        }
+    }
+
     public function informes(Request $request)
     {
         $idlist = $request->id;

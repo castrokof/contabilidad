@@ -115,6 +115,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('rel_pago_cuenta/{id}', 'Facturacion\CuentasxPagarController@eliminar')->name('eliminar_pago')->middleware('superEditor');
 
     Route::get('pagos/cuenta/{id}', 'Facturacion\CuentasxPagarController@getPagos')->name('lista_pagos')->middleware('superEditor');
+    Route::delete('pagos/delete/{id}', 'Facturacion\CuentasxPagarController@delPagos')->name('delete_pagos')->middleware('superEditor');
     Route::get('paycuentasxpagar/{id}/addpay', 'Facturacion\CuentasxPagarController@addpay')->name('cuentasxpagar-pay')->middleware('superEditor');
     /* Route::post('paycuentasxpagar', 'Facturacion\CuentasxPagarController@guardarpago')->name('cuentasxpagar_payment')->middleware('superEditor'); */
     Route::post('paycuentasxpagar', 'Facturacion\CuentasxPagarController@validpay')->name('cuentasxpagar_payment')->middleware('superEditor');
