@@ -868,7 +868,7 @@ Cuentas por Pagar
                             valordelpagoFormatted +
                             "</td><td>" +
                             pago.fechadepago +
-                            '</td><td><button type="button" name="eliminar" id="eliminar" class="btn-float btn-danger btn-sm delete-pago" title="eliminar" data-pago-id="' + pago.id + '"> <i class="fas fa-trash"></i></button></td></tr>';
+                            '</td><td><button type="button" name="eliminar" id="eliminar" class="btn btn-danger btn-sm delete-pago" title="eliminar" data-pago-id="' + pago.id + '"> <i class="fas fa-trash"></i></button></td></tr>';
                         $("#modalPagosTable tbody").append(row);
                         totalPago += parseFloat(pago.valordelpago);
                     });
