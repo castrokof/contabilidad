@@ -326,7 +326,6 @@ Cuentas por Pagar
 
                                 })
 
-
                             } else if (data.success == 'ok1') {
                                 $('#form-general')[0].reset();
                                 $('#modal-add-cuentas').modal('hide');
@@ -340,9 +339,16 @@ Cuentas por Pagar
                                     timer: 1500
 
                                 })
-
-
+                            } else if (data.error3 == 'post3') {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Advertencia',
+                                    text: 'Los campos %FIDEM 1 y %FIDEM 2 deben ser diligenciados.',
+                                    showConfirmButton: false,
+                                    timer: 2900
+                                });
                             }
+
                             $('#form_result').html(html)
                         }
 
@@ -1337,7 +1343,14 @@ Cuentas por Pagar
                             input2.val(porcentajes - porcentaje1);
                         }
                     }
+
                 });
+
+                // Se hace la validación de los campos % FIDEM 1 y % FIDEM 2
+                /* if (input1.val() === '' || input2.val() === '') {
+                    alert('Los campos % FIDEM 1 y % FIDEM 2 deben ser diligenciados.');
+                } */
+
             } else {
                 futuro1.hide();
                 futuro2.hide();

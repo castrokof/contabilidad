@@ -164,6 +164,17 @@ class CuentasxPagarController extends Controller
         if ($sede_id == 6) {
             $sede_fidem_1 = 4;
             $sede_fidem_2 = 5;
+
+            // Se adiciona la validación de los campos % FIDEM 1 y % FIDEM 2, no pueden ir vacios si se cumple esta condición
+            $porcentaje_gasto_fidem_1 = $request->input('porcentaje_gasto_fidem_1');
+            $porcentaje_gasto_fidem_2 = $request->input('porcentaje_gasto_fidem_2');
+
+            if (empty($porcentaje_gasto_fidem_1) || empty($porcentaje_gasto_fidem_2)) {
+                /* return back()->withInput()->withErrors(['Los campos % FIDEM 1 y % FIDEM 2 deben ser diligenciados.']); */
+                /* return response()->json(['Los campos % FIDEM 1 y % FIDEM 2 deben ser diligenciados.']); */
+                return response()->json(['error3' => 'post3']);
+            }
+
         } else {
             $sede_fidem_1 = null;
             $sede_fidem_2 = null;
